@@ -14,16 +14,16 @@ local GD=RS:FindFirstChild("GameData")
 local CR=workspace:FindFirstChild("CurrentRooms")
 local CF="Hotel";local MF=nil
 pcall(function()if GD and GD:FindFirstChild("Floor")then CF=GD.Floor.Value end end)
-local function gF()return MF or CF end
+function gF()return MF or CF end
 _G.C={SpeedEnabled=false,WalkSpeed=22,SpeedBoost=0,JumpPower=50,InfiniteJumps=false,EnableJump=false,EnableSlide=false,BunnyHop=false,Fly=false,FlySpeed=50,Noclip=false,RemoveClosetDelay=false,RemoveAccel=false,DoorReach=false,InstantPrompts=false,PromptClip=false,PromptReach=1,DisableIdleKick=false,AutoBreaker=false,AutoInteract=false,AutoCloset=false,AutoCollect=false,AutoCoins=false,AutoDoor=false,AutoSeek=false,AutoPlay=false,AutoPickupAll=false,AutoSolve=false,AutoRevive=false,AutoBuy=false,TPItemRadius=200,BringItems=false,BringRadius=100,InfiniteHide=false,HideLock=false,AutoReHide=false,InfiniteItems=false,GodRusher=false,EntityFreeze=false,EntityTeleport=false,Speed10x=false,MaxStats=false,Invisible=false,TimeStop=false,SlowMotion=false,AutoPlatform=false,PlatformSize=5,BypassScreech=false,BypassHalt=false,BypassEyes=false,BypassLookman=false,BypassSnare=false,BypassKillbricks=false,BypassSeekingWall=false,BypassBanana=false,BypassGiggle=false,BypassDupe=false,BypassVacuum=false,BypassGloombatEggs=false,BypassSeekObstructions=false,BypassJeff=false,BypassRush=false,BypassAmbush=false,BypassSeek=false,BypassFigure=false,BypassGrumble=false,BypassGiggleArc=false,BypassDrones=false,AntiRansom=false,AntiClosetTrash=false,ForgetMeNot=false,HonchoESP=false,TimeShower=false,FigureInvisible=false,AutoCrouch=false,GodMode=false,InfiniteRevive=false,AutoDodge=false,AutoHideRush=false,AutoHideAmbush=false,AutoHideAll=false,AdaptiveSpeed=false,PredictiveHide=false,SmartPath=false,AntiAFK=true,ESP_All=false,ESP_Rush=false,ESP_Ambush=false,ESP_Seek=false,ESP_Figure=false,ESP_Screech=false,ESP_Hide=false,ESP_Eyes=false,ESP_Halt=false,ESP_Grumble=false,ESP_Giggle=false,ESP_Blitz=false,ESP_Lookman=false,ESP_Noise=false,ESP_Creak=false,ESP_Scribbles=false,ESP_Teller=false,ESP_Drones=false,ESP_Bash=false,ESP_Monument=false,ESP_Sally=false,ESP_Frozen=false,ESP_Doors=false,ESP_Closets=false,ESP_Money=false,ESP_Keys=false,ESP_Items=false,ESP_Ladders=false,ESP_Players=false,ESP_Library=false,ESP_Breaker=false,ESP_Elevators=false,ESP_Chests=false,ESP_Paintings=false,ESP_Minecart=false,ESP_Rails=false,ESP_Turns=false,ESP_Pits=false,ESP_Lava=false,ESP_Bombs=false,ESP_Objectives=false,ESPColor=Color3.fromRGB(180,30,30),DoorColor=Color3.fromRGB(120,20,40),ClosetColor=Color3.fromRGB(100,255,100),MaxDistance=500,RainbowMode=false,XRay=true,ShowDistance=true,FillTransparency=0.55,TextSize=12,ESPUpdateRate=1.5,Theme="GrayBlack",AutoSave=true,BypassDelay=0.1,NotifyMonsters=false,NotifyItems=false,NotifySound=true,RushWarning=false,AmbushWarning=false,SeekWarning=false,HaltWarning=false,RushTracer=false,LightColor=Color3.fromRGB(255,255,255),LightBrightness=2,Crosshair=false,CrosshairColor=Color3.fromRGB(255,0,0),CrosshairSize=20,FOV=70,ThirdPerson=false,Freecam=false,NoFog=false,Wallhack=false,Chams=false,Hitmarker=false,DamageNumbers=false,DangerMeter=false,EntityTracker=false,SmartESP=false,SmartRange=100,ShowRoomNum=false,ShowTimer=false,SpeedrunTimer=0,BestRun=0,AutoScreenshot=false,DuckSpawn=false,DuckCount=100,MusicId="",MusicPlaying=false,MusicVolume=0.5,AntiDetect=false,SafeMode=false,FunFire=false,FunConfetti=false,FunRainbow=false,FunDisco=false,Snow=false,Leaves=false,Petals=false,AuraFire=false,AuraIce=false,ChatSpam=false,RandomTP=false,FakeDeath=false,KnobESP=false,Level=1,XP=0,DailyQuests=false,Profile=1,AutoFarm=false,AutoFarmDeaths=false,FarmDoors=1,FarmDelay=3,AutoPlayAgain=true,KnobCounter=0,CoinsCounter=0,DeathsCounter=0,DoorsCounter=0,StartTime=os.time(),MonsterList={Rush=true,Ambush=true,Seek=true,Figure=true,Screech=true,Hide=true,Eyes=true,Halt=true,Grumble=true,Giggle=true,Dupe=true,Jack=true,Snare=true,Timothy=true,Glitch=true,Shadow=true,Blitz=true,Lookman=true,Noise=true,Creak=true,Scribbles=true,Drones=true,Jeff=true,Bash=true,Monument=true,Sally=true}} local C=_G.C
 _G.Th={GrayBlack={bg=Color3.fromRGB(20,20,25),panel=Color3.fromRGB(40,40,45),accent=Color3.fromRGB(120,20,40),text=Color3.fromRGB(240,240,245),danger=Color3.fromRGB(180,30,30)},Black={bg=Color3.fromRGB(10,10,12),panel=Color3.fromRGB(25,25,28),accent=Color3.fromRGB(120,20,40),text=Color3.fromRGB(230,230,235),danger=Color3.fromRGB(180,30,30)},Blood={bg=Color3.fromRGB(25,10,10),panel=Color3.fromRGB(45,15,15),accent=Color3.fromRGB(220,40,40),text=Color3.fromRGB(255,230,230),danger=Color3.fromRGB(200,40,40)},Toxic={bg=Color3.fromRGB(10,25,15),panel=Color3.fromRGB(20,45,30),accent=Color3.fromRGB(50,220,100),text=Color3.fromRGB(230,255,235),danger=Color3.fromRGB(180,30,30)},Gold={bg=Color3.fromRGB(30,25,10),panel=Color3.fromRGB(50,40,15),accent=Color3.fromRGB(255,200,50),text=Color3.fromRGB(255,245,220),danger=Color3.fromRGB(180,30,30)},Neon={bg=Color3.fromRGB(5,5,15),panel=Color3.fromRGB(15,15,35),accent=Color3.fromRGB(0,255,180),text=Color3.fromRGB(220,255,250),danger=Color3.fromRGB(180,30,30)},Cyberpunk={bg=Color3.fromRGB(15,5,30),panel=Color3.fromRGB(30,10,55),accent=Color3.fromRGB(255,0,200),text=Color3.fromRGB(0,255,255),danger=Color3.fromRGB(180,30,30)}} local Th=_G.Th
-local function TTS(text)if C.NotifySound then pcall(function()local s=Instance.new("Sound",SS);s.SoundId="rbxassetid://8784885431";s.Volume=0.6;s:Play();task.delay(2,function()s:Destroy()end)end)end;pcall(function()game:GetService("StarterGui"):SetCore("SendNotification",{Title="WARNING",Text=text,Duration=4})end)end
+function TTS(text)if C.NotifySound then pcall(function()local s=Instance.new("Sound",SS);s.SoundId="rbxassetid://8784885431";s.Volume=0.6;s:Play();task.delay(2,function()s:Destroy()end)end)end;pcall(function()game:GetService("StarterGui"):SetCore("SendNotification",{Title="WARNING",Text=text,Duration=4})end)end
 local CFG="BurmaldaV13.json"
-local function sv()pcall(function()local d={};for k,v in pairs(C)do if type(v)=="Color3"then d[k]={__c=true,r=v.R,g=v.G,b=v.B}else d[k]=v end end;writefile(CFG,HS:JSONEncode(d))end)end
-local function ld()pcall(function()if isfile and isfile(CFG)then local d=HS:JSONDecode(readfile(CFG));for k,v in pairs(d)do if type(v)=="table"and v.__c then C[k]=Color3.new(v.r,v.g,v.b)else C[k]=v end end end end) end
+function sv()pcall(function()local d={};for k,v in pairs(C)do if type(v)=="Color3"then d[k]={__c=true,r=v.R,g=v.G,b=v.B}else d[k]=v end end;writefile(CFG,HS:JSONEncode(d))end)end
+function ld()pcall(function()if isfile and isfile(CFG)then local d=HS:JSONDecode(readfile(CFG));for k,v in pairs(d)do if type(v)=="table"and v.__c then C[k]=Color3.new(v.r,v.g,v.b)else C[k]=v end end end end) end
 ld()
 local FBV,FBG,FC
-local function setFly(s)
+function setFly(s)
     local ch=LP.Character;if not ch then return end
     local hum=ch:FindFirstChildOfClass("Humanoid");local root=ch:FindFirstChild("HumanoidRootPart");if not root then return end
     if FBV then FBV:Destroy()FBV=nil end;if FBG then FBG:Destroy()FBG=nil end;if FC then FC:Disconnect()FC=nil end
@@ -42,12 +42,12 @@ local cam=workspace.CurrentCamera;local cf=Vector3.new(cam.CFrame.LookVector.X,0
 end
 LP.CharacterAdded:Connect(function()task.wait(1);if C.Fly then setFly(false);task.wait(0.1);setFly(true)end end)
 local NC
-local function setNC(s)if NC then NC:Disconnect()NC=nil end;if not s then return end;NC=Run.Stepped:Connect(function()local ch=LP.Character;if ch then for _,p in ipairs(ch:GetDescendants())do if p:IsA("BasePart")and p.CanCollide then p.CanCollide=false end end end end)end
+function setNC(s)if NC then NC:Disconnect()NC=nil end;if not s then return end;NC=Run.Stepped:Connect(function()local ch=LP.Character;if ch then for _,p in ipairs(ch:GetDescendants())do if p:IsA("BasePart")and p.CanCollide then p.CanCollide=false end end end end)end
 local SCA,SCF,SCR=false,nil,nil
-local function installSC()if SCA or not RF then return end;SCR=RF:FindFirstChild("Screech");if not SCR then return end;SCF=Instance.new("RemoteEvent");SCF.Name="Screech";SCF.Parent=RF;SCR.Name="Screech_REAL";SCA=true end
-local function removeSC()if not SCA then return end;pcall(function()if SCR and SCR.Parent then SCR.Name="Screech"end if SCF then SCF:Destroy()end end);SCA=false end
+function installSC()if SCA or not RF then return end;SCR=RF:FindFirstChild("Screech");if not SCR then return end;SCF=Instance.new("RemoteEvent");SCF.Name="Screech";SCF.Parent=RF;SCR.Name="Screech_REAL";SCA=true end
+function removeSC()if not SCA then return end;pcall(function()if SCR and SCR.Parent then SCR.Name="Screech"end if SCF then SCF:Destroy()end end);SCA=false end
 local HC
-local function startH()if HC then HC:Disconnect()end;HC=Run.RenderStepped:Connect(function()if not C.BypassHalt then return end;local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end;local cam=workspace.CurrentCamera;for _,o in ipairs(workspace:GetDescendants())do if o.Name:lower():find("halt")then local p=o:IsA("BasePart")and o or(o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true));if p and(p.Position-ch.HumanoidRootPart.Position).Magnitude<60 then local a=(ch.HumanoidRootPart.Position-p.Position).Unit;local n=cam.CFrame.Position;cam.CFrame=CFrame.new(n,n+Vector3.new(a.X,0,a.Z))end end end end)end
+function startH()if HC then HC:Disconnect()end;HC=Run.RenderStepped:Connect(function()if not C.BypassHalt then return end;local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end;local cam=workspace.CurrentCamera;for _,o in ipairs(workspace:GetDescendants())do if o.Name:lower():find("halt")then local p=o:IsA("BasePart")and o or(o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true));if p and(p.Position-ch.HumanoidRootPart.Position).Magnitude<60 then local a=(ch.HumanoidRootPart.Position-p.Position).Unit;local n=cam.CFrame.Position;cam.CFrame=CFrame.new(n,n+Vector3.new(a.X,0,a.Z))end end end end)end
 task.spawn(function()while task.wait(0.5)do if C.GodMode then local ch=LP.Character;local h=ch and ch:FindFirstChildOfClass("Humanoid");if h and h.Health<h.MaxHealth then pcall(function()h.Health=h.MaxHealth end)end end end end)
 task.spawn(function()while task.wait(1)do if C.InfiniteRevive and RF then pcall(function()local r=RF:FindFirstChild("Revive");if r then r:FireServer()end end)end end end)
 task.spawn(function()
@@ -58,7 +58,7 @@ task.spawn(function()
     end
 end)
 local infJumpConn
-local function setInfJump(s)
+function setInfJump(s)
     if infJumpConn then infJumpConn:Disconnect()infJumpConn=nil end;if not s then return end
     local ch=LP.Character;if not ch then return end;local h=ch:FindFirstChildOfClass("Humanoid");if not h then return end
     infJumpConn=h.StateChanged:Connect(function(o,n)if n==Enum.HumanoidStateType.Freefall and C.InfiniteJumps then task.wait(0.01);h:ChangeState(Enum.HumanoidStateType.Jumping)end end)
@@ -75,7 +75,7 @@ task.spawn(function()while task.wait(1)do if C.RemoveAccel then pcall(function()
 print("[Burmalda v13] Part 1/6 loaded")
 -- Part 2/6 - TP / Hide / Auto-Seek / Bypass / ESP / Visual
 -- ВСТАВИТЬ ПОСЛЕ ЧАСТИ 1
-local function findNearestItem()
+function findNearestItem()
     local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return nil end
     local myPos=ch.HumanoidRootPart.Position;local closest,dist=nil,math.huge
     for _,o in ipairs(workspace:GetDescendants())do
@@ -92,11 +92,11 @@ local function findNearestItem()
     end
     return closest
 end
-local function tpNearestItem()local item=findNearestItem();if item then local ch=LP.Character;if ch and ch:FindFirstChild("HumanoidRootPart")then ch.HumanoidRootPart.CFrame=CFrame.new(item.Position+Vector3.new(0,3,0));N("TP to item")end else N("No items")end end
-local function tpToPlayer(t)local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end;local tg=t.Character;if not tg then N("No char")return end;local tr=tg:FindFirstChild("HumanoidRootPart");if not tr then N("Not in game")return end;ch.HumanoidRootPart.CFrame=CFrame.new(tr.Position+Vector3.new(0,3,0));N("TP to "..t.Name)end
-local function bringPlayer(t)local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end;local myPos=ch.HumanoidRootPart.Position;local tg=t.Character;if not tg then return end;local tr=tg:FindFirstChild("HumanoidRootPart");if not tr then return end;tr.CFrame=CFrame.new(myPos+Vector3.new(0,3,0));N("Brought "..t.Name)end
-local function isInsideCloset()local ch=LP.Character;if not ch then return false end;if ch:GetAttribute("Hiding")then return true end;if ch:GetAttribute("InCloset")then return true end;if ch:GetAttribute("Hidden")then return true end;if ch:FindFirstChild("Hidden")then return true end;if ch:FindFirstChild("InCloset")then return true end;return false end
-local function forceHide()
+function tpNearestItem()local item=findNearestItem();if item then local ch=LP.Character;if ch and ch:FindFirstChild("HumanoidRootPart")then ch.HumanoidRootPart.CFrame=CFrame.new(item.Position+Vector3.new(0,3,0));N("TP to item")end else N("No items")end end
+function tpToPlayer(t)local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end;local tg=t.Character;if not tg then N("No char")return end;local tr=tg:FindFirstChild("HumanoidRootPart");if not tr then N("Not in game")return end;ch.HumanoidRootPart.CFrame=CFrame.new(tr.Position+Vector3.new(0,3,0));N("TP to "..t.Name)end
+function bringPlayer(t)local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end;local myPos=ch.HumanoidRootPart.Position;local tg=t.Character;if not tg then return end;local tr=tg:FindFirstChild("HumanoidRootPart");if not tr then return end;tr.CFrame=CFrame.new(myPos+Vector3.new(0,3,0));N("Brought "..t.Name)end
+function isInsideCloset()local ch=LP.Character;if not ch then return false end;if ch:GetAttribute("Hiding")then return true end;if ch:GetAttribute("InCloset")then return true end;if ch:GetAttribute("Hidden")then return true end;if ch:FindFirstChild("Hidden")then return true end;if ch:FindFirstChild("InCloset")then return true end;return false end
+function forceHide()
     local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return false end
     local pos=ch.HumanoidRootPart.Position;local closest,prompt,dist=nil,nil,math.huge
     for _,o in ipairs(workspace:GetDescendants())do
@@ -119,7 +119,7 @@ if C.HideLock then for _,o in ipairs(workspace:GetDescendants())do if o:IsA("Pro
     end
 end)
 local HD=0;local IH=false
-local function aH()
+function aH()
     local ch=LP.Character;if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end
     local pos=ch.HumanoidRootPart.Position;local dg=false
     for _,o in ipairs(workspace:GetDescendants())do if o:IsA("Model")then local n=o.Name:lower();if(n:find("rush")and C.AutoHideRush)or(n:find("ambush")and C.AutoHideAmbush)or(C.AutoHideAll and(n:find("seek")or n:find("figure")))then local p=o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true);if p and(p.Position-pos).Magnitude<100 then dg=true break end end end end
@@ -130,7 +130,7 @@ local function aH()
 end
 -- AUTO-PLATFORM
 local platFolder=Instance.new("Folder",workspace);platFolder.Name="BurmaldaPlatforms"
-local function makePlatform(pos,size)
+function makePlatform(pos,size)
     local p=Instance.new("Part",platFolder)
     p.Size=size or Vector3.new(C.PlatformSize,1,C.PlatformSize)
     p.Position=pos;p.Anchored=true;p.CanCollide=true;p.Transparency=0.4;p.Color=Color3.fromRGB(0,255,255);p.Material=Enum.Material.Neon
@@ -233,21 +233,21 @@ end)
 -- ESP
 local ENT={"RushMoving","AmbushMoving","Seek","Figure","Screech","Hide","Eyes","Glitch","Dupe","Jack","Snare","Timothy","Shadow","Halt","Grumble","Giggle","Gloombat","Monument","Sally","JeffTheKiller","Bash","Blitz","A60","A120","Noise","Creak","Scribbles","Lookman","DronesStampede","Groundskeeper","TellerRig","NoiseModel","FrozenAmbush","CustomEntity","StemsEntity"}
 local EN={RushMoving="Rush",AmbushMoving="Ambush",Seek="Seek",Figure="Figure",Screech="Screech",Hide="Hide",Eyes="Eyes",Glitch="Glitch",Dupe="Dupe",Jack="Jack",Snare="Snare",Timothy="Timothy",Shadow="Shadow",Halt="Halt",Grumble="Grumble",Giggle="Giggle",Gloombat="Gloombat",Monument="Monument",Sally="Sally",JeffTheKiller="Jeff",Bash="Bash",Blitz="Blitz",A60="A-60",A120="A-120",Noise="Noise",Creak="Creak",Scribbles="Scribbles",Lookman="Lookman",DronesStampede="Drones",Groundskeeper="Groundskeeper",TellerRig="Teller",NoiseModel="Noise",FrozenAmbush="Frozen Ambush",CustomEntity="Custom",StemsEntity="Balls"}
-local function isE(o)if not o:IsA("Model")and not o:IsA("BasePart")then return false,nil,nil end;local n=o.Name:lower();for _,e in ipairs(ENT)do if n==e:lower()or n:find(e:lower(),1,true)then return true,e,EN[e]or e end end;return false,nil,nil end
+function isE(o)if not o:IsA("Model")and not o:IsA("BasePart")then return false,nil,nil end;local n=o.Name:lower();for _,e in ipairs(ENT)do if n==e:lower()or n:find(e:lower(),1,true)then return true,e,EN[e]or e end end;return false,nil,nil end
 local ESP={}
-local function clearESP()for _,v in pairs(ESP)do pcall(function()v:Destroy()end)end;ESP={}end
-local function makeESP(o,col,txt,yo)
+function clearESP()for _,v in pairs(ESP)do pcall(function()v:Destroy()end)end;ESP={}end
+function makeESP(o,col,txt,yo)
     if ESP[o]and ESP[o].Parent then return end
     local bb=Instance.new("BillboardGui");bb.Size=UDim2.new(0,140,0,28);bb.StudsOffset=Vector3.new(0,yo or 4,0);bb.AlwaysOnTop=true;bb.Adornee=o;bb.Parent=o
     local h=Instance.new("Highlight",o);h.FillColor=col;h.FillTransparency=C.FillTransparency;h.OutlineColor=col;h.OutlineTransparency=0.3;h.DepthMode=C.XRay and Enum.HighlightDepthMode.AlwaysOnTop or Enum.HighlightDepthMode.Occluded;h.Adornee=o
     local lb=Instance.new("TextLabel",bb);lb.Size=UDim2.new(1,0,1,0);lb.BackgroundTransparency=1;lb.Text=txt;lb.TextColor3=col;lb.TextStrokeTransparency=0;lb.TextStrokeColor3=Color3.fromRGB(0,0,0);lb.Font=Enum.Font.GothamBold;lb.TextSize=C.TextSize
     ESP[o]=bb
 end
-local function getP(o)if o:IsA("BasePart")then return o.Position end;if o.PrimaryPart then return o.PrimaryPart.Position end;local p=o:FindFirstChildWhichIsA("BasePart",true);return p and p.Position end
-local function myP()local ch=LP.Character;if ch and ch:FindFirstChild("HumanoidRootPart")then return ch.HumanoidRootPart.Position end end
-local function cO(b)if C.RainbowMode then return Color3.fromHSV(tick()%5/5,1,1)end return b end
-local function getDoorNum(o)local n=tonumber(o.Parent and o.Parent.Name)or tonumber(o.Parent and o.Parent.Parent and o.Parent.Parent.Name);if n then return tostring(n+1)end;return "?"end
-local function updESP()
+function getP(o)if o:IsA("BasePart")then return o.Position end;if o.PrimaryPart then return o.PrimaryPart.Position end;local p=o:FindFirstChildWhichIsA("BasePart",true);return p and p.Position end
+function myP()local ch=LP.Character;if ch and ch:FindFirstChild("HumanoidRootPart")then return ch.HumanoidRootPart.Position end end
+function cO(b)if C.RainbowMode then return Color3.fromHSV(tick()%5/5,1,1)end return b end
+function getDoorNum(o)local n=tonumber(o.Parent and o.Parent.Name)or tonumber(o.Parent and o.Parent.Parent and o.Parent.Parent.Name);if n then return tostring(n+1)end;return "?"end
+function updESP()
     local pos=myP();if not pos then return end
     for _,o in ipairs(workspace:GetDescendants())do
         if ESP[o]then continue end
@@ -291,7 +291,7 @@ if C.BypassDrones then for _,o in ipairs(workspace:GetDescendants())do if o.Name
         end)
     end
 end)
-local function byT(names,state)for _,o in ipairs(workspace:GetDescendants())do if o:IsA("Model")then local n=o.Name:lower();for _,t in ipairs(names)do if n==t:lower()or n:find(t:lower(),1,true)then for _,p in ipairs(o:GetDescendants())do if p:IsA("BasePart")then pcall(function()p.CanTouch=not state end)end end end end end end end
+function byT(names,state)for _,o in ipairs(workspace:GetDescendants())do if o:IsA("Model")then local n=o.Name:lower();for _,t in ipairs(names)do if n==t:lower()or n:find(t:lower(),1,true)then for _,p in ipairs(o:GetDescendants())do if p:IsA("BasePart")then pcall(function()p.CanTouch=not state end)end end end end end end end
 task.spawn(function()
     while task.wait(C.BypassDelay)do
         pcall(function()
@@ -312,7 +312,7 @@ task.spawn(function()
 end)
 -- ABYSSALL: Anti Scribbles (перехват)
 local AntiScribbles_OldNamecall,AntiScribbles_IsHooked=false,false
-local function HookAntiScribbles()
+function HookAntiScribbles()
     if AntiScribbles_IsHooked then return end
     pcall(function()
         AntiScribbles_OldNamecall=hookmetamethod(game,"__namecall",function(self,...)
@@ -359,7 +359,7 @@ print("[Burmalda v13] Part 2/6 loaded")
 -- Part 3/6 - Farm / Music / Sound / Move / Stats / Players / Features / AntiDet
 -- ВСТАВИТЬ ПОСЛЕ ЧАСТИ 2
 -- AUTO
-local function getR()local ch=LP.Character;return ch and ch:FindFirstChild("HumanoidRootPart")end
+function getR()local ch=LP.Character;return ch and ch:FindFirstChild("HumanoidRootPart")end
 task.spawn(function()
     while task.wait(0.3)do
         if C.AutoCollect then local r=getR();if r then for _,o in ipairs(workspace:GetDescendants())do if o:IsA("Model")or o:IsA("BasePart")then if P:GetPlayerFromCharacter(o)then continue end;local n=o.Name:lower();if n:find("crucifix")or n:find("lockpick")or n:find("bandage")or n:find("flashlight")or n:find("lighter")or n:find("battery")then local p=o:IsA("BasePart")and o or(o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true));if p and(p.Position-r.Position).Magnitude<20 then pcall(function()r.CFrame=CFrame.new(p.Position)end)end end end end end end
@@ -409,10 +409,10 @@ task.spawn(function()
 end)
 -- MUSIC
 local musicSound
-local function playMusic(id)if musicSound then musicSound:Destroy()end;if id==""or not id then N("No ID")return end;musicSound=Instance.new("Sound",SS);musicSound.SoundId="rbxassetid://"..id;musicSound.Volume=C.MusicVolume;musicSound.Looped=true;musicSound:Play();C.MusicId=id;C.MusicPlaying=true end
-local function stopMusic()if musicSound then musicSound:Stop();musicSound:Destroy()end;musicSound=nil;C.MusicPlaying=false end
+function playMusic(id)if musicSound then musicSound:Destroy()end;if id==""or not id then N("No ID")return end;musicSound=Instance.new("Sound",SS);musicSound.SoundId="rbxassetid://"..id;musicSound.Volume=C.MusicVolume;musicSound.Looped=true;musicSound:Play();C.MusicId=id;C.MusicPlaying=true end
+function stopMusic()if musicSound then musicSound:Stop();musicSound:Destroy()end;musicSound=nil;C.MusicPlaying=false end
 -- DUCKS
-local function spawnDucks(count)
+function spawnDucks(count)
     for i=1,count do task.spawn(function()
         local duck=Instance.new("Part",workspace)
         duck.Size=Vector3.new(2,2,2);duck.Shape=Enum.PartType.Ball;duck.Color=Color3.fromRGB(255,255,0);duck.Material=Enum.Material.Plastic;duck.CanCollide=true
@@ -537,7 +537,7 @@ local QBL=Instance.new("UIListLayout",QBF)
 QBL.Padding=UDim.new(0,8)
 QBL.SortOrder=Enum.SortOrder.LayoutOrder
 
-local function makeQuickBtn(text,col,cb)
+function makeQuickBtn(text,col,cb)
     local b=Instance.new("TextButton",QBF)
     b.Size=UDim2.new(1,0,0,65)
     b.BackgroundColor3=col
@@ -561,7 +561,7 @@ makeQuickBtn("NOCLIP",Color3.fromRGB(80,60,120),function()C.Noclip=not C.Noclip;
 local spawnFolder=Instance.new("Folder",workspace)
 spawnFolder.Name="BurmaldaSpawned"
 
-local function spawnVisual(name,color,size,shape)
+function spawnVisual(name,color,size,shape)
     local ch=LP.Character
     if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end
     local p=Instance.new("Part",spawnFolder)
@@ -574,15 +574,15 @@ local function spawnVisual(name,color,size,shape)
     game:GetService("Debris"):AddItem(p,15)
 end
 
-local function spawnRush()spawnVisual("Rush",Color3.fromRGB(255,0,0),Vector3.new(5,5,5),Enum.PartType.Ball)end
-local function spawnAmbush()spawnVisual("Ambush",Color3.fromRGB(255,80,0),Vector3.new(5,5,5),Enum.PartType.Ball)end
-local function spawnSeek()spawnVisual("Seek",Color3.fromRGB(150,0,255),Vector3.new(5,5,5),Enum.PartType.Ball)end
-local function spawnFigure()spawnVisual("Figure",Color3.fromRGB(100,0,0),Vector3.new(5,5,5),Enum.PartType.Ball)end
-local function spawnCoin()spawnVisual("Coin",Color3.fromRGB(255,215,0),Vector3.new(1.5,1.5,1.5),Enum.PartType.Ball)end
-local function spawnKey()spawnVisual("Key",Color3.fromRGB(255,255,100),Vector3.new(1,1,1),Enum.PartType.Block)end
+function spawnRush()spawnVisual("Rush",Color3.fromRGB(255,0,0),Vector3.new(5,5,5),Enum.PartType.Ball)end
+function spawnAmbush()spawnVisual("Ambush",Color3.fromRGB(255,80,0),Vector3.new(5,5,5),Enum.PartType.Ball)end
+function spawnSeek()spawnVisual("Seek",Color3.fromRGB(150,0,255),Vector3.new(5,5,5),Enum.PartType.Ball)end
+function spawnFigure()spawnVisual("Figure",Color3.fromRGB(100,0,0),Vector3.new(5,5,5),Enum.PartType.Ball)end
+function spawnCoin()spawnVisual("Coin",Color3.fromRGB(255,215,0),Vector3.new(1.5,1.5,1.5),Enum.PartType.Ball)end
+function spawnKey()spawnVisual("Key",Color3.fromRGB(255,255,100),Vector3.new(1,1,1),Enum.PartType.Block)end
 
 -- FUN: Confetti
-local function doConfetti()
+function doConfetti()
     for i=1,50 do
         task.spawn(function()
             local ch=LP.Character
@@ -618,7 +618,7 @@ p.Position=ch.HumanoidRootPart.Position+Vector3.new(math.random(-50,50),50+math.
 end)
 
 -- FUN: Chat Spam
-local function chatSpam(msg,count)
+function chatSpam(msg,count)
     pcall(function()
         local Folder=RS:FindFirstChild("DefaultChatSystemEvents")or Instance.new("Folder")
         local Event=Folder:FindFirstChild("SayMessageRequest")or Instance.new("RemoteEvent")
@@ -627,7 +627,7 @@ local function chatSpam(msg,count)
 end
 
 -- FUN: Random TP
-local function randomTP()
+function randomTP()
     local ch=LP.Character
     if ch and ch:FindFirstChild("HumanoidRootPart")then
         ch.HumanoidRootPart.CFrame=CFrame.new(math.random(-200,200),50,math.random(-200,200))
@@ -636,7 +636,7 @@ local function randomTP()
 end
 
 -- FUN: Fake Death
-local function fakeDeath()
+function fakeDeath()
     local ch=LP.Character
     local h=ch and ch:FindFirstChildOfClass("Humanoid")
     if h then h.Health=0 end
@@ -644,7 +644,7 @@ end
 
 -- ABYSSALL: Spectate Entity
 local spectateConn
-local function startSpectate()
+function startSpectate()
     if spectateConn then spectateConn:Disconnect()end
     spectateConn=Run.Heartbeat:Connect(function()
         if not C.SpectateEntity then return end
@@ -725,7 +725,7 @@ local pp=o.Parent:IsA("BasePart")and o.Parent or o.Parent:FindFirstChildWhichIsA
 end)
 
 -- ABYSSALL: Guess Library Code
-local function guessLibraryCode()
+function guessLibraryCode()
     pcall(function()
         for _,o in ipairs(workspace:GetDescendants())do
             if o:IsA("ProximityPrompt")and o.Parent then
@@ -842,7 +842,7 @@ local FT=Instance.new("TextLabel",FM);FT.Size=UDim2.new(1,0,0,35);FT.Position=UD
 local FSu=Instance.new("TextLabel",FM);FSu.Size=UDim2.new(1,0,0,18);FSu.Position=UDim2.new(0,0,0,46);FSu.BackgroundTransparency=1;FSu.Text="By KOTENOK7204";FSu.TextColor3=Color3.fromRGB(200,200,210);FSu.Font=Enum.Font.Gotham;FSu.TextSize=10
 local FSu2=Instance.new("TextLabel",FM);FSu2.Size=UDim2.new(1,0,0,18);FSu2.Position=UDim2.new(0,0,0,62);FSu2.BackgroundTransparency=1;FSu2.Text="Tester: Kostya_2015KostyaKos";FSu2.TextColor3=Color3.fromRGB(255,200,100);FSu2.Font=Enum.Font.GothamBold;FSu2.TextSize=10
 local FQ=Instance.new("TextLabel",FM);FQ.Size=UDim2.new(1,0,0,22);FQ.Position=UDim2.new(0,0,0,84);FQ.BackgroundTransparency=1;FQ.Text="Where are you?";FQ.TextColor3=Color3.fromRGB(240,240,245);FQ.Font=Enum.Font.GothamBold;FQ.TextSize=14
-local function mkFB(txt,y,fn)local b=Instance.new("TextButton",FM);b.Size=UDim2.new(0,270,0,32);b.Position=UDim2.new(0.5,-135,0,y);b.BackgroundColor3=Color3.fromRGB(40,40,45);b.Text=txt;b.TextColor3=Color3.fromRGB(240,240,245);b.Font=Enum.Font.GothamBold;b.TextSize=12;b.BorderSizePixel=0;local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,6);local s=Instance.new("UIStroke",b);s.Color=Color3.fromRGB(120,20,40);s.Thickness=1;b.MouseButton1Click:Connect(function()MF=fn;sv();FS:Destroy();N("Floor: "..fn)end)end
+function mkFB(txt,y,fn)local b=Instance.new("TextButton",FM);b.Size=UDim2.new(0,270,0,32);b.Position=UDim2.new(0.5,-135,0,y);b.BackgroundColor3=Color3.fromRGB(40,40,45);b.Text=txt;b.TextColor3=Color3.fromRGB(240,240,245);b.Font=Enum.Font.GothamBold;b.TextSize=12;b.BorderSizePixel=0;local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,6);local s=Instance.new("UIStroke",b);s.Color=Color3.fromRGB(120,20,40);s.Thickness=1;b.MouseButton1Click:Connect(function()MF=fn;sv();FS:Destroy();N("Floor: "..fn)end)end
 mkFB("Hotel",118,"Hotel");mkFB("Mines",155,"Mines");mkFB("Backdoor",192,"Backdoor");mkFB("Outdoors",229,"Outdoors");mkFB("Archives",266,"Archives");mkFB("Stairwell",303,"Stairwell")
 
 -- MAIN GUI
@@ -865,8 +865,8 @@ local TBC=Instance.new("UICorner",TB);TBC.CornerRadius=UDim.new(0,10)
 local TBL=Instance.new("UIListLayout",TB);TBL.Padding=UDim.new(0,3);TBL.SortOrder=Enum.SortOrder.LayoutOrder
 local CT=Instance.new("Frame",M);CT.Size=UDim2.new(1,-125,1,-42);CT.Position=UDim2.new(0,122,0,38);CT.BackgroundTransparency=1
 local Pg={}
-local function sw(n)for k,p in pairs(Pg)do p.Visible=(k==n)end end
-local function crP(n)
+function sw(n)for k,p in pairs(Pg)do p.Visible=(k==n)end end
+function crP(n)
     local p=Instance.new("ScrollingFrame",CT);p.Size=UDim2.new(1,0,1,0);p.BackgroundTransparency=1;p.BorderSizePixel=0;p.ScrollBarThickness=3;p.ScrollBarImageColor3=T().accent;p.CanvasSize=UDim2.new(0,0,3200);p.Visible=false
     local L=Instance.new("UIListLayout",p);L.Padding=UDim.new(0,3);L.SortOrder=Enum.SortOrder.LayoutOrder
     Pg[n]=p;return p
@@ -875,10 +875,10 @@ local tL={{n="Main"},{n="Character"},{n="TP"},{n="Hide"},{n="AutoSeek"},{n="Bypa
 local tbts={}
 for _,t in ipairs(tL)do crP(t.n);local b=Instance.new("TextButton",TB);b.Size=UDim2.new(0.9,0,0,24);b.BackgroundColor3=t.d and T().danger or T().panel;b.BorderSizePixel=0;b.Text=t.n;b.TextColor3=t.d and Color3.fromRGB(255,200,210)or T().text;b.Font=Enum.Font.Gotham;b.TextSize=9;b.LayoutOrder=#tbts+1;b:SetAttribute("d",t.d or false);local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,5);b.MouseButton1Click:Connect(function()sw(t.n);for _,x in ipairs(tbts)do x.BackgroundColor3=x:GetAttribute("d")and T().danger or T().panel end;b.BackgroundColor3=T().accent end);table.insert(tbts,b)end
 sw("Main");if tbts[1]then tbts[1].BackgroundColor3=T().accent end
-local function mT(p,t,i,cb,d)local b=Instance.new("TextButton",p);b.Size=UDim2.new(1,-6,0,26);b.BackgroundColor3=d and T().danger or T().panel;b.BorderSizePixel=0;b.Text="";local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,5);local l=Instance.new("TextLabel",b);l.Size=UDim2.new(0.75,0,1,0);l.Position=UDim2.new(0,8,0,0);l.BackgroundTransparency=1;l.Text=t;l.TextColor3=d and Color3.fromRGB(255,200,210)or T().text;l.Font=Enum.Font.Gotham;l.TextSize=9;l.TextXAlignment=Enum.TextXAlignment.Left;local s=Instance.new("TextLabel",b);s.Size=UDim2.new(0.2,0,1,0);s.Position=UDim2.new(0.75,0,0,0);s.BackgroundTransparency=1;s.Text=i and "ON"or "OFF";s.TextColor3=i and Color3.fromRGB(80,220,120)or Color3.fromRGB(220,80,80);s.Font=Enum.Font.GothamBold;s.TextSize=9;local st=i;b.MouseButton1Click:Connect(function()st=not st;s.Text=st and "ON"or "OFF";s.TextColor3=st and Color3.fromRGB(80,220,120)or Color3.fromRGB(220,80,80);cb(st)end)end
-local function mB(p,t,cb,col)local b=Instance.new("TextButton",p);b.Size=UDim2.new(1,-6,0,28);b.BackgroundColor3=col or T().panel;b.BorderSizePixel=0;b.Text=t;b.TextColor3=T().text;b.Font=Enum.Font.GothamBold;b.TextSize=10;local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,5);b.MouseButton1Click:Connect(cb)end
-local function mS(p,t,mn,mx,i,cb)local f=Instance.new("Frame",p);f.Size=UDim2.new(1,-6,0,36);f.BackgroundColor3=T().panel;f.BorderSizePixel=0;local c=Instance.new("UICorner",f);c.CornerRadius=UDim.new(0,5);local l=Instance.new("TextLabel",f);l.Size=UDim2.new(1,-16,0,14);l.Position=UDim2.new(0,8,0,2);l.BackgroundTransparency=1;l.Text=t..": "..i;l.TextColor3=T().text;l.Font=Enum.Font.Gotham;l.TextSize=9;l.TextXAlignment=Enum.TextXAlignment.Left;local bar=Instance.new("Frame",f);bar.Size=UDim2.new(1,-16,0,10);bar.Position=UDim2.new(0,8,0,22);bar.BackgroundColor3=T().bg;bar.BorderSizePixel=0;local bc=Instance.new("UICorner",bar);bc.CornerRadius=UDim.new(0,4);local fl=Instance.new("Frame",bar);fl.Size=UDim2.new((i-mn)/(mx-mn),0,1,0);fl.BackgroundColor3=T().accent;fl.BorderSizePixel=0;local fc=Instance.new("UICorner",fl);fc.CornerRadius=UDim.new(0,4);local dr=false;bar.InputBegan:Connect(function(inp)if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then dr=true end end);bar.InputEnded:Connect(function(inp)if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then dr=false end end);UIS.InputChanged:Connect(function(inp)if dr and(inp.UserInputType==Enum.UserInputType.MouseMovement or inp.UserInputType==Enum.UserInputType.Touch)then local r=math.clamp((inp.Position.X-bar.AbsolutePosition.X)/bar.AbsoluteSize.X,0,1);fl.Size=UDim2.new(r,0,1,0);local v=math.floor(mn+(mx-mn)*r);l.Text=t..": "..v;cb(v)end end)end
-local function mL(p,t,col)local l=Instance.new("TextLabel",p);l.Size=UDim2.new(1,-6,0,20);l.BackgroundTransparency=1;l.Text=t;l.TextColor3=col or T().accent;l.Font=Enum.Font.GothamBold;l.TextSize=10;l.TextXAlignment=Enum.TextXAlignment.Left end
+function mT(p,t,i,cb,d)local b=Instance.new("TextButton",p);b.Size=UDim2.new(1,-6,0,26);b.BackgroundColor3=d and T().danger or T().panel;b.BorderSizePixel=0;b.Text="";local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,5);local l=Instance.new("TextLabel",b);l.Size=UDim2.new(0.75,0,1,0);l.Position=UDim2.new(0,8,0,0);l.BackgroundTransparency=1;l.Text=t;l.TextColor3=d and Color3.fromRGB(255,200,210)or T().text;l.Font=Enum.Font.Gotham;l.TextSize=9;l.TextXAlignment=Enum.TextXAlignment.Left;local s=Instance.new("TextLabel",b);s.Size=UDim2.new(0.2,0,1,0);s.Position=UDim2.new(0.75,0,0,0);s.BackgroundTransparency=1;s.Text=i and "ON"or "OFF";s.TextColor3=i and Color3.fromRGB(80,220,120)or Color3.fromRGB(220,80,80);s.Font=Enum.Font.GothamBold;s.TextSize=9;local st=i;b.MouseButton1Click:Connect(function()st=not st;s.Text=st and "ON"or "OFF";s.TextColor3=st and Color3.fromRGB(80,220,120)or Color3.fromRGB(220,80,80);cb(st)end)end
+function mB(p,t,cb,col)local b=Instance.new("TextButton",p);b.Size=UDim2.new(1,-6,0,28);b.BackgroundColor3=col or T().panel;b.BorderSizePixel=0;b.Text=t;b.TextColor3=T().text;b.Font=Enum.Font.GothamBold;b.TextSize=10;local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,5);b.MouseButton1Click:Connect(cb)end
+function mS(p,t,mn,mx,i,cb)local f=Instance.new("Frame",p);f.Size=UDim2.new(1,-6,0,36);f.BackgroundColor3=T().panel;f.BorderSizePixel=0;local c=Instance.new("UICorner",f);c.CornerRadius=UDim.new(0,5);local l=Instance.new("TextLabel",f);l.Size=UDim2.new(1,-16,0,14);l.Position=UDim2.new(0,8,0,2);l.BackgroundTransparency=1;l.Text=t..": "..i;l.TextColor3=T().text;l.Font=Enum.Font.Gotham;l.TextSize=9;l.TextXAlignment=Enum.TextXAlignment.Left;local bar=Instance.new("Frame",f);bar.Size=UDim2.new(1,-16,0,10);bar.Position=UDim2.new(0,8,0,22);bar.BackgroundColor3=T().bg;bar.BorderSizePixel=0;local bc=Instance.new("UICorner",bar);bc.CornerRadius=UDim.new(0,4);local fl=Instance.new("Frame",bar);fl.Size=UDim2.new((i-mn)/(mx-mn),0,1,0);fl.BackgroundColor3=T().accent;fl.BorderSizePixel=0;local fc=Instance.new("UICorner",fl);fc.CornerRadius=UDim.new(0,4);local dr=false;bar.InputBegan:Connect(function(inp)if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then dr=true end end);bar.InputEnded:Connect(function(inp)if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then dr=false end end);UIS.InputChanged:Connect(function(inp)if dr and(inp.UserInputType==Enum.UserInputType.MouseMovement or inp.UserInputType==Enum.UserInputType.Touch)then local r=math.clamp((inp.Position.X-bar.AbsolutePosition.X)/bar.AbsoluteSize.X,0,1);fl.Size=UDim2.new(r,0,1,0);local v=math.floor(mn+(mx-mn)*r);l.Text=t..": "..v;cb(v)end end)end
+function mL(p,t,col)local l=Instance.new("TextLabel",p);l.Size=UDim2.new(1,-6,0,20);l.BackgroundTransparency=1;l.Text=t;l.TextColor3=col or T().accent;l.Font=Enum.Font.GothamBold;l.TextSize=10;l.TextXAlignment=Enum.TextXAlignment.Left end
 
 -- MAIN
 mL(Pg["Main"],"QUICK")
@@ -888,7 +888,7 @@ mB(Pg["Main"],"Save Config",function()sv()N("Saved")end,T().accent)
 mL(Pg["Main"],"PLAYERS")
 local plrList=Instance.new("Frame",Pg["Main"]);plrList.Size=UDim2.new(1,-6,0,0);plrList.BackgroundTransparency=1;plrList.AutomaticSize=Enum.AutomaticSize.Y
 local plrLayout=Instance.new("UIListLayout",plrList);plrLayout.Padding=UDim.new(0,3)
-local function refreshPlayers()for _,c in ipairs(plrList:GetChildren())do if c:IsA("Frame")then c:Destroy()end end;for _,plr in ipairs(P:GetPlayers())do if plr~=LP then local row=Instance.new("Frame",plrList);row.Size=UDim2.new(1,0,0,28);row.BackgroundColor3=T().panel;row.BorderSizePixel=0;local rc=Instance.new("UICorner",row);rc.CornerRadius=UDim.new(0,5);local nb=Instance.new("TextButton",row);nb.Size=UDim2.new(0.6,0,1,0);nb.BackgroundColor3=T().accent;nb.Text=plr.Name;nb.TextColor3=Color3.fromRGB(255,255,255);nb.Font=Enum.Font.Gotham;nb.TextSize=9;nb.BorderSizePixel=0;local nc=Instance.new("UICorner",nb);nc.CornerRadius=UDim.new(0,5);nb.MouseButton1Click:Connect(function()pcall(function()tpToPlayer(plr)end)end);local bb=Instance.new("TextButton",row);bb.Size=UDim2.new(0.38,0,1,0);bb.Position=UDim2.new(0.62,0,0,0);bb.BackgroundColor3=Color3.fromRGB(60,80,140);bb.Text="Bring";bb.TextColor3=Color3.fromRGB(255,255,255);bb.Font=Enum.Font.GothamBold;bb.TextSize=9;bb.BorderSizePixel=0;local bc=Instance.new("UICorner",bb);bc.CornerRadius=UDim.new(0,5);bb.MouseButton1Click:Connect(function()pcall(function()bringPlayer(plr)end)end)end end end
+function refreshPlayers()for _,c in ipairs(plrList:GetChildren())do if c:IsA("Frame")then c:Destroy()end end;for _,plr in ipairs(P:GetPlayers())do if plr~=LP then local row=Instance.new("Frame",plrList);row.Size=UDim2.new(1,0,0,28);row.BackgroundColor3=T().panel;row.BorderSizePixel=0;local rc=Instance.new("UICorner",row);rc.CornerRadius=UDim.new(0,5);local nb=Instance.new("TextButton",row);nb.Size=UDim2.new(0.6,0,1,0);nb.BackgroundColor3=T().accent;nb.Text=plr.Name;nb.TextColor3=Color3.fromRGB(255,255,255);nb.Font=Enum.Font.Gotham;nb.TextSize=9;nb.BorderSizePixel=0;local nc=Instance.new("UICorner",nb);nc.CornerRadius=UDim.new(0,5);nb.MouseButton1Click:Connect(function()pcall(function()tpToPlayer(plr)end)end);local bb=Instance.new("TextButton",row);bb.Size=UDim2.new(0.38,0,1,0);bb.Position=UDim2.new(0.62,0,0,0);bb.BackgroundColor3=Color3.fromRGB(60,80,140);bb.Text="Bring";bb.TextColor3=Color3.fromRGB(255,255,255);bb.Font=Enum.Font.GothamBold;bb.TextSize=9;bb.BorderSizePixel=0;local bc=Instance.new("UICorner",bb);bc.CornerRadius=UDim.new(0,5);bb.MouseButton1Click:Connect(function()pcall(function()bringPlayer(plr)end)end)end end end
 mB(Pg["Main"],"Refresh Players",function()refreshPlayers()end,T().accent)
 task.spawn(function()task.wait(1);refreshPlayers()end)
 
@@ -1331,7 +1331,7 @@ end)
 local screenshotFolder=Instance.new("Folder",workspace)
 screenshotFolder.Name="BurmaldaScreenshots"
 
-local function takeScreenshot()
+function takeScreenshot()
     pcall(function()
         local ch=LP.Character
         if ch and ch:FindFirstChild("HumanoidRootPart")then
@@ -1368,7 +1368,7 @@ end)
 -- FREECAM
 local freecamCam=nil
 local freecamConn=nil
-local function setFreecam(state)
+function setFreecam(state)
     if freecamConn then freecamConn:Disconnect()freecamConn=nil end
     if not state then
         workspace.CurrentCamera.CameraType=Enum.CameraType.Custom
@@ -1405,7 +1405,7 @@ local Profiles={
 }
 local CurrentProfile="Default"
 
-local function loadProfile(name)
+function loadProfile(name)
     if not Profiles[name]then N("Profile not found")return end
     for k,v in pairs(Profiles[name])do C[k]=v end
     CurrentProfile=name
@@ -1413,7 +1413,7 @@ local function loadProfile(name)
     sv()
 end
 
-local function saveProfile(name)
+function saveProfile(name)
     Profiles[name]={}
     for k,v in pairs(C)do
         if type(v)=="boolean"or type(v)=="number"then Profiles[name][k]=v end
@@ -1482,7 +1482,7 @@ end)
 -- DAMAGE NUMBERS (визуально)
 local dmgGui=Instance.new("ScreenGui");dmgGui.Name="DmgNumbers";dmgGui.ResetOnSpawn=false;dmgGui.Parent=LP:WaitForChild("PlayerGui")
 
-local function showDamage(amount,pos)
+function showDamage(amount,pos)
     if not C.DamageNumbers then return end
     local label=Instance.new("TextLabel",dmgGui)
     label.Size=UDim2.new(0,80,0,30)
@@ -1534,7 +1534,7 @@ danger=math.clamp(danger,0,100)
 end)
 
 -- DROPDOWN UI (для Ignore Lists)
-local function mkDropdown(parent,label,options,callback)
+function mkDropdown(parent,label,options,callback)
     local f=Instance.new("Frame",parent);f.Size=UDim2.new(1,-6,0,30);f.BackgroundColor3=T().panel;f.BorderSizePixel=0
     local c=Instance.new("UICorner",f);c.CornerRadius=UDim.new(0,5)
     local btn=Instance.new("TextButton",f);btn.Size=UDim2.new(1,0,1,0);btn.BackgroundTransparency=1;btn.Text=label.." ▼";btn.TextColor3=T().text;btn.Font=Enum.Font.GothamBold;btn.TextSize=10
@@ -1633,7 +1633,7 @@ KList.Padding=UDim.new(0,6)
 KList.SortOrder=Enum.SortOrder.LayoutOrder
 KList.HorizontalAlignment=Enum.HorizontalAlignment.Center
 
-local function makeKnob(label,minV,maxV,startV,callback,color)
+function makeKnob(label,minV,maxV,startV,callback,color)
     color=color or Color3.fromRGB(120,20,40)
     local knob=Instance.new("Frame",KnobFrame)
     knob.Size=UDim2.new(1,-8,0,55)
@@ -1670,7 +1670,7 @@ local function makeKnob(label,minV,maxV,startV,callback,color)
     local startAngle=0
     local startValue=startV
     
-    local function updateDial()
+    function updateDial()
         local percent=(value-minV)/(maxV-minV)
         local angle=-135+(percent*270)
         pointer.Rotation=angle
@@ -1779,7 +1779,7 @@ local cwApply=Instance.new("TextButton",cwFrame);cwApply.Size=UDim2.new(1,-20,0,
 local cwac=Instance.new("UICorner",cwApply);cwac.CornerRadius=UDim.new(0,6)
 
 local cwRVal=1;local cwGVal=0;local cwBVal=0
-local function updateCW()
+function updateCW()
     cwPreview.BackgroundColor3=Color3.new(cwRVal,cwGVal,cwBVal)
 end
 cwR.MouseButton1Click:Connect(function()cwRVal=cwRVal+0.1;if cwRVal>1 then cwRVal=0 end;updateCW()end)
@@ -1811,7 +1811,7 @@ end)
 -- ═══ FOLLOW PLAYER ═══
 local followTarget=nil
 local followConn=nil
-local function startFollow(plr)
+function startFollow(plr)
     if followConn then followConn:Disconnect()end
     followTarget=plr
     followConn=Run.Heartbeat:Connect(function()
@@ -1870,7 +1870,7 @@ end)
 
 -- ═══ FAKE ENTITY ═══
 local fakeEntities={}
-local function spawnFakeEntity(name)
+function spawnFakeEntity(name)
     local ch=LP.Character
     if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end
     local p=Instance.new("Part",workspace)
@@ -1886,7 +1886,7 @@ local function spawnFakeEntity(name)
 end
 
 -- ═══ FAKE CHAT ═══
-local function fakeChat(msg)
+function fakeChat(msg)
     pcall(function()
         local Folder=RS:FindFirstChild("DefaultChatSystemEvents")or Instance.new("Folder")
         local Event=Folder:FindFirstChild("SayMessageRequest")or Instance.new("RemoteEvent")
@@ -2015,7 +2015,7 @@ print("[Burmalda v13] Copyright KOTENOK7204 | Tester Kostya_2015KostyaKos")
 -- ВСТАВИТЬ ПОСЛЕ ЧАСТИ 7
 
 -- ═══ ENTITY TELEPORT (функция) ═══
-local function tpEntityToMe()
+function tpEntityToMe()
     local ch=LP.Character
     if not ch or not ch:FindFirstChild("HumanoidRootPart")then return end
     local myPos=ch.HumanoidRootPart.Position
@@ -2123,19 +2123,19 @@ end)
 
 -- ═══ UI SCALE / OPACITY ═══
 local uiScale=C.UI_Scale or 1
-local function applyUIScale(s)
+function applyUIScale(s)
     uiScale=s
     M.Size=UDim2.new(0,440*s,0,420*s)
     OB.Size=UDim2.new(0,50*s,0,50*s)
 end
 
-local function applyOpacity(o)
+function applyOpacity(o)
     M.BackgroundTransparency=o
     TB.BackgroundTransparency=o
 end
 
 -- ═══ SERVER HOP ═══
-local function serverHop()
+function serverHop()
     pcall(function()
         local url="https://games.roblox.com/v1/games/6839171747/servers/Public?sortOrder=Asc&limit=100"
         local response=HS:JSONDecode(game:HttpGet(url))
@@ -2190,7 +2190,7 @@ task.spawn(function()
 end)
 
 -- ═══ FAKE SCREENSHOT ═══
-local function fakeScreenshot()
+function fakeScreenshot()
     pcall(function()
         local gui=Instance.new("ScreenGui",LP:WaitForChild("PlayerGui"))
         gui.Name="FakeSS"
@@ -2235,7 +2235,7 @@ label.Text="- "..math.random(5,50)
 end)
 
 -- ═══ CUSTOM NOTIFICATIONS ═══
-local function customNotify(title,text,color)
+function customNotify(title,text,color)
     pcall(function()
         local gui=Instance.new("ScreenGui",LP:WaitForChild("PlayerGui"))
         gui.Name="CustomNotif"
