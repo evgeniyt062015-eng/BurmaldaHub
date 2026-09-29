@@ -1,6 +1,5 @@
-
--- BURMALDA v13 | Part 3/8 — TP + HIDE + AUTOSEEK
--- TP Items/Players, Infinite Hide, Auto Seek, Route Arrow, Platform, Steer
+-- BURMALDA v14 | Part 3/8 — TP + HIDE + AUTOSEEK
+-- TP Items/Players, Infinite Hide, Auto Seek, Route Arrow, Platform
 
 local C=_G.C
 local T=_G.T
@@ -18,26 +17,37 @@ local function getR()
     return ch and ch:FindFirstChild("HumanoidRootPart")
 end
 
--- ═══ FIND NEAREST ITEM ═══
-local function findNearestItem()
-    local ch=LP.Character
-    if not ch or not ch:FindFirstChild("HumanoidRootPart") then return nil end
-    local myPos=ch.HumanoidRootPart.Position
+local function getItemPart(o)
+    if o:IsA("BasePart") then return o end
+    if o.PrimaryPart then return o.PrimaryPart end
+    return o:FindFirstChildWhichIsA("BasePart",true)
+end
+
+local ITEM_NAMES={"crucifix","lockpick","bandage","flashlight","lighter","battery",
+"vitamin","key","coin","gold","candle","skeleton","shakelight","straplight",
+"bulklight","lantern","shears","scanner","compass","bottle","crate","pizza",
+"donut","cheese","bread","smoothie","nanner","glowstick"}
+
+local function isItem(name)
+    local n=name:lower()
+    for _,k in ipairs(ITEM_NAMES) do
+        if n:find(k,1,true) then return true end
+    end
+    return false
+end
+
+-- ═══ TP NEAREST ITEM ═══
+_G.tpNearestItem=function()
+    local r=getR(); if not r then return end
+    local myPos=r.Position
     local closest,dist=nil,math.huge
     for _,o in ipairs(workspace:GetDescendants()) do
         if o:IsA("Model") or o:IsA("BasePart") then
             if P:GetPlayerFromCharacter(o) then continue end
-            if o==ch then continue end
-            if ch:IsAncestorOf(o) then continue end
-            local n=o.Name:lower()
-            if n:find("crucifix") or n:find("lockpick") or n:find("bandage")
-            or n:find("flashlight") or n:find("lighter") or n:find("battery")
-            or n:find("vitamin") or n:find("key") or n:find("coin")
-            or n:find("gold") or n:find("candle") or n:find("skeleton")
-            or n:find("shakelight") or n:find("straplight") or n:find("bulklight")
-            or n:find("lantern") or n:find("shears") or n:find("scanner")
-            or n:find("compass") then
-                local p=o:IsA("BasePart") and o or (o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true))
+            local ch=LP.Character
+            if ch and ch:IsAncestorOf(o) then continue end
+            if isItem(o.Name) then
+                local p=getItemPart(o)
                 if p then
                     local d=(p.Position-myPos).Magnitude
                     if d<dist and d<C.TPItemRadius and d>3 then
@@ -48,42 +58,27 @@ local function findNearestItem()
             end
         end
     end
-    return closest
-end
-
-_G.tpNearestItem=function()
-    local item=findNearestItem()
-    if item then
-        local ch=LP.Character
-        if ch and ch:FindFirstChild("HumanoidRootPart") then
-            ch.HumanoidRootPart.CFrame=CFrame.new(item.Position+Vector3.new(0,3,0))
-            N("TP to item")
-        end
+    if closest then
+        r.CFrame=CFrame.new(closest.Position+Vector3.new(0,3,0))
+        N("TP to item")
     else
-        N("No items")
+        N("No items nearby")
     end
 end
 
 _G.tpToPlayer=function(t)
-    local ch=LP.Character
-    if not ch or not ch:FindFirstChild("HumanoidRootPart") then return end
-    local tg=t.Character
-    if not tg then N("No char"); return end
-    local tr=tg:FindFirstChild("HumanoidRootPart")
-    if not tr then N("Not in game"); return end
-    ch.HumanoidRootPart.CFrame=CFrame.new(tr.Position+Vector3.new(0,3,0))
+    local r=getR(); if not r then return end
+    local tg=t.Character; if not tg then N("No char"); return end
+    local tr=tg:FindFirstChild("HumanoidRootPart"); if not tr then N("Not in game"); return end
+    r.CFrame=CFrame.new(tr.Position+Vector3.new(0,3,0))
     N("TP to "..t.Name)
 end
 
 _G.bringPlayer=function(t)
-    local ch=LP.Character
-    if not ch or not ch:FindFirstChild("HumanoidRootPart") then return end
-    local myPos=ch.HumanoidRootPart.Position
-    local tg=t.Character
-    if not tg then return end
-    local tr=tg:FindFirstChild("HumanoidRootPart")
-    if not tr then return end
-    tr.CFrame=CFrame.new(myPos+Vector3.new(0,3,0))
+    local r=getR(); if not r then return end
+    local tg=t.Character; if not tg then return end
+    local tr=tg:FindFirstChild("HumanoidRootPart"); if not tr then return end
+    tr.CFrame=CFrame.new(r.Position+Vector3.new(0,3,0))
     N("Brought "..t.Name)
 end
 
@@ -99,19 +94,17 @@ _G.isInsideCloset=function()
     return false
 end
 
-_G.forceHide=function()
-    local ch=LP.Character
-    if not ch or not ch:FindFirstChild("HumanoidRootPart") then return false end
-    local pos=ch.HumanoidRootPart.Position
+local function findCloset(pos, maxDist)
     local closest,prompt,dist=nil,nil,math.huge
     for _,o in ipairs(workspace:GetDescendants()) do
         if o:IsA("Model") then
             local n=o.Name:lower()
             if n:find("closet") or n:find("hiding") or n:find("wardrobe")
             or n:find("cabinet") or n:find("locker") then
-                local p=o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true)
-                if p thenlocal d=(p.Position-pos).Magnitude
-                    if d<dist then
+                local p=getItemPart(o)
+                if p then
+                    local d=(p.Position-pos).Magnitude
+                    if d<dist and d<maxDist then
                         local pr=o:FindFirstChildWhichIsA("ProximityPrompt",true)
                         if pr and pr.Enabled then
                             dist=d
@@ -123,21 +116,25 @@ _G.forceHide=function()
             end
         end
     end
-    if closest and prompt and dist<100 then
-        local p=closest.PrimaryPart or closest:FindFirstChildWhichIsA("BasePart",true)
-        if p then ch.HumanoidRootPart.CFrame=CFrame.new(p.Position+Vector3.new(0,2,0)) end
-        task.wait(0.1)
-        pcall(function()
-            prompt:InputHoldBegin()
-            task.wait(math.max(prompt.HoldDuration or 0,0.05))
-            prompt:InputHoldEnd()
-        end)
-        return true
-    end
-    return false
+    return closest,prompt,dist
 end
 
--- ═══ INFINITE HIDE LOOP ═══
+_G.forceHide=function()
+    local r=getR(); if not r then return false end
+    local closest,prompt,dist=findCloset(r.Position,100)
+    if not closest then return false end
+    local p=getItemPart(closest)
+    if p then r.CFrame=CFrame.new(p.Position+Vector3.new(0,2,0)) end
+    task.wait(0.1)
+    pcall(function()
+        prompt:InputHoldBegin()
+        task.wait(math.max(prompt.HoldDuration or 0,0.05))
+        prompt:InputHoldEnd()
+    end)
+    return true
+end
+
+-- ═══ INFINITE HIDE ═══
 task.spawn(function()
     while task.wait(0.3) do
         if C.InfiniteHide then
@@ -159,61 +156,51 @@ end)
 -- ═══ AUTO HIDE ═══
 local HD=0
 local IH=false
+
 _G.aH=function()
-    local ch=LP.Character
-    if not ch or not ch:FindFirstChild("HumanoidRootPart") then return end
-    local pos=ch.HumanoidRootPart.Position
-    local dg=false
+    local r=getR(); if not r then return end
+    local pos=r.Position
+    local danger=false
     for _,o in ipairs(workspace:GetDescendants()) do
         if o:IsA("Model") then
             local n=o.Name:lower()
             if (n:find("rush") and C.AutoHideRush)
             or (n:find("ambush") and C.AutoHideAmbush)
-            or (C.AutoHideAll and (n:find("seek") or n:find("figure"))) then
-                local p=o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true)
+            or (C.AutoHideAll and (n:find("seek") or n:find("figure") or n:find("blitz"))) then
+                local p=getItemPart(o)
                 if p and (p.Position-pos).Magnitude<100 then
-                    dg=true
+                    danger=true
                     break
                 end
             end
         end
     end
-    if not dg or IH or tick()-HD<2 then return end
-    local cl,pr,dt=nil,nil,math.huge
-    for _,o in ipairs(workspace:GetDescendants()) do
-        if o:IsA("Model") then
-            local n=o.Name:lower()
-            if n:find("closet") or n:find("hiding") or n:find("wardrobe") then
-                local p=o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true)
-                if p then
-                    local d=(p.Position-pos).Magnitude
-                    if d<dt then
-                        local pp=o:FindFirstChildWhichIsA("ProximityPrompt",true)
-                        if pp and pp.Enabled then
-                            dt=d
-                            cl=o
-                            pr=pp
-                        end
-                    end
-                end
-            end
-        end
-    end
-    if cl and pr and dt<50 then
-        local p=cl.PrimaryPart or cl:FindFirstChildWhichIsA("BasePart",true)
-        if p then ch.HumanoidRootPart.CFrame=CFrame.new(p.Position+Vector3.new(0,2,0)) end
+    if not danger or IH or tick()-HD<2 then return end
+    local closest,prompt,dist=findCloset(pos,50)
+    if closest and prompt then
+        local p=getItemPart(closest)
+        if p then r.CFrame=CFrame.new(p.Position+Vector3.new(0,2,0)) end
         task.wait(0.15)
         IH=true
         pcall(function()
-            pr:InputHoldBegin()
-            task.wait(math.max(pr.HoldDuration or 0,0.05))
-            pr:InputHoldEnd()
+            prompt:InputHoldBegin()
+            task.wait(math.max(prompt.HoldDuration or 0,0.05))
+            prompt:InputHoldEnd()
         end)
         HD=tick()
         task.wait(1)
         IH=false
     end
 end
+
+-- ═══ AUTO RE-HIDE ═══
+task.spawn(function()
+    while task.wait(1) do
+        if C.AutoReHide and C.InfiniteHide then
+            if not _G.isInsideCloset() then pcall(_G.forceHide) end
+        end
+    end
+end)
 
 -- ═══ AUTO-PLATFORM ═══
 local platFolder=Instance.new("Folder",workspace)
@@ -228,25 +215,17 @@ local function makePlatform(pos,size)
     p.Transparency=0.4
     p.Color=Color3.fromRGB(0,255,255)
     p.Material=Enum.Material.Neon
-game:GetService("Debris"):AddItem(p,3)
+    game:GetService("Debris"):AddItem(p,3)
 end
 
 task.spawn(function()
-    while task.wait(0.15) do
+    while task.wait(0.2) do
         if C.AutoPlatform then
-            local ch=LP.Character
-            if ch and ch:FindFirstChild("HumanoidRootPart") then
-                local root=ch.HumanoidRootPart
-                local fwd=root.CFrame.LookVector*5
-                makePlatform(root.Position+fwd-Vector3.new(0,2,0))
-                makePlatform(root.Position-Vector3.new(0,3,0))
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o:IsA("BasePart") and (o.Name:lower():find("water") or o.Material==Enum.Material.Water) then
-                        if (o.Position-root.Position).Magnitude<30 then
-                            makePlatform(Vector3.new(root.Position.X,o.Position.Y+3,root.Position.Z),Vector3.new(8,0.5,8))
-                        end
-                    end
-                end
+            local r=getR()
+            if r then
+                local fwd=r.CFrame.LookVector*5
+                makePlatform(r.Position+fwd-Vector3.new(0,2,0))
+                makePlatform(r.Position-Vector3.new(0,3,0))
             end
         end
     end
@@ -261,30 +240,24 @@ task.spawn(function()
                 local h=ch:FindFirstChildOfClass("Humanoid")
                 local root=ch.HumanoidRootPart
                 if h then
+                    -- Ray для прыжков
                     pcall(function()
                         local ray=Ray.new(root.Position,root.CFrame.LookVector*4)
                         local hit=workspace:FindPartOnRay(ray,ch)
-                        if hit and hit.CanCollide and C.AutoPlatform then
-                            makePlatform(root.Position+root.CFrame.LookVector*4-Vector3.new(0,1,0),Vector3.new(5,0.5,5))
-                        end
-                        if hit and hit.CanCollide and not C.AutoPlatform then
-                            h:ChangeState(Enum.HumanoidStateType.Jumping)
-                        end
-                    end)
-                    pcall(function()
-                        local ray=Ray.new(root.Position+Vector3.new(0,2,0),Vector3.new(0,3,0))
-                        local hit=workspace:FindPartOnRay(ray,ch)
-                        if RF then
-                            if hit and hit.CanCollide then
-                                if RF:FindFirstChild("Crouch") then RF.Crouch:FireServer(true) end
+                        if hit and hit.CanCollide then
+                            if C.AutoPlatform then
+                                makePlatform(root.Position+root.CFrame.LookVector*4-Vector3.new(0,1,0),Vector3.new(5,0.5,5))
                             else
-                                if RF:FindFirstChild("Crouch") then RF.Crouch:FireServer(false) end
+                                h:ChangeState(Enum.HumanoidStateType.Jumping)
                             end
                         end
                     end)
+                    -- Поиск ближайшей двери
                     local myPos=root.Position
                     local latestRoom=0
-                    if GD and GD:FindFirstChild("LatestRoom") then latestRoom=GD.LatestRoom.Value end
+                    if GD and GD:FindFirstChild("LatestRoom") then
+                        latestRoom=GD.LatestRoom.Value
+                    end
                     local bestDoor,bestNum=nil,math.huge
                     for _,o in ipairs(workspace:GetDescendants()) do
                         if o:IsA("Model") and o.Name:lower()=="door" then
@@ -299,7 +272,7 @@ task.spawn(function()
                         end
                     end
                     if bestDoor then
-                        local dp=bestDoor.PrimaryPart or bestDoor:FindFirstChildWhichIsA("BasePart",true)
+                        local dp=getItemPart(bestDoor)
                         if dp then
                             local dir=(dp.Position-myPos).Unit
                             h:Move(dir,false)
@@ -308,7 +281,7 @@ task.spawn(function()
                                     if pr:IsA("ProximityPrompt") then
                                         pcall(function()
                                             pr:InputHoldBegin()
-task.wait(0.05)
+                                            task.wait(0.05)
                                             pr:InputHoldEnd()
                                         end)
                                     end
@@ -345,11 +318,12 @@ sac.CornerRadius=UDim.new(0,10)
 task.spawn(function()
     while task.wait(0.1) do
         if C.AutoSeek then
-            local ch=LP.Character
-            if ch and ch:FindFirstChild("HumanoidRootPart") then
-                local myPos=ch.HumanoidRootPart.Position
+            local r=getR()
+            if r then
                 local latestRoom=0
-                if GD and GD:FindFirstChild("LatestRoom") then latestRoom=GD.LatestRoom.Value end
+                if GD and GD:FindFirstChild("LatestRoom") then
+                    latestRoom=GD.LatestRoom.Value
+                end
                 local bestDoor,bestNum=nil,math.huge
                 for _,o in ipairs(workspace:GetDescendants()) do
                     if o:IsA("Model") and o.Name:lower()=="door" then
@@ -364,9 +338,9 @@ task.spawn(function()
                     end
                 end
                 if bestDoor then
-                    local dp=bestDoor.PrimaryPart or bestDoor:FindFirstChildWhichIsA("BasePart",true)
+                    local dp=getItemPart(bestDoor)
                     if dp then
-                        local dir=(dp.Position-myPos).Unit
+                        local dir=(dp.Position-r.Position).Unit
                         local cam=workspace.CurrentCamera
                         local cl=cam.CFrame.LookVector
                         local angle=math.atan2(dir.X-cl.X,dir.Z-cl.Z)*57.3
@@ -398,23 +372,23 @@ task.spawn(function()
                     local ct,td=nil,math.huge
                     for _,o in ipairs(workspace:GetDescendants()) do
                         if o:IsA("Model") and (o.Name:lower():find("turn") or o.Name:lower():find("junction")) then
-                            local p=o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true)
+                            local p=getItemPart(o)
                             if p then
                                 local d=(p.Position-myPos).Magnitude
-                                if d<td then
-                                    td=d
-                                    ct=o
-                                end
+                                if d<td then td=d ct=o end
                             end
                         end
                     end
                     if ct and td<15 then
-                        local dir=(ct.PrimaryPart.Position-myPos).Unit
-                        local right=mc:GetPivot().RightVector
-if dir:Dot(right)>0 then
-                            pcall(function() move:FireServer(Vector3.new(1,0,0)) end)
-                        else
-                            pcall(function() move:FireServer(Vector3.new(-1,0,0)) end)
+                        local ctPart=getItemPart(ct)
+                        if ctPart then
+                            local dir=(ctPart.Position-myPos).Unit
+                            local right=mc:GetPivot().RightVector
+                            if dir:Dot(right)>0 then
+                                pcall(function() move:FireServer(Vector3.new(1,0,0)) end)
+                            else
+                                pcall(function() move:FireServer(Vector3.new(-1,0,0)) end)
+                            end
                         end
                     else
                         pcall(function() move:FireServer(Vector3.new(0,0,1)) end)
@@ -425,15 +399,4 @@ if dir:Dot(right)>0 then
     end
 end)
 
--- ═══ AUTO RE-HIDE ═══
-task.spawn(function()
-    while task.wait(1) do
-        if C.AutoReHide and C.InfiniteHide then
-            if not _G.isInsideCloset() then
-                pcall(_G.forceHide)
-            end
-        end
-    end
-end)
-
-print("[Burmalda v13] Part 3/8 — TP + HIDE + AUTOSEEK loaded")
+print("[Burmalda v14] Part 3/8 — TP + HIDE + AUTOSEEK loaded")
