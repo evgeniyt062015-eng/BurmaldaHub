@@ -1,5 +1,5 @@
 -- BURMALDA v15 | Part 14/14 — LOADING + AUTO-LOADER
--- Экран загрузки с подсказками, определение места, автозапуск
+-- Экран загрузки с подсказками, проверка лобби/игры, автозапуск
 
 local C=_G.C
 local T=_G.T
@@ -22,14 +22,12 @@ BG.Size=UDim2.new(1,0,1,0)
 BG.BackgroundColor3=Color3.fromRGB(10,10,14)
 BG.BorderSizePixel=0
 
--- Градиент
 local grad=Instance.new("Frame",BG)
 grad.Size=UDim2.new(1,0,1,0)
 grad.BackgroundColor3=Color3.fromRGB(120,20,40)
 grad.BackgroundTransparency=0.85
 grad.BorderSizePixel=0
 
--- Лого
 local Logo=Instance.new("ImageLabel",BG)
 Logo.Size=UDim2.new(0,100,0,100)
 Logo.Position=UDim2.new(0.5,-50,0.4,-150)
@@ -38,7 +36,6 @@ Logo.Image="rbxassetid://6031280882"
 Logo.ImageColor3=Color3.fromRGB(180,30,30)
 Logo.ScaleType=Enum.ScaleType.Fit
 
--- Заголовок
 local Title=Instance.new("TextLabel",BG)
 Title.Size=UDim2.new(1,0,0,50)
 Title.Position=UDim2.new(0,0,0.4,-30)
@@ -57,7 +54,6 @@ Ver.TextColor3=Color3.fromRGB(180,30,30)
 Ver.Font=Enum.Font.GothamBold
 Ver.TextSize=14
 
--- Прогресс-бар
 local BarBG=Instance.new("Frame",BG)
 BarBG.Size=UDim2.new(0,400,0,8)
 BarBG.Position=UDim2.new(0.5,-200,0.5,30)
@@ -73,7 +69,6 @@ Bar.BorderSizePixel=0
 local BC=Instance.new("UICorner",Bar)
 BC.CornerRadius=UDim.new(1,0)
 
--- Процент
 local Percent=Instance.new("TextLabel",BG)
 Percent.Size=UDim2.new(1,0,0,18)
 Percent.Position=UDim2.new(0,0,0.5,45)
@@ -83,7 +78,6 @@ Percent.TextColor3=Color3.fromRGB(200,200,210)
 Percent.Font=Enum.Font.GothamBold
 Percent.TextSize=12
 
--- Статус
 local Status=Instance.new("TextLabel",BG)
 Status.Size=UDim2.new(1,0,0,24)
 Status.Position=UDim2.new(0,0,0.5,70)
@@ -93,7 +87,6 @@ Status.TextColor3=Color3.fromRGB(240,240,245)
 Status.Font=Enum.Font.Gotham
 Status.TextSize=14
 
--- ПОДСКАЗКА (что сейчас грузится)
 local Hint=Instance.new("TextLabel",BG)
 Hint.Size=UDim2.new(0,600,0,20)
 Hint.Position=UDim2.new(0.5,-300,0.5,100)
@@ -104,7 +97,6 @@ Hint.Font=Enum.Font.Gotham
 Hint.TextSize=11
 Hint.TextWrapped=true
 
--- Место
 local Info=Instance.new("TextLabel",BG)
 Info.Size=UDim2.new(1,0,0,18)
 Info.Position=UDim2.new(0,0,0.5,130)
@@ -114,7 +106,6 @@ Info.TextColor3=Color3.fromRGB(150,150,160)
 Info.Font=Enum.Font.Gotham
 Info.TextSize=11
 
--- Кредит
 local Credit=Instance.new("TextLabel",BG)
 Credit.Size=UDim2.new(1,0,0,20)
 Credit.Position=UDim2.new(0,0,1,-30)
@@ -124,36 +115,34 @@ Credit.TextColor3=Color3.fromRGB(120,120,130)
 Credit.Font=Enum.Font.Gotham
 Credit.TextSize=10
 
--- ═══ ПОДСКАЗКИ ПО КАЖДОЙ ЧАСТИ ═══
+-- ═══ ПОДСКАЗКИ ПО ЧАСТЯМ ═══
 local HINTS={
-    [1]="Part 1 — CORE: Config, темы, уведомления",
-    [2]="Part 2 — MAIN: Fly, Noclip, Speed (фикс телепорта)",
-    [3]="Part 3 — TP + HIDE + AUTO: Auto Collect, Auto Coins, Auto Door",
-    [4]="Part 4 — BYPASS: Rush, Ambush, Seek, Figure + Abysall",
-    [5]="Part 5 — VISUAL: FOV, Chams, Wallhack (с выключением)",
-    [6]="Part 6 — ESP: 22 монстра + объекты через Highlight",
-    [7]="Part 7 — EXPLOITS: God Mode, Freeze, Time Stop",
-    [8]="Part 8 — MUSIC + SOUND: плеер, предупреждения",
-    [9]="Part 9 — STATS + PLAYERS: FPS, Ping, Follow",
-    [10]="Part 10 — FUN: Snow, Aura, Fireworks, Ducks",
-    [11]="Part 11 — ADMIN: Fake Panel, 40+ кнопок",
-    [12]="Part 12 — FPS BOOSTER: Low Graphics, Remove Particles",
-    [13]="Part 13 — GUI: 34 вкладки, кнопка B, Search",
+    [2]="Part 2 — MAIN: Fly, Noclip, Speed (фикс)",
+    [3]="Part 3 — TP + HIDE + AUTO: Auto Collect",
+    [4]="Part 4 — BYPASS: Rush, Ambush, Seek, Figure",
+    [5]="Part 5 — VISUAL: FOV, Chams, Wallhack",
+    [6]="Part 6 — ESP: 22 монстра + объекты",
+    [7]="Part 7 — EXPLOITS: God Mode, Freeze",
+    [8]="Part 8 — MUSIC + SOUND",
+    [9]="Part 9 — STATS + PLAYERS",
+    [10]="Part 10 — FUN: Snow, Aura, Ducks",
+    [11]="Part 11 — ADMIN: Fake Panel",
+    [12]="Part 12 — FPS BOOSTER",
+    [13]="Part 13 — GUI: 34 вкладки, кнопка B",
 }
 
 local HINTS_STATIC={
     "💡 Совет: нажми B — открыть меню",
-    "💡 Совет: Auto Seek Door — идёт к дверям сам",
+    "💡 Совет: Auto Seek Door — идёт к дверям",
     "💡 Совет: Bypass Rush — защита от Rush",
     "💡 Совет: ESP Doors — видно все двери",
     "💡 Совет: FPS Booster — убирает лаги",
     "💡 Совет: Fly — F для вкл/выкл",
-    "💡 Совет: Admin — Fake Panel (визуал)",
-    "💡 Совет: Spawn Rush — реально создаёт шар",
-    "💡 Совет: Config в Settings — сохранение",
+    "💡 Совет: Search в хедере — поиск",
+    "💡 Совет: Spawn Rush — реальный шар",
+    "💡 Совет: Config в Settings",
     "💡 Совет: Updates — проверка версии",
-    "💡 Совет: Search в хедере — поиск функций",
-    "💡 Совет: Notify Entities — уведомления о спавне",
+    "💡 Совет: Notify Entities — уведомления",
 }
 
 local function setProgress(p, text, hint)
@@ -164,20 +153,59 @@ local function setProgress(p, text, hint)
     if hint then Hint.Text=hint end
 end
 
+-- ═══ ОПРЕДЕЛЕНИЕ МЕСТА ═══
 local function detectLocation()
     local inGame=false
-    if _G.CR and _G.CR:FindFirstChildOfClass("Model") then
-        inGame=true
+    
+    -- Проверка 1: есть ли комнаты в CurrentRooms
+    if _G.CR then
+        for _,child in ipairs(_G.CR:GetChildren()) do
+            if child:IsA("Model") then
+                inGame=true
+                break
+            end
+        end
     end
+    
+    -- Проверка 2: есть ли прогресс в LatestRoom
+    if not inGame then
+        local gd=_G.GD
+        if gd and gd:FindFirstChild("LatestRoom") then
+            local lr=gd.LatestRoom.Value
+            if lr and tonumber(lr) and tonumber(lr)>0 then
+                inGame=true
+            end
+        end
+    end
+    
+    -- Проверка 3: есть ли персонаж в комнате с дверьми
+    if not inGame then
+        local ch=LP and LP.Character
+        if ch then
+            local r=ch:FindFirstChild("HumanoidRootPart")
+            if r then
+                for _,o in ipairs(workspace:GetDescendants()) do
+                    if o:IsA("Model") and o.Name:lower()=="door" then
+                        if (o:GetPivot().Position - r.Position).Magnitude < 50 then
+                            inGame=true
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
     local floor="Hotel"
     if _G.GD and _G.GD:FindFirstChild("Floor") then
         floor=_G.GD.Floor.Value
     end
+    
     if inGame then
         Info.Text="📍 Место: В ИГРЕ | Этаж: "..floor
         return "game", floor
     else
-        Info.Text="📍 Место: ЛОББИ (ожидание игры)"
+        Info.Text="📍 Место: ЛОББИ — зайдите в лифт и начните игру"
         return "lobby", floor
     end
 end
@@ -200,7 +228,6 @@ local function loadParts(startFrom)
         end
         task.wait(0.15)
         
-        -- Периодически меняем подсказку на статичную
         if i%3==0 then
             Hint.Text=HINTS_STATIC[math.random(1,#HINTS_STATIC)]
             task.wait(0.3)
@@ -217,17 +244,31 @@ task.spawn(function()
     local loc, floor = detectLocation()
     task.wait(0.5)
     
+    -- Сообщение лобби/игра
+    if loc=="lobby" then
+        setProgress(0.20, "ЛОББИ — зайдите в лифт и начните игру", "💡 Нажмите HOST GAME → выберите этаж")
+        Hint.TextColor3=Color3.fromRGB(255,200,50)
+        task.wait(2)
+        N("🎮 ВЫ В ЛОББИ — зайдите в лифт и начните игру")
+        N("💡 HOST GAME → выберите этаж")
+        task.wait(1.5)
+    else
+        setProgress(0.20, "ВЫ В ИГРЕ | Этаж: "..floor, "💡 Загружаем функции для "..floor)
+        Hint.TextColor3=Color3.fromRGB(80,220,120)
+        task.wait(1)
+        N("✅ ВЫ В ИГРЕ | Этаж: "..floor)
+        task.wait(0.5)
+    end
+    
     setProgress(0.25, "Загрузка скриптов...", "💡 Загружаем 12 частей...")
     task.wait(0.2)
     
-    -- Загружаем Part2-13
     loadParts(2)
     
     setProgress(1, "BURMALDA v15 запущена!", "✅ Готово! Нажми B для открытия меню")
     task.wait(1.5)
     
-    -- Плавно убираем экран
-    local fadeTime=0.6
+    -- Плавное исчезновение
     local steps=15
     for i=1,steps do
         local p=i/steps
@@ -242,18 +283,17 @@ task.spawn(function()
         Hint.TextTransparency=p
         Info.TextTransparency=p
         Credit.TextTransparency=p
-        task.wait(fadeTime/steps)
+        task.wait(0.6/steps)
     end
     LoadGui:Destroy()
     
-    -- Приветствие
     task.wait(0.3)
     N("✅ Burmalda v15 загружена!")
     task.wait(0.5)
     N("👑 Нажми B — открыть меню")
 end)
 
--- ═══ АВТО-ПЕРЕЗАПУСК ПРИ ТЕЛЕПОРТЕ ═══
+-- ═══ АВТО-ПЕРЕЗАПУСК ═══
 local AUTO_RELOAD=true
 local lastFloor=_G.gF()
 local lastChar=LP.Character
@@ -270,7 +310,6 @@ LP.CharacterAdded:Connect(function(newChar)
     end
 end)
 
--- Следим за сменой этажа
 task.spawn(function()
     while task.wait(2) do
         if _G.GD and _G.GD:FindFirstChild("Floor") then
@@ -292,4 +331,4 @@ pcall(function()
     end
 end)
 
-print("[Burmalda v15] Part 14/14 — LOADING SCREEN + AUTO-LOADER loaded")
+print("[Burmalda v15] Part 14/14 — LOADING + AUTO-LOADER loaded")
