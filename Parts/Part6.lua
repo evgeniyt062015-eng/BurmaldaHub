@@ -1,4 +1,4 @@
--- BURMALDA v13 | Part 6/8 — VISUAL + MUSIC + SOUND + MOVE + STATS
+-- BURMALDA v14 | Part 6/8 — VISUAL + MUSIC + SOUND + MOVE + STATS
 -- FOV, Crosshair, Tracker, Wallhack, Chams, Music Player
 
 local C=_G.C
@@ -86,7 +86,7 @@ task.spawn(function()
     end
 end)
 
--- ═══ FUN RAINBOW (персонаж) ═══
+-- ═══ FUN RAINBOW ═══
 task.spawn(function()
     while task.wait(0.1) do
         if C.FunRainbow then
@@ -147,45 +147,58 @@ end)
 
 -- ═══ MUSIC PLAYER ═══
 local musicSound=nil
+
 _G.playMusic=function(id)
-    if musicSound then musicSound:Destroy() end
+    if musicSound then pcall(function() musicSound:Destroy() end) end
     if id=="" or not id then N("No ID"); return end
-    musicSound=Instance.new("Sound",SS)
-    musicSound.SoundId="rbxassetid://"..id
-    musicSound.Volume=C.MusicVolume
-    musicSound.Looped=true
-    musicSound:Play()
-    C.MusicId=id
-    C.MusicPlaying=true
+    pcall(function()
+        musicSound=Instance.new("Sound",SS)
+        musicSound.SoundId="rbxassetid://"..tostring(id)
+        musicSound.Volume=C.MusicVolume
+        musicSound.Looped=true
+        musicSound:Play()
+        C.MusicId=id
+        C.MusicPlaying=true
+    end)
 end
 
 _G.stopMusic=function()
-    if musicSound then musicSound:Stop(); musicSound:Destroy() end
+    if musicSound then
+        pcall(function() musicSound:Stop(); musicSound:Destroy() end)
+    end
     musicSound=nil
     C.MusicPlaying=false
 end
 
--- ═══ SOUND WARNINGS ═══
+-- ═══ SOUND WARNING (Rush) ═══
+local warnedRush=false
 task.spawn(function()
     while task.wait(1) do
         if C.RushWarning then
+            local found=false
             for _,o in ipairs(workspace:GetDescendants()) do
-                if o.Name:lower():find("rush") and o:IsA("Model") then
-                    pcall(function()
-                        local s=Instance.new("Sound",SS)
-                        s.SoundId="rbxassetid://8784885431"
-                        s.Volume=1
-                        s:Play()
-                        task.delay(2,function() s:Destroy() end)
-                    end)
+                if o:IsA("Model") and o.Name:lower():find("rush") then
+                    found=true
                     break
                 end
+            end
+            if found and not warnedRush then
+                warnedRush=true
+                pcall(function()
+                    local s=Instance.new("Sound",SS)
+                    s.SoundId="rbxassetid://8784885431"
+                    s.Volume=1
+                    s:Play()
+                    task.delay(2,function() s:Destroy() end)
+                end)
+            elseif not found then
+                warnedRush=false
             end
         end
     end
 end)
 
--- ═══ MOVE: SAVE / TP TO SAVE ═══
+-- ═══ SAVE / TP TO SAVE ═══
 local savedPos=nil
 
 _G.savePos=function()
@@ -235,7 +248,7 @@ _G.setFollow=function(plr)
     end)
 end
 
--- ═══ STATS: SPEEDRUN TIMER ═══
+-- ═══ SPEEDRUN TIMER ═══
 task.spawn(function()
     while task.wait(1) do
         if C.ShowTimer then
@@ -323,22 +336,27 @@ task.spawn(function()
             if root then
                 local pos=root.Position
                 for _,o in ipairs(workspace:GetDescendants()) do
-                    local ok,_,ne=_G.isE(o)
-                    if ok then
-                        local op=o:IsA("BasePart") and o.Position or (o.PrimaryPart and o.PrimaryPart.Position)
-                        if op then
-                            local d=(op-pos).Magnitude
-                            if d<150 then
-                                local dot=Instance.new("Frame",trackerFrame)
-                                dot.Name="Dot"
-                                dot.Size=UDim2.new(0,8,0,8)
-                                local rx=math.clamp((op.X-pos.X)/150*0.5+0.5,0,1)
-                                local rz=math.clamp((op.Z-pos.Z)/150*0.5+0.5,0,1)
-                                dot.Position=UDim2.new(rx,-4,rz,-4)
-                                dot.BackgroundColor3=C.ESPColor
-                                dot.BorderSizePixel=0
-                                local dc=Instance.new("UICorner",dot)
-                                dc.CornerRadius=UDim.new(1,0)
+                    if o:IsA("Model") then
+                        local n=o.Name:lower()
+                        local isEnt=n:find("rush") or n:find("ambush") or n:find("seek")
+                            or n:find("figure") or n:find("screech") or n:find("halt")
+                            or n:find("grumble") or n:find("giggle") or n:find("blitz")
+                        if isEnt then
+                            local op=o.PrimaryPart and o.PrimaryPart.Position
+                            if op then
+                                local d=(op-pos).Magnitude
+                                if d<150 then
+                                    local dot=Instance.new("Frame",trackerFrame)
+                                    dot.Name="Dot"
+                                    dot.Size=UDim2.new(0,8,0,8)
+                                    local rx=math.clamp((op.X-pos.X)/150*0.5+0.5,0,1)
+                                    local rz=math.clamp((op.Z-pos.Z)/150*0.5+0.5,0,1)
+                                    dot.Position=UDim2.new(rx,-4,rz,-4)
+                                    dot.BackgroundColor3=C.ESPColor
+                                    dot.BorderSizePixel=0
+                                    local dc=Instance.new("UICorner",dot)
+                                    dc.CornerRadius=UDim.new(1,0)
+                                end
                             end
                         end
                     end
@@ -350,4 +368,4 @@ task.spawn(function()
     end
 end)
 
-print("[Burmalda v13] Part 6/8 — VISUAL + MUSIC + SOUND + MOVE + STATS loaded")
+print("[Burmalda v14] Part 6/8 — VISUAL + MUSIC + MOVE + STATS loaded")
