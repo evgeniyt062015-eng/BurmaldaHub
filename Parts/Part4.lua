@@ -1,5 +1,5 @@
--- BURMALDA v13 | Part 4/8 — BYPASS + EXPLOITS
--- 16 Bypass + GodMode, Revive, TimeStop, Dodge, Freeze
+-- BURMALDA v14 | Part 4/8 — BYPASS + EXPLOITS
+-- 18 Bypass + GodMode, Revive, TimeStop, Dodge, Freeze
 
 local C=_G.C
 local T=_G.T
@@ -9,79 +9,27 @@ local Run=_G.Run
 local RF=_G.RF
 local P=_G.P
 
--- ═══ BYPASS LOOP (Rush, Ambush, Seek, Figure, Grumble, Drones) ═══
-task.spawn(function()
-    while task.wait(0.3) do
-        pcall(function()
-            if C.BypassRush then
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o.Name:lower():find("rush") and (o:IsA("Model") or o:IsA("BasePart")) then
-                        for _,p in ipairs(o:GetDescendants()) do
-                            if p:IsA("BasePart") then p.CanTouch=false; p.CanCollide=false end
-                        end
-                    end
-                end
-            end
-            if C.BypassAmbush then
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o.Name:lower():find("ambush") and (o:IsA("Model") or o:IsA("BasePart")) then
-                        for _,p in ipairs(o:GetDescendants()) do
-                            if p:IsA("BasePart") then p.CanTouch=false; p.CanCollide=false end
-                        end
-                    end
-                end
-            end
-            if C.BypassSeek then
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o.Name:lower():find("seek") and (o:IsA("Model") or o:IsA("BasePart")) then
-                        for _,p in ipairs(o:GetDescendants()) do
-                            if p:IsA("BasePart") then p.CanTouch=false end
-                        end
-                    end
-                end
-            end
-            if C.BypassFigure then
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o.Name:lower():find("figure") and (o:IsA("Model") or o:IsA("BasePart")) then
-                        for _,p in ipairs(o:GetDescendants()) do
-                            if p:IsA("BasePart") then p.CanTouch=false; p.CanCollide=false end
-                        end
-                    end
-                end
-            end
-            if C.BypassGrumble then
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o.Name:lower():find("grumble") and (o:IsA("Model") or o:IsA("BasePart")) then
-                        for _,p in ipairs(o:GetDescendants()) do
-                            if p:IsA("BasePart") then p.CanTouch=false end
-                        end
-                    end
-                end
-            end
-            if C.BypassDrones then
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o.Name:lower():find("drones") and (o:IsA("Model") or o:IsA("BasePart")) then
-                        for _,p in ipairs(o:GetDescendants()) do
-                            if p:IsA("BasePart") then p.CanTouch=false end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
+-- ═══ HELPERS ═══
+local function getPart(o)
+    if o:IsA("BasePart") then return o end
+    if o.PrimaryPart then return o.PrimaryPart end
+    return o:FindFirstChildWhichIsA("BasePart",true)
+end
 
--- ═══ UNIVERSAL BYPASS ═══
-local function byT(names,state)
+local function getAllParts(model)
+    return model:GetDescendants()
+end
+
+-- ═══ BYPASS CORE — по имени модели ═══
+local function bypassModel(namePattern, disableTouch, disableCollide)
     for _,o in ipairs(workspace:GetDescendants()) do
-        if o:IsA("Model") then
+        if o:IsA("Model") or o:IsA("BasePart") then
             local n=o.Name:lower()
-            for _,t in ipairs(names) do
-                if n==t:lower() or n:find(t:lower(),1,true) then
-                    for _,p in ipairs(o:GetDescendants()) do
-                        if p:IsA("BasePart") then
-                            pcall(function() p.CanTouch=not state end)
-                        end
+            if n:find(namePattern,1,true) then
+                for _,p in ipairs(o:GetDescendants()) do
+                    if p:IsA("BasePart") then
+                        if disableTouch then pcall(function() p.CanTouch=false end) end
+                        if disableCollide then pcall(function() p.CanCollide=false end) end
                     end
                 end
             end
@@ -89,48 +37,66 @@ local function byT(names,state)
     end
 end
 
+-- ═══ BYPASS LOOP ═══
 task.spawn(function()
-    while task.wait(C.BypassDelay) do
+    while task.wait(0.3) do
         pcall(function()
-            if C.BypassEyes or C.BypassLookman then
-                local m=RF and RF:FindFirstChild("MotorReplication")
-                if m then m:FireServer(-(600+math.random(0,100))) end
-            end
-            if C.BypassSnare then byT({"Snare"},true) end
-            if C.BypassKillbricks then byT({"Lava"},true) end
-if C.BypassBanana then byT({"BananaPeel"},true) end
-            if C.BypassSeekingWall then byT({"ScaryWall"},true) end
-            if C.BypassDupe then byT({"DoorFake","FakeDoor"},true) end
-            if C.BypassVacuum then byT({"SideroomSpace"},true) end
-            if C.BypassGloombatEggs then byT({"Gloombat"},true) end
-            if C.BypassSeekObstructions then byT({"SeekFloodline"},true) end
-            if C.BypassJeff then byT({"JeffTheKiller"},true) end
-            if C.AntiRansom then byT({"Ransom"},true) end
-            if C.AntiClosetTrash then byT({"ClosetTrash"},true) end
+            if C.BypassRush then bypassModel("rush",true,true) end
+            if C.BypassAmbush then bypassModel("ambush",true,true) end
+            if C.BypassSeek then bypassModel("seek",true,false) end
+            if C.BypassFigure then bypassModel("figure",true,true) end
+            if C.BypassGrumble then bypassModel("grumble",true,false) end
+            if C.BypassDrones then bypassModel("drones",true,false) end
+            if C.BypassScreech then bypassModel("screech",true,false) end
+            if C.BypassHalt then bypassModel("halt",true,false) end
+            if C.BypassSnare then bypassModel("snare",true,false) end
+            if C.BypassKillbricks then bypassModel("lava",true,false) end
+            if C.BypassSeekingWall then bypassModel("scarywall",true,true) end
+            if C.BypassBanana then bypassModel("bananapeel",true,false) end
+            if C.BypassDupe then bypassModel("fakedoor",true,false) end
+            if C.BypassVacuum then bypassModel("sideroomspace",true,true) end
+            if C.BypassGloombatEggs then bypassModel("gloombat",true,false) end
+            if C.BypassSeekObstructions then bypassModel("seekfloodline",true,false) end
+            if C.BypassJeff then bypassModel("jeffthekiller",true,true) end
+            if C.AntiRansom then bypassModel("ransom",true,false) end
+            if C.AntiClosetTrash then bypassModel("closettrah",true,false) end
         end)
     end
 end)
 
--- ═══ ANTI-SCRIBBLES (hookmetamethod) ═══
-local AntiScribbles_OldNamecall,AntiScribbles_IsHooked=false,false
+-- ═══ BYPASS EYES / LOOKMAN ═══
+task.spawn(function()
+    while task.wait(C.BypassDelay or 0.1) do
+        if C.BypassEyes or C.BypassLookman then
+            pcall(function()
+                local m=RF and RF:FindFirstChild("MotorReplication")
+                if m then m:FireServer(-(600+math.random(0,100))) end
+            end)
+        end
+    end
+end)
 
-local function HookAntiScribbles()
-    if AntiScribbles_IsHooked then return end
+-- ═══ ANTI-SCRIBBLES (hookmetamethod) ═══
+local hooked=false
+local oldNamecall=nil
+
+local function hookAntiScribbles()
+    if hooked then return end
     pcall(function()
-        AntiScribbles_OldNamecall=hookmetamethod(game,"__namecall",function(self,...)
+        oldNamecall=hookmetamethod(game,"__namecall",function(self,...)
             local method=getnamecallmethod()
             if method=="FireServer" or method=="InvokeServer" then
                 if tostring(self):lower():find("scribble") then return nil end
             end
-            return AntiScribbles_OldNamecall(self,...)
+            return oldNamecall(self,...)
         end)
-        AntiScribbles_IsHooked=true
+        hooked=true
     end)
 end
 
 task.spawn(function()
     while task.wait(1) do
-        if C.BypassGiggleArc then HookAntiScribbles() end
+        if C.BypassGiggleArc then hookAntiScribbles() end
     end
 end)
 
@@ -146,7 +112,7 @@ task.spawn(function()
                 if h and h.WalkSpeed<10 then isCrouch=true end
                 if not isCrouch then
                     for _,o in ipairs(workspace:GetDescendants()) do
-                        if o.Name:lower():find("figure") and o:IsA("Model") then
+                        if o:IsA("Model") and o.Name:lower():find("figure") then
                             for _,p in ipairs(o:GetDescendants()) do
                                 if p:IsA("BasePart") then
                                     p.CanTouch=false; p.CanCollide=false; p.Transparency=0.5
@@ -171,7 +137,7 @@ task.spawn(function()
                     local n=o.Name:lower()
                     if n:find("rush") or n:find("ambush") or n:find("seek")
                     or n:find("figure") or n:find("screech") or n:find("halt")
-                    or n:find("grumble") or n:find("giggle") then
+                    or n:find("grumble") or n:find("giggle") or n:find("blitz") then
                         local h=o:FindFirstChildWhichIsA("Humanoid")
                         if h then pcall(function() h.WalkSpeed=0; h.JumpPower=0 end) end
                         for _,p in ipairs(o:GetDescendants()) do
@@ -188,41 +154,40 @@ end)
 task.spawn(function()
     while task.wait(0.1) do
         if C.TimeStop then
-            pcall(function()
-                for _,o in ipairs(workspace:GetDescendants()) do
-                    if o:IsA("Model") then
-                        local n=o.Name:lower()
-                        if n:find("rush") or n:find("ambush") or n:find("seek")
-                        or n:find("figure") or n:find("screech") then
-                            local h=o:FindFirstChildWhichIsA("Humanoid")
-                            if h then h.WalkSpeed=0; h.JumpPower=0 end
-end
+            for _,o in ipairs(workspace:GetDescendants()) do
+                if o:IsA("Model") then
+                    local n=o.Name:lower()
+                    if n:find("rush") or n:find("ambush") or n:find("seek")
+                    or n:find("figure") or n:find("screech") then
+                        local h=o:FindFirstChildWhichIsA("Humanoid")
+                        if h then h.WalkSpeed=0; h.JumpPower=0 end
                     end
                 end
-            end)
+            end
         end
     end
 end)
 
 -- ═══ SLOW MOTION ═══
+local origGrav=workspace.Gravity
 task.spawn(function()
-    while task.wait(0.1) do
+    while task.wait(0.2) do
         if C.SlowMotion then
-            pcall(function() workspace.Gravity=50 end)
+            if workspace.Gravity~=50 then workspace.Gravity=50 end
         else
-            pcall(function() workspace.Gravity=196.2 end)
+            if workspace.Gravity~=196.2 then workspace.Gravity=196.2 end
         end
     end
 end)
 
 -- ═══ GOD RUSHER ═══
 task.spawn(function()
-    while task.wait(0.5) do
+    while task.wait(0.3) do
         if C.GodRusher then
             local ch=LP.Character
             if ch then
                 local h=ch:FindFirstChildOfClass("Humanoid")
-                if h then h.Health=h.MaxHealth end
+                if h and h.Health<h.MaxHealth then h.Health=h.MaxHealth end
             end
         end
     end
@@ -238,11 +203,11 @@ task.spawn(function()
                 for _,o in ipairs(workspace:GetDescendants()) do
                     if o:IsA("Model") then
                         local n=o.Name:lower()
-                        local p=o.PrimaryPart or o:FindFirstChildWhichIsA("BasePart",true)
+                        local p=getPart(o)
                         if p then
                             local d=(p.Position-pos).Magnitude
                             if (n:find("rush") or n:find("ambush")) and d<80 then
-                                if not _G.isInsideCloset() then pcall(_G.aH) end
+                                if not _G.isInsideCloset() and _G.aH then pcall(_G.aH) end
                                 break
                             end
                             if n:find("seek") and d<50 then
@@ -265,11 +230,9 @@ task.spawn(function()
             local ch=LP.Character
             if ch then
                 for _,tool in ipairs(LP.Backpack:GetChildren()) do
-                    pcall(function()
-                        if tool:IsA("Tool") and tool.Parent~=ch then
-                            tool.Parent=ch
-                        end
-                    end)
+                    if tool:IsA("Tool") then
+                        pcall(function() tool.Parent=ch end)
+                    end
                 end
             end
         end
@@ -292,4 +255,4 @@ task.spawn(function()
     end
 end)
 
-print("[Burmalda v13] Part 4/8 — BYPASS + EXPLOITS loaded")
+print("[Burmalda v14] Part 4/8 — BYPASS + EXPLOITS loaded")
