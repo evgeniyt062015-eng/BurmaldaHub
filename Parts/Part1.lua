@@ -1,3 +1,92 @@
+    -- BURMALDA v13 | Part 1/8 — CORE (Config, Themes, Notify, Save/Load)
+-- Автор: KOTENOK7204 | Тестер: Kostya_2015KostyaKos
+
+local P=game:GetService("Players")
+local RS=game:GetService("ReplicatedStorage")
+local Run=game:GetService("RunService")
+local UIS=game:GetService("UserInputService")
+local HS=game:GetService("HttpService")
+local VU=game:GetService("VirtualUser")
+local SS=game:GetService("SoundService")
+local Lighting=game:GetService("Lighting")
+local LP=P.LocalPlayer
+
+local RF=RS:FindFirstChild("RemotesFolder") or RS:FindFirstChild("EntityInfo") or RS:FindFirstChild("Bricks")
+local GD=RS:FindFirstChild("GameData")
+local CR=workspace:FindFirstChild("CurrentRooms")
+
+local CF="Hotel"
+local MF=nil
+pcall(function()
+    if GD and GD:FindFirstChild("Floor") then
+        CF=GD.Floor.Value
+    end
+end)
+
+_G.P=P
+_G.RS=RS
+_G.Run=Run
+_G.UIS=UIS
+_G.HS=HS
+_G.VU=VU
+_G.SS=SS
+_G.Lighting=Lighting
+_G.LP=LP
+_G.RF=RF
+_G.GD=GD
+_G.CR=CR
+_G.CF=CF
+_G.MF=MF
+
+_G.gF=function()
+    return _G.MF or _G.CF
+end
+
+_G.C={
+    SpeedEnabled=false, WalkSpeed=22, SpeedBoost=0, JumpPower=50,
+    InfiniteJumps=false, EnableJump=false, EnableSlide=false, BunnyHop=false,
+    Fly=false, FlySpeed=50, Noclip=false,
+    RemoveClosetDelay=false, RemoveAccel=false,
+    DoorReach=false, InstantPrompts=false, PromptClip=false, PromptReach=1,
+    DisableIdleKick=false,
+    AutoBreaker=false, AutoInteract=false, AutoCloset=false,
+    AutoCollect=false, AutoCoins=false, AutoDoor=false, AutoSeek=false,
+    AutoPlay=false, AutoPickupAll=false, AutoSolve=false, AutoRevive=false, AutoBuy=false,
+    TPItemRadius=200, BringItems=false, BringRadius=100,
+    InfiniteHide=false, HideLock=false, AutoReHide=false,
+    InfiniteItems=false, GodRusher=false, EntityFreeze=false, EntityTeleport=false,
+    Speed10x=false, MaxStats=false, Invisible=false, TimeStop=false, SlowMotion=false,
+    AutoPlatform=false, PlatformSize=5,
+    BypassScreech=false, BypassHalt=false, BypassEyes=false, BypassLookman=false,
+    BypassSnare=false, BypassKillbricks=false, BypassSeekingWall=false,
+    BypassBanana=false, BypassGiggle=false, BypassDupe=false, BypassVacuum=false,
+    BypassGloombatEggs=false, BypassSeekObstructions=false, BypassJeff=false,
+    BypassRush=false, BypassAmbush=false, BypassSeek=false, BypassFigure=false,
+    BypassGrumble=false, BypassGiggleArc=false, BypassDrones=false,
+    AntiRansom=false, AntiClosetTrash=false, ForgetMeNot=false,
+    HonchoESP=false, TimeShower=false, FigureInvisible=false, AutoCrouch=false,
+    GodMode=false, InfiniteRevive=false, AutoDodge=false,
+    AutoHideRush=false, AutoHideAmbush=false, AutoHideAll=false,
+    AdaptiveSpeed=false, PredictiveHide=false, SmartPath=false, AntiAFK=true,
+    ESP_All=false, ESP_Rush=false, ESP_Ambush=false, ESP_Seek=false, ESP_Figure=false,
+    ESP_Screech=false, ESP_Hide=false, ESP_Eyes=false, ESP_Halt=false,
+    ESP_Grumble=false, ESP_Giggle=false, ESP_Blitz=false, ESP_Lookman=false,
+    ESP_Noise=false, ESP_Creak=false, ESP_Scribbles=false, ESP_Teller=false,
+    ESP_Drones=false, ESP_Bash=false, ESP_Monument=false, ESP_Sally=false, ESP_Frozen=false,
+    ESP_Doors=false, ESP_Closets=false, ESP_Money=false, ESP_Keys=false,
+    ESP_Items=false, ESP_Ladders=false, ESP_Players=false, ESP_Library=false,
+    ESP_Breaker=false, ESP_Elevators=false, ESP_Chests=false, ESP_Paintings=false,
+    ESP_Minecart=false, ESP_Rails=false, ESP_Turns=false, ESP_Pits=false,
+    ESP_Lava=false, ESP_Bombs=false, ESP_Objectives=false,
+    ESPColor=Color3.fromRGB(180,30,30),
+    DoorColor=Color3.fromRGB(120,20,40),
+    ClosetColor=Color3.fromRGB(100,255,100),
+    MaxDistance=500, RainbowMode=false, XRay=true, ShowDistance=true,
+    FillTransparency=0.55, TextSize=12, ESPUpdateRate=1.5,
+    Theme="GrayBlack", AutoSave=true, BypassDelay=0.1,
+    NotifyMonsters=false, NotifyItems=false, NotifySound=true,
+    RushWarning=false, AmbushWarning=false, SeekWarning=false, HaltWarning=false,
+    RushTracer=false,
     LightColor=Color3.fromRGB(255,255,255), LightBrightness=2,
     Crosshair=false, CrosshairColor=Color3.fromRGB(255,0,0), CrosshairSize=20,
     FOV=70, ThirdPerson=false, Freecam=false, NoFog=false,
