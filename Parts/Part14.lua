@@ -100,7 +100,7 @@ Hint.Position=UDim2.new(0.5,-300,0.5,100)
 Hint.BackgroundTransparency=1
 Hint.Text=""
 Hint.TextColor3=Color3.fromRGB(120,180,255)
-Hint.Font=Enum.Font.GothamItalic
+Hint.Font=Enum.Font.Gotham
 Hint.TextSize=11
 Hint.TextWrapped=true
 
