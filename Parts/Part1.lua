@@ -1,195 +1,240 @@
-    -- BURMALDA v13 | Part 1/8 — CORE (Config, Themes, Notify, Save/Load)
--- Автор: KOTENOK7204 | Тестер: Kostya_2015KostyaKos
+-- BURMALDA v14 | Part 9/9 — LOADING SCREEN + AUTO-LOADER
+-- Экран загрузки, определение лобби/игры, авто-перезапуск при телепорте
 
-local P=game:GetService("Players")
-local RS=game:GetService("ReplicatedStorage")
-local Run=game:GetService("RunService")
-local UIS=game:GetService("UserInputService")
-local HS=game:GetService("HttpService")
-local VU=game:GetService("VirtualUser")
-local SS=game:GetService("SoundService")
-local Lighting=game:GetService("Lighting")
-local LP=P.LocalPlayer
+local C=_G.C
+local T=_G.T
+local N=_G.N
+local LP=_G.LP
+local Run=_G.Run
+local P=_G.P
+local HS=_G.HS
+local CR=_G.CR
 
-local RF=RS:FindFirstChild("RemotesFolder") or RS:FindFirstChild("EntityInfo") or RS:FindFirstChild("Bricks")
-local GD=RS:FindFirstChild("GameData")
-local CR=workspace:FindFirstChild("CurrentRooms")
+-- ═══ ЗАГРУЗОЧНЫЙ ЭКРАН ═══
+local LoadGui=Instance.new("ScreenGui")
+LoadGui.Name="BurmaldaLoading"
+LoadGui.ResetOnSpawn=false
+LoadGui.IgnoreGuiInset=true
+LoadGui.DisplayOrder=999
+LoadGui.Parent=LP:WaitForChild("PlayerGui")
 
-local CF="Hotel"
-local MF=nil
-pcall(function()
-    if GD and GD:FindFirstChild("Floor") then
-        CF=GD.Floor.Value
+-- Фон
+local BG=Instance.new("Frame",LoadGui)
+BG.Size=UDim2.new(1,0,1,0)
+BG.BackgroundColor3=Color3.fromRGB(10,10,14)
+BG.BorderSizePixel=0
+
+-- Градиент сверху
+local TopGrad=Instance.new("Frame",BG)
+TopGrad.Size=UDim2.new(1,0,0.3,0)
+TopGrad.BackgroundColor3=Color3.fromRGB(120,20,40)
+TopGrad.BackgroundTransparency=0.7
+TopGrad.BorderSizePixel=0
+
+-- Лого (щит)
+local Logo=Instance.new("ImageLabel",BG)
+Logo.Size=UDim2.new(0,120,0,120)
+Logo.Position=UDim2.new(0.5,-60,0.5,-180)
+Logo.BackgroundTransparency=1
+Logo.Image="rbxassetid://6031280882"
+Logo.ImageColor3=Color3.fromRGB(180,30,30)
+Logo.ScaleType=Enum.ScaleType.Fit
+
+-- Заголовок
+local Title=Instance.new("TextLabel",BG)
+Title.Size=UDim2.new(1,0,0,50)
+Title.Position=UDim2.new(0,0,0.5,-40)
+Title.BackgroundTransparency=1
+Title.Text="BURMALDA"
+Title.TextColor3=Color3.fromRGB(240,240,245)
+Title.Font=Enum.Font.GothamBlack
+Title.TextSize=48
+Title.TextScaled=false
+
+local Ver=Instance.new("TextLabel",BG)
+Ver.Size=UDim2.new(1,0,0,30)
+Ver.Position=UDim2.new(0,0,0.5,20)
+Ver.BackgroundTransparency=1
+Ver.Text="v14 FINAL"
+Ver.TextColor3=Color3.fromRGB(180,30,30)
+Ver.Font=Enum.Font.GothamBold
+Ver.TextSize=18
+
+-- Прогресс-бар
+local BarBG=Instance.new("Frame",BG)
+BarBG.Size=UDim2.new(0,400,0,8)
+BarBG.Position=UDim2.new(0.5,-200,0.5,80)
+BarBG.BackgroundColor3=Color3.fromRGB(40,40,45)
+BarBG.BorderSizePixel=0
+local BarBGc=Instance.new("UICorner",BarBG)
+BarBGc.CornerRadius=UDim.new(1,0)
+
+local Bar=Instance.new("Frame",BarBG)
+Bar.Size=UDim2.new(0,0,1,0)
+Bar.BackgroundColor3=Color3.fromRGB(180,30,30)
+Bar.BorderSizePixel=0
+local Barc=Instance.new("UICorner",Bar)
+Barc.CornerRadius=UDim.new(1,0)
+
+-- Статус
+local Status=Instance.new("TextLabel",BG)
+Status.Size=UDim2.new(1,0,0,24)
+Status.Position=UDim2.new(0,0,0.5,110)
+Status.BackgroundTransparency=1
+Status.Text="Инициализация..."
+Status.TextColor3=Color3.fromRGB(200,200,210)
+Status.Font=Enum.Font.Gotham
+Status.TextSize=14
+
+-- Инфо (пол/лобби)
+local Info=Instance.new("TextLabel",BG)
+Info.Size=UDim2.new(1,0,0,20)
+Info.Position=UDim2.new(0,0,0.5,140)
+Info.BackgroundTransparency=1
+Info.Text=""
+Info.TextColor3=Color3.fromRGB(150,150,160)
+Info.Font=Enum.Font.Gotham
+Info.TextSize=12
+
+-- Подпись
+local Credit=Instance.new("TextLabel",BG)
+Credit.Size=UDim2.new(1,0,0,20)
+Credit.Position=UDim2.new(0,0,1,-30)
+Credit.BackgroundTransparency=1
+Credit.Text="By KOTENOK7204 | Tester: Kostya_2015KostyaKos"
+Credit.TextColor3=Color3.fromRGB(120,120,130)
+Credit.Font=Enum.Font.Gotham
+Credit.TextSize=11
+
+-- ═══ ФУНКЦИИ ОБНОВЛЕНИЯ ═══
+local function setProgress(p, text)
+    p=math.clamp(p,0,1)
+    Bar:TweenSize(UDim2.new(p,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+    if text then Status.Text=text end
+end
+
+local function detectLocation()
+    -- Проверяем лобби или игру
+    local inGame=false
+    if CR and CR:FindFirstChildOfClass("Model") then
+        inGame=true
+    end
+    local floor="Hotel"
+    if _G.GD and _G.GD:FindFirstChild("Floor") then
+        floor=_G.GD.Floor.Value
+    end
+    if inGame then
+        Info.Text="Место: В ИГРЕ | Этаж: "..floor
+        return "game", floor
+    else
+        Info.Text="Место: ЛОББИ (ожидание игры...)"
+        return "lobby", floor
+    end
+end
+
+-- ═══ ЗАГРУЗКА ═══
+local function loadParts()
+    local base="https://raw.githubusercontent.com/evgeniyt062015-eng/BurmaldaHub/main/Parts/"
+    local total=8
+    
+    for i=1,total do
+        setProgress((i-1)/total, "Загрузка Part "..i.."/"..total.."...")
+        local ok,err=pcall(function()
+            loadstring(game:HttpGet(base.."Part"..i..".lua?t="..tick()))()
+        end)
+        if ok then
+            print("[Burmalda v14] Part "..i.." loaded")
+        else
+            warn("[Burmalda v14] Part "..i.." failed: "..tostring(err))
+        end
+        task.wait(0.1)
+    end
+    
+    setProgress(1, "Готово!")
+end
+
+-- ═══ ОСНОВНОЙ ЦИКЛ ═══
+task.spawn(function()
+    setProgress(0.05, "Проверка executor...")
+    task.wait(0.3)
+    
+    setProgress(0.15, "Определение места...")
+    local loc,floor=detectLocation()
+    task.wait(0.4)
+    
+    setProgress(0.25, "Загрузка скриптов...")
+    task.wait(0.2)
+    
+    loadParts()
+    
+    task.wait(0.5)
+    setProgress(1, "BURMALDA v14 запущена!")
+    
+    -- Ждём 1.5 сек и прячем
+    task.wait(1.5)
+    
+    -- Плавно убираем
+    for i=0,1,0.05 do
+        BG.BackgroundTransparency=i
+        TopGrad.BackgroundTransparency=0.7+i*0.3
+        Logo.ImageTransparency=i
+        Title.TextTransparency=i
+        Ver.TextTransparency=i
+        BarBG.BackgroundTransparency=i
+        Bar.BackgroundTransparency=i
+        Status.TextTransparency=i
+        Info.TextTransparency=i
+        Credit.TextTransparency=i
+        task.wait(0.02)
+    end
+    LoadGui:Destroy()
+    
+    -- Приветствие
+    task.wait(0.3)
+    _G.N("Burmalda v14 загружена!")
+end)
+
+-- ═══ АВТО-ПЕРЕЗАПУСК ПРИ ТЕЛЕПОРТЕ (как в Abysall) ═══
+local AUTO_RELOAD=true
+local lastFloor=_G.gF()
+local lastChar=LP.Character
+
+-- Следим за сменой персонажа (новая игра / респавн)
+LP.CharacterAdded:Connect(function(newChar)
+    if not AUTO_RELOAD then return end
+    if lastChar==newChar then return end
+    lastChar=newChar
+    
+    task.wait(3)  -- ждём загрузки новой сцены
+    local newFloor=_G.gF()
+    if newFloor~=lastFloor then
+        lastFloor=newFloor
+        _G.N("Переход на этаж: "..newFloor)
+        -- При следующем респавне Part8 сам загрузится заново
+        -- (не перезагружаем, чтобы не было цикла)
     end
 end)
 
-_G.P=P
-_G.RS=RS
-_G.Run=Run
-_G.UIS=UIS
-_G.HS=HS
-_G.VU=VU
-_G.SS=SS
-_G.Lighting=Lighting
-_G.LP=LP
-_G.RF=RF
-_G.GD=GD
-_G.CR=CR
-_G.CF=CF
-_G.MF=MF
-
-_G.gF=function()
-    return _G.MF or _G.CF
-end
-
-_G.C={
-    SpeedEnabled=false, WalkSpeed=22, SpeedBoost=0, JumpPower=50,
-    InfiniteJumps=false, EnableJump=false, EnableSlide=false, BunnyHop=false,
-    Fly=false, FlySpeed=50, Noclip=false,
-    RemoveClosetDelay=false, RemoveAccel=false,
-    DoorReach=false, InstantPrompts=false, PromptClip=false, PromptReach=1,
-    DisableIdleKick=false,
-    AutoBreaker=false, AutoInteract=false, AutoCloset=false,
-    AutoCollect=false, AutoCoins=false, AutoDoor=false, AutoSeek=false,
-    AutoPlay=false, AutoPickupAll=false, AutoSolve=false, AutoRevive=false, AutoBuy=false,
-    TPItemRadius=200, BringItems=false, BringRadius=100,
-    InfiniteHide=false, HideLock=false, AutoReHide=false,
-    InfiniteItems=false, GodRusher=false, EntityFreeze=false, EntityTeleport=false,
-    Speed10x=false, MaxStats=false, Invisible=false, TimeStop=false, SlowMotion=false,
-    AutoPlatform=false, PlatformSize=5,
-    BypassScreech=false, BypassHalt=false, BypassEyes=false, BypassLookman=false,
-    BypassSnare=false, BypassKillbricks=false, BypassSeekingWall=false,
-    BypassBanana=false, BypassGiggle=false, BypassDupe=false, BypassVacuum=false,
-    BypassGloombatEggs=false, BypassSeekObstructions=false, BypassJeff=false,
-    BypassRush=false, BypassAmbush=false, BypassSeek=false, BypassFigure=false,
-    BypassGrumble=false, BypassGiggleArc=false, BypassDrones=false,
-    AntiRansom=false, AntiClosetTrash=false, ForgetMeNot=false,
-    HonchoESP=false, TimeShower=false, FigureInvisible=false, AutoCrouch=false,
-    GodMode=false, InfiniteRevive=false, AutoDodge=false,
-    AutoHideRush=false, AutoHideAmbush=false, AutoHideAll=false,
-    AdaptiveSpeed=false, PredictiveHide=false, SmartPath=false, AntiAFK=true,
-    ESP_All=false, ESP_Rush=false, ESP_Ambush=false, ESP_Seek=false, ESP_Figure=false,
-    ESP_Screech=false, ESP_Hide=false, ESP_Eyes=false, ESP_Halt=false,
-    ESP_Grumble=false, ESP_Giggle=false, ESP_Blitz=false, ESP_Lookman=false,
-    ESP_Noise=false, ESP_Creak=false, ESP_Scribbles=false, ESP_Teller=false,
-    ESP_Drones=false, ESP_Bash=false, ESP_Monument=false, ESP_Sally=false, ESP_Frozen=false,
-    ESP_Doors=false, ESP_Closets=false, ESP_Money=false, ESP_Keys=false,
-    ESP_Items=false, ESP_Ladders=false, ESP_Players=false, ESP_Library=false,
-    ESP_Breaker=false, ESP_Elevators=false, ESP_Chests=false, ESP_Paintings=false,
-    ESP_Minecart=false, ESP_Rails=false, ESP_Turns=false, ESP_Pits=false,
-    ESP_Lava=false, ESP_Bombs=false, ESP_Objectives=false,
-    ESPColor=Color3.fromRGB(180,30,30),
-    DoorColor=Color3.fromRGB(120,20,40),
-    ClosetColor=Color3.fromRGB(100,255,100),
-    MaxDistance=500, RainbowMode=false, XRay=true, ShowDistance=true,
-    FillTransparency=0.55, TextSize=12, ESPUpdateRate=1.5,
-    Theme="GrayBlack", AutoSave=true, BypassDelay=0.1,
-    NotifyMonsters=false, NotifyItems=false, NotifySound=true,
-    RushWarning=false, AmbushWarning=false, SeekWarning=false, HaltWarning=false,
-    RushTracer=false,
-    LightColor=Color3.fromRGB(255,255,255), LightBrightness=2,
-    Crosshair=false, CrosshairColor=Color3.fromRGB(255,0,0), CrosshairSize=20,
-    FOV=70, ThirdPerson=false, Freecam=false, NoFog=false,
-    Wallhack=false, Chams=false, Hitmarker=false, DamageNumbers=false, DangerMeter=false,
-    EntityTracker=false, SmartESP=false, SmartRange=100,
-    ShowRoomNum=false, ShowTimer=false, SpeedrunTimer=0, BestRun=0,
-    AutoScreenshot=false,
-    -- Fun
-    DuckSpawn=false, DuckCount=100,
-    MusicId="", MusicPlaying=false, MusicVolume=0.5,
-    AntiDetect=false, SafeMode=false,
-    FunFire=false, FunConfetti=false, FunRainbow=false, FunDisco=false,
-    Snow=false, Leaves=false, Petals=false, AuraFire=false, AuraIce=false,
-    ChatSpam=false, RandomTP=false, FakeDeath=false,
-    -- Misc
-    KnobESP=false, Level=1, XP=0, DailyQuests=false, Profile=1,
-    AutoFarm=false, AutoFarmDeaths=false, FarmDoors=1, FarmDelay=3, AutoPlayAgain=true,
-    KnobCounter=0, CoinsCounter=0, DeathsCounter=0, DoorsCounter=0, StartTime=os.time(),
-    -- Extra (from Abysall)
-    AutoAim=false, AntiKick=false, FollowPlayer=false, DiscordRich=false,
-    AchievementsUnlock=false, RoomESP=false, AutoRejoin=false, UI_Scale=1,
-    -- Monsters list
-    MonsterList={Rush=true,Ambush=true,Seek=true,Figure=true,Screech=true,Hide=true,Eyes=true,Halt=true,Grumble=true,Giggle=true,Dupe=true,Jack=true,Snare=true,Timothy=true,Glitch=true,Shadow=true,Blitz=true,Lookman=true,Noise=true,Creak=true,Scribbles=true,Drones=true,Jeff=true,Bash=true,Monument=true,Sally=true}
-}
-local C=_G.C
-
--- ═══ THEMES (Th) ═══
-_G.Th={
-    GrayBlack={bg=Color3.fromRGB(20,20,25),panel=Color3.fromRGB(40,40,45),accent=Color3.fromRGB(120,20,40),text=Color3.fromRGB(240,240,245),danger=Color3.fromRGB(180,30,30)},
-    Black={bg=Color3.fromRGB(10,10,12),panel=Color3.fromRGB(25,25,28),accent=Color3.fromRGB(120,20,40),text=Color3.fromRGB(230,230,235),danger=Color3.fromRGB(180,30,30)},
-    Blood={bg=Color3.fromRGB(25,10,10),panel=Color3.fromRGB(45,15,15),accent=Color3.fromRGB(220,40,40),text=Color3.fromRGB(255,230,230),danger=Color3.fromRGB(200,40,40)},
-    Toxic={bg=Color3.fromRGB(10,25,15),panel=Color3.fromRGB(20,45,30),accent=Color3.fromRGB(50,220,100),text=Color3.fromRGB(230,255,235),danger=Color3.fromRGB(180,30,30)},
-    Gold={bg=Color3.fromRGB(30,25,10),panel=Color3.fromRGB(50,40,15),accent=Color3.fromRGB(255,200,50),text=Color3.fromRGB(255,245,220),danger=Color3.fromRGB(180,30,30)},
-    Neon={bg=Color3.fromRGB(5,5,15),panel=Color3.fromRGB(15,15,35),accent=Color3.fromRGB(0,255,180),text=Color3.fromRGB(220,255,250),danger=Color3.fromRGB(180,30,30)},
-    Cyberpunk={bg=Color3.fromRGB(15,5,30),panel=Color3.fromRGB(30,10,55),accent=Color3.fromRGB(255,0,200),text=Color3.fromRGB(0,255,255),danger=Color3.fromRGB(180,30,30)}
-}
-local Th=_G.Th
-
--- ═══ T() — Get Theme ═══
-_G.T=function()
-    return Th[C.Theme] or Th.GrayBlack
-end
-
--- ═══ N() — Notify ═══
-_G.N=function(text)
-    pcall(function()
-        game:GetService("StarterGui"):SetCore("SendNotification",{
-            Title="Burmalda v13",
-            Text=tostring(text),
-            Duration=3
-        })
-    end)
-end
-
--- ═══ TTS() — Notify with Sound ═══
-_G.TTS=function(text)
-    pcall(function()
-        if C.NotifySound then
-            local s=Instance.new("Sound",SS)
-            s.SoundId="rbxassetid://8784885431"
-            s.Volume=0.6
-            s:Play()
-            task.delay(2,function() s:Destroy() end)
-        end
-        game:GetService("StarterGui"):SetCore("SendNotification",{
-            Title="Burmalda v13",
-            Text=tostring(text),
-            Duration=4
-        })
-    end)
-end
-
--- ═══ SAVE / LOAD ═══
-local CFG="BurmaldaV13.json"
-_G.sv=function()
-    pcall(function()
-        local d={}
-        for k,v in pairs(C) do
-            if type(v)=="Color3" then
-                d[k]={__c=true,r=v.R,g=v.G,b=v.B}
-            else
-                d[k]=v
+-- Следим за сменой этажа (телепорт между этажами)
+task.spawn(function()
+    while task.wait(2) do
+        if _G.GD and _G.GD:FindFirstChild("Floor") then
+            local cur=_G.GD.Floor.Value
+            if cur~=lastFloor then
+                lastFloor=cur
+                _G.N("Новый этаж: "..cur)
             end
         end
-        writefile(CFG,HS:JSONEncode(d))
-    end)
-end
+    end
+end)
 
-_G.ld=function()
-    pcall(function()
-        if isfile and isfile(CFG) then
-            local d=HS:JSONDecode(readfile(CFG))
-            for k,v in pairs(d) do
-                if type(v)=="table" and v.__c then
-                    C[k]=Color3.new(v.r,v.g,v.b)
-                else
-                    C[k]=v
-                end
-            end
-        end
-    end)
-end
+-- ═══ QUEUE_ON_TELEPORT (если поддерживается) ═══
+pcall(function()
+    if queue_on_teleport then
+        queue_on_teleport([[
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/evgeniyt062015-eng/BurmaldaHub/main/Main.lua?t="..tick()))()
+        ]])
+    end
+end)
 
-_G.ld()
-
-print("[Burmalda v13] Part 1/8 — CORE loaded")
+print("[Burmalda v14] Part 9/9 — LOADING SCREEN + AUTO-LOADER loaded")
