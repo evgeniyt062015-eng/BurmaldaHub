@@ -1,17 +1,13 @@
--- BURMALDA v13 | Part 8/8 — FULL GUI (32 вкладки + кнопка B + стартовый экран)
+-- BURMALDA v14 | Part 8/8 — FULL GUI (32 вкладки + кнопка B)
 -- Финальная часть
 
 local C=_G.C
 local T=_G.T
 local N=_G.N
 local LP=_G.LP
-local Run=_G.Run
 local UIS=_G.UIS
-local P=_G.P
 
--- ═══════════════════════════════════════════════
--- FLOOR SELECT (стартовый экран)
--- ═══════════════════════════════════════════════
+-- ═══ FLOOR SELECT ═══
 local FS=Instance.new("ScreenGui")
 FS.Name="BurmaldaFS"
 FS.ResetOnSpawn=false
@@ -41,7 +37,7 @@ local FT=Instance.new("TextLabel",FM)
 FT.Size=UDim2.new(1,0,0,35)
 FT.Position=UDim2.new(0,0,0,10)
 FT.BackgroundTransparency=1
-FT.Text="BURMALDA v13"
+FT.Text="BURMALDA v14"
 FT.TextColor3=Color3.fromRGB(120,20,40)
 FT.Font=Enum.Font.GothamBlack
 FT.TextSize=22
@@ -75,12 +71,11 @@ FQ.TextSize=14
 
 -- ═══ MAIN GUI ═══
 local SG=Instance.new("ScreenGui")
-SG.Name="BurmaldaV13GUI"
+SG.Name="BurmaldaV14GUI"
 SG.ResetOnSpawn=false
 SG.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 SG.Parent=LP:WaitForChild("PlayerGui")
 
--- Кнопка B
 local OB=Instance.new("TextButton",SG)
 OB.Size=UDim2.new(0,50,0,50)
 OB.Position=UDim2.new(0,10,0.5,-25)
@@ -99,7 +94,6 @@ local OBS=Instance.new("UIStroke",OB)
 OBS.Color=Color3.fromRGB(240,240,245)
 OBS.Thickness=2
 
--- Главное окно M
 local M=Instance.new("Frame",SG)
 M.Size=UDim2.new(0,440,0,420)
 M.Position=UDim2.new(0.5,-220,0.5,-210)
@@ -121,7 +115,6 @@ OB.MouseButton1Click:Connect(function()
     OB.Text=M.Visible and "X" or "B"
 end)
 
--- Header
 local H=Instance.new("Frame",M)
 H.Size=UDim2.new(1,0,0,34)
 H.BackgroundColor3=T().accent
@@ -134,7 +127,7 @@ local HT=Instance.new("TextLabel",H)
 HT.Size=UDim2.new(1,-40,1,0)
 HT.Position=UDim2.new(0,10,0,0)
 HT.BackgroundTransparency=1
-HT.Text="BURMALDA v13 | ".._G.gF()
+HT.Text="BURMALDA v14 | ".._G.gF()
 HT.TextColor3=Color3.fromRGB(255,255,255)
 HT.Font=Enum.Font.GothamBold
 HT.TextSize=11
@@ -154,11 +147,11 @@ local CBC=Instance.new("UICorner",CB)
 CBC.CornerRadius=UDim.new(0,4)
 
 CB.MouseButton1Click:Connect(function()
-    if _G.sv then _G.sv() end
+    if _G.sv then pcall(_G.sv) end
     M.Visible=false
     OB.Text="B"
 end)
--- Левая колонка (кнопки вкладок)
+
 local TB=Instance.new("ScrollingFrame",M)
 TB.Size=UDim2.new(0,120,1,-34)
 TB.Position=UDim2.new(0,0,0,34)
@@ -175,7 +168,6 @@ local TBL=Instance.new("UIListLayout",TB)
 TBL.Padding=UDim.new(0,3)
 TBL.SortOrder=Enum.SortOrder.LayoutOrder
 
--- Контент
 local CT=Instance.new("Frame",M)
 CT.Size=UDim2.new(1,-125,1,-42)
 CT.Position=UDim2.new(0,122,0,38)
@@ -183,14 +175,10 @@ CT.BackgroundTransparency=1
 
 local Pg={}
 
--- ═══ SW — переключение вкладок ═══
 local function sw(n)
-    for k,p in pairs(Pg) do
-        p.Visible=(k==n)
-    end
+    for k,p in pairs(Pg) do p.Visible=(k==n) end
 end
 
--- ═══ CrP — создание вкладки ═══
 local function crP(n)
     local p=Instance.new("ScrollingFrame",CT)
     p.Size=UDim2.new(1,0,1,0)
@@ -207,7 +195,6 @@ local function crP(n)
     return p
 end
 
--- ═══ mT — Toggle ═══
 local function mT(p,t,i,cb,d)
     local b=Instance.new("TextButton",p)
     b.Size=UDim2.new(1,-6,0,26)
@@ -233,7 +220,6 @@ local function mT(p,t,i,cb,d)
     end)
 end
 
--- ═══ mB — Button ═══
 local function mB(p,t,cb,col)
     local b=Instance.new("TextButton",p)
     b.Size=UDim2.new(1,-6,0,28)
@@ -247,7 +233,6 @@ local function mB(p,t,cb,col)
     b.MouseButton1Click:Connect(cb)
 end
 
--- ═══ mS — Slider ═══
 local function mS(p,t,mn,mx,i,cb)
     local f=Instance.new("Frame",p)
     f.Size=UDim2.new(1,-6,0,36)
@@ -263,7 +248,7 @@ local function mS(p,t,mn,mx,i,cb)
     bar.BackgroundColor3=T().bg; bar.BorderSizePixel=0
     local bc=Instance.new("UICorner",bar); bc.CornerRadius=UDim.new(0,4)
     local fl=Instance.new("Frame",bar)
-    fl.Size=UDim2.new((i-mn)/(mx-mn),0,1,0)
+    fl.Size=UDim2.new(math.clamp((i-mn)/(mx-mn),0,1),0,1,0)
     fl.BackgroundColor3=T().accent; fl.BorderSizePixel=0
     local fc=Instance.new("UICorner",fl); fc.CornerRadius=UDim.new(0,4)
     local dr=false
@@ -272,7 +257,7 @@ local function mS(p,t,mn,mx,i,cb)
     end)
     bar.InputEnded:Connect(function(inp)
         if inp.UserInputType==Enum.UserInputType.MouseButton1 or inp.UserInputType==Enum.UserInputType.Touch then dr=false end
-end)
+    end)
     UIS.InputChanged:Connect(function(inp)
         if dr and (inp.UserInputType==Enum.UserInputType.MouseMovement or inp.UserInputType==Enum.UserInputType.Touch) then
             local r=math.clamp((inp.Position.X-bar.AbsolutePosition.X)/bar.AbsoluteSize.X,0,1)
@@ -284,7 +269,7 @@ end)
     end)
 end
 
--- ═══ LIST вкладок ═══
+-- ═══ ВКЛАДКИ ═══
 local tL={
     {n="Main"},{n="Character"},{n="TP"},{n="Hide"},{n="AutoSeek"},
     {n="Bypass"},{n="Exploits",d=true},{n="ESP"},{n="Visual"},
@@ -296,7 +281,6 @@ local tL={
     {n="Settings"},{n="Info"}
 }
 
--- Кнопки вкладок
 local tbts={}
 for _,t in ipairs(tL) do
     crP(t.n)
@@ -323,223 +307,209 @@ end
 sw("Main")
 if tbts[1] then tbts[1].BackgroundColor3=T().accent end
 
--- ═══════════════════════════════════════════════
--- НАПОЛНЕНИЕ ВКЛАДОК
--- ═══════════════════════════════════════════════
+-- ═══ НАПОЛНЕНИЕ ═══
 
--- === MAIN ===
-local PgMain=Pg["Main"]
-mT(PgMain,"Speed Hack",C.SpeedEnabled,function(v) C.SpeedEnabled=v end)
-mS(PgMain,"Walk Speed",16,200,C.WalkSpeed,function(v) C.WalkSpeed=v end)
-mS(PgMain,"Speed Boost",0,100,C.SpeedBoost,function(v) C.SpeedBoost=v end)
-mS(PgMain,"Jump Power",50,500,C.JumpPower,function(v) C.JumpPower=v end)
-mT(PgMain,"Fly",C.Fly,function(v) C.Fly=v; _G.setFly(v) end)
-mS(PgMain,"Fly Speed",10,200,C.FlySpeed,function(v) C.FlySpeed=v end)
-mT(PgMain,"Noclip",C.Noclip,function(v) C.Noclip=v; _G.setNC(v) end)
-mT(PgMain,"Infinite Jumps",C.InfiniteJumps,function(v) C.InfiniteJumps=v; _G.setInfJump(v) end)
-mT(PgMain,"Enable Jump",C.EnableJump,function(v) C.EnableJump=v end)
-mT(PgMain,"Enable Slide",C.EnableSlide,function(v) C.EnableSlide=v end)
-mT(PgMain,"Bunny Hop",C.BunnyHop,function(v) C.BunnyHop=v end)
-mT(PgMain,"Anti-AFK",C.AntiAFK,function(v) C.AntiAFK=v end)
+-- MAIN
+local P1=Pg["Main"]
+mT(P1,"Speed Hack",C.SpeedEnabled,function(v) C.SpeedEnabled=v end)
+mS(P1,"Walk Speed",16,200,C.WalkSpeed,function(v) C.WalkSpeed=v end)
+mS(P1,"Speed Boost",0,100,C.SpeedBoost,function(v) C.SpeedBoost=v end)
+mS(P1,"Jump Power",50,500,C.JumpPower,function(v) C.JumpPower=v end)
+mT(P1,"Fly",C.Fly,function(v) C.Fly=v; _G.setFly(v) end)
+mS(P1,"Fly Speed",10,200,C.FlySpeed,function(v) C.FlySpeed=v end)
+mT(P1,"Noclip",C.Noclip,function(v) C.Noclip=v; _G.setNC(v) end)
+mT(P1,"Infinite Jumps",C.InfiniteJumps,function(v) C.InfiniteJumps=v; _G.setInfJump(v) end)
+mT(P1,"Enable Jump",C.EnableJump,function(v) C.EnableJump=v end)
+mT(P1,"Enable Slide",C.EnableSlide,function(v) C.EnableSlide=v end)
+mT(P1,"Bunny Hop",C.BunnyHop,function(v) C.BunnyHop=v end)
+mT(P1,"Anti-AFK",C.AntiAFK,function(v) C.AntiAFK=v end)
 
--- === CHARACTER ===
-local PgCh=Pg["Character"]
-mT(PgCh,"God Mode",C.GodMode,function(v) C.GodMode=v end)
-mT(PgCh,"Infinite Revive",C.InfiniteRevive,function(v) C.InfiniteRevive=v end)
-mT(PgCh,"Max Stats",C.MaxStats,function(v) C.MaxStats=v end)
-mT(PgCh,"Invisible",C.Invisible,function(v) C.Invisible=v end)
-mT(PgCh,"Auto Crouch",C.AutoCrouch,function(v) C.AutoCrouch=v end)
-mT(PgCh,"Remove Closet Delay",C.RemoveClosetDelay,function(v) C.RemoveClosetDelay=v end)
-mT(PgCh,"Remove Accel",C.RemoveAccel,function(v) C.RemoveAccel=v end)
+-- CHARACTER
+local P2=Pg["Character"]
+mT(P2,"God Mode",C.GodMode,function(v) C.GodMode=v end)
+mT(P2,"Infinite Revive",C.InfiniteRevive,function(v) C.InfiniteRevive=v end)
+mT(P2,"Max Stats",C.MaxStats,function(v) C.MaxStats=v end)
+mT(P2,"Invisible",C.Invisible,function(v) C.Invisible=v end)
+mT(P2,"Remove Closet Delay",C.RemoveClosetDelay,function(v) C.RemoveClosetDelay=v end)
+mT(P2,"Remove Accel",C.RemoveAccel,function(v) C.RemoveAccel=v end)
 
--- === TP ===
-local PgTP=Pg["TP"]
-mB(PgTP,"TP Nearest Item",function() _G.tpNearestItem() end)
-mS(PgTP,"TP Item Radius",50,500,C.TPItemRadius,function(v) C.TPItemRadius=v end)
-mT(PgTP,"Auto Collect",C.AutoCollect,function(v) C.AutoCollect=v end)
-mT(PgTP,"Auto Coins",C.AutoCoins,function(v) C.AutoCoins=v end)
+-- TP
+local P3=Pg["TP"]
+mB(P3,"TP Nearest Item",function() _G.tpNearestItem() end)
+mS(P3,"TP Radius",50,500,C.TPItemRadius,function(v) C.TPItemRadius=v end)
+mT(P3,"Auto Collect",C.AutoCollect,function(v) C.AutoCollect=v end)
+mT(P3,"Auto Coins",C.AutoCoins,function(v) C.AutoCoins=v end)
 
--- === HIDE ===
-local PgHide=Pg["Hide"]
-mT(PgHide,"Infinite Hide",C.InfiniteHide,function(v) C.InfiniteHide=v end)
-mT(PgHide,"Hide Lock",C.HideLock,function(v) C.HideLock=v end)
-mT(PgHide,"Auto Re-Hide",C.AutoReHide,function(v) C.AutoReHide=v end)
-mT(PgHide,"Auto Hide Rush",C.AutoHideRush,function(v) C.AutoHideRush=v end)
-mT(PgHide,"Auto Hide Ambush",C.AutoHideAmbush,function(v) C.AutoHideAmbush=v end)
-mT(PgHide,"Auto Hide All",C.AutoHideAll,function(v) C.AutoHideAll=v end)
+-- HIDE
+local P4=Pg["Hide"]
+mT(P4,"Infinite Hide",C.InfiniteHide,function(v) C.InfiniteHide=v end)
+mT(P4,"Hide Lock",C.HideLock,function(v) C.HideLock=v end)
+mT(P4,"Auto Re-Hide",C.AutoReHide,function(v) C.AutoReHide=v end)
+mT(P4,"Auto Hide Rush",C.AutoHideRush,function(v) C.AutoHideRush=v end)
+mT(P4,"Auto Hide Ambush",C.AutoHideAmbush,function(v) C.AutoHideAmbush=v end)
+mT(P4,"Auto Hide All",C.AutoHideAll,function(v) C.AutoHideAll=v end)
 
--- === AUTOSEEK ===
-local PgAS=Pg["AutoSeek"]
-mT(PgAS,"Auto Seek",C.AutoSeek,function(v) C.AutoSeek=v end)
-mT(PgAS,"Auto Platform",C.AutoPlatform,function(v) C.AutoPlatform=v end)
+-- AUTOSEEK
+local P5=Pg["AutoSeek"]
+mT(P5,"Auto Seek",C.AutoSeek,function(v) C.AutoSeek=v end)
+mT(P5,"Auto Platform",C.AutoPlatform,function(v) C.AutoPlatform=v end)
 
--- === BYPASS ===
-local PgB=Pg["Bypass"]
-local bypassList={"BypassScreech","BypassHalt","BypassEyes","BypassLookman","BypassSnare","BypassKillbricks","BypassSeekingWall","BypassBanana","BypassGiggle","BypassDupe","BypassVacuum","BypassGloombatEggs","BypassSeekObstructions","BypassJeff","BypassRush","BypassAmbush","BypassSeek","BypassFigure","BypassGrumble","BypassDrones"}
-for _,b in ipairs(bypassList) do
-    mT(PgB,b:gsub("Bypass",""),C[b],function(v) C[b]=v end)
+-- BYPASS
+local P6=Pg["Bypass"]
+local byList={"BypassScreech","BypassHalt","BypassEyes","BypassLookman","BypassSnare","BypassKillbricks","BypassSeekingWall","BypassBanana","BypassGiggle","BypassDupe","BypassVacuum","BypassGloombatEggs","BypassSeekObstructions","BypassJeff","BypassRush","BypassAmbush","BypassSeek","BypassFigure","BypassGrumble","BypassDrones","AntiRansom","AntiClosetTrash"}
+for _,b in ipairs(byList) do
+    mT(P6,b,C[b],function(v) C[b]=v end)
 end
 
--- === EXPLOITS ===
-local PgE=Pg["Exploits"]
-mT(PgE,"God Rusher",C.GodRusher,function(v) C.GodRusher=v end,true)
-mT(PgE,"Entity Freeze",C.EntityFreeze,function(v) C.EntityFreeze=v end,true)
-mT(PgE,"Entity Teleport",C.EntityTeleport,function(v) C.EntityTeleport=v end,true)
-mT(PgE,"Speed 10x",C.Speed10x,function(v) C.Speed10x=v end,true)
-mT(PgE,"Invisible",C.Invisible,function(v) C.Invisible=v end,true)
-mT(PgE,"Time Stop",C.TimeStop,function(v) C.TimeStop=v end,true)
-mT(PgE,"Slow Motion",C.SlowMotion,function(v) C.SlowMotion=v end,true)
-mT(PgE,"Auto Dodge",C.AutoDodge,function(v) C.AutoDodge=v end,true)
+-- EXPLOITS
+local P7=Pg["Exploits"]
+mT(P7,"God Rusher",C.GodRusher,function(v) C.GodRusher=v end,true)
+mT(P7,"Entity Freeze",C.EntityFreeze,function(v) C.EntityFreeze=v end,true)
+mT(P7,"Entity Teleport",C.EntityTeleport,function(v) C.EntityTeleport=v end,true)
+mT(P7,"Speed 10x",C.Speed10x,function(v) C.Speed10x=v end,true)
+mT(P7,"Invisible",C.Invisible,function(v) C.Invisible=v end,true)
+mT(P7,"Time Stop",C.TimeStop,function(v) C.TimeStop=v end,true)
+mT(P7,"Slow Motion",C.SlowMotion,function(v) C.SlowMotion=v end,true)
+mT(P7,"Auto Dodge",C.AutoDodge,function(v) C.AutoDodge=v end,true)
 
--- === ESP ===
-local PgESP=Pg["ESP"]
-mT(PgESP,"ESP All",C.ESP_All,function(v) C.ESP_All=v end)
-local espMonsters={"Rush","Ambush","Seek","Figure","Screech","Hide","Eyes","Halt","Grumble","Giggle","Blitz","Lookman","Noise","Creak","Scribbles","Teller","Drones","Bash","Monument","Sally","Frozen"}
-for _,m in ipairs(espMonsters) do
-    local key="ESP_"..m
-    if C[key]~=nil then
-        mT(PgESP,"ESP "..m,C[key],function(v) C[key]=v end)
-    end
-end
-mT(PgESP,"ESP Doors",C.ESP_Doors,function(v) C.ESP_Doors=v end)
-mT(PgESP,"ESP Closets",C.ESP_Closets,function(v) C.ESP_Closets=v end)
-mT(PgESP,"ESP Money",C.ESP_Money,function(v) C.ESP_Money=v end)
-mT(PgESP,"ESP Keys",C.ESP_Keys,function(v) C.ESP_Keys=v end)
-mT(PgESP,"ESP Items",C.ESP_Items,function(v) C.ESP_Items=v end)
-mT(PgESP,"ESP Players",C.ESP_Players,function(v) C.ESP_Players=v end)
-mT(PgESP,"Smart ESP",C.SmartESP,function(v) C.SmartESP=v end)
-mS(PgESP,"Smart Range",50,300,C.SmartRange,function(v) C.SmartRange=v end)
-mS(PgESP,"Max Distance",100,1000,C.MaxDistance,function(v) C.MaxDistance=v end)
-mS(PgESP,"Fill Transparency",0,1,C.FillTransparency,function(v) C.FillTransparency=v end)
-mS(PgESP,"Text Size",8,24,C.TextSize,function(v) C.TextSize=v end)
-mS(PgESP,"Update Rate",0.3,3,C.ESPUpdateRate,function(v) C.ESPUpdateRate=v end)
+-- ESP
+local P8=Pg["ESP"]
+mT(P8,"ESP All",C.ESP_All,function(v) C.ESP_All=v end)
+mT(P8,"ESP Rush",C.ESP_Rush,function(v) C.ESP_Rush=v end)
+mT(P8,"ESP Ambush",C.ESP_Ambush,function(v) C.ESP_Ambush=v end)
+mT(P8,"ESP Seek",C.ESP_Seek,function(v) C.ESP_Seek=v end)
+mT(P8,"ESP Figure",C.ESP_Figure,function(v) C.ESP_Figure=v end)
+mT(P8,"ESP Screech",C.ESP_Screech,function(v) C.ESP_Screech=v end)
+mT(P8,"ESP Eyes",C.ESP_Eyes,function(v) C.ESP_Eyes=v end)
+mT(P8,"ESP Halt",C.ESP_Halt,function(v) C.ESP_Halt=v end)
+mT(P8,"ESP Doors",C.ESP_Doors,function(v) C.ESP_Doors=v end)
+mT(P8,"ESP Closets",C.ESP_Closets,function(v) C.ESP_Closets=v end)
+mT(P8,"ESP Money",C.ESP_Money,function(v) C.ESP_Money=v end)
+mT(P8,"ESP Keys",C.ESP_Keys,function(v) C.ESP_Keys=v end)
+mT(P8,"ESP Items",C.ESP_Items,function(v) C.ESP_Items=v end)
+mT(P8,"ESP Players",C.ESP_Players,function(v) C.ESP_Players=v end)
+mT(P8,"Smart ESP",C.SmartESP,function(v) C.SmartESP=v end)
+mS(P8,"Smart Range",50,300,C.SmartRange,function(v) C.SmartRange=v end)
+mS(P8,"Max Distance",100,1000,C.MaxDistance,function(v) C.MaxDistance=v end)
 
--- === VISUAL ===
-local PgV=Pg["Visual"]
-mS(PgV,"FOV",40,120,C.FOV,function(v) C.FOV=v end)
-mT(PgV,"Third Person",C.ThirdPerson,function(v) C.ThirdPerson=v end)
-mT(PgV,"No Fog",C.NoFog,function(v) C.NoFog=v end)
-mT(PgV,"Wallhack",C.Wallhack,function(v) C.Wallhack=v end)
-mT(PgV,"Chams",C.Chams,function(v) C.Chams=v end)
-mT(PgV,"Crosshair",C.Crosshair,function(v) C.Crosshair=v end)
-mT(PgV,"Entity Tracker",C.EntityTracker,function(v) C.EntityTracker=v end)
-mT(PgV,"Rainbow Mode",C.RainbowMode,function(v) C.RainbowMode=v end)
-mT(PgV,"Fun Rainbow",C.FunRainbow,function(v) C.FunRainbow=v end)
+-- VISUAL
+local P9=Pg["Visual"]
+mS(P9,"FOV",40,120,C.FOV,function(v) C.FOV=v end)
+mT(P9,"Third Person",C.ThirdPerson,function(v) C.ThirdPerson=v end)
+mT(P9,"No Fog",C.NoFog,function(v) C.NoFog=v end)
+mT(P9,"Wallhack",C.Wallhack,function(v) C.Wallhack=v end)
+mT(P9,"Chams",C.Chams,function(v) C.Chams=v end)
+mT(P9,"Crosshair",C.Crosshair,function(v) C.Crosshair=v end)
+mT(P9,"Entity Tracker",C.EntityTracker,function(v) C.EntityTracker=v end)
+mT(P9,"Rainbow Mode",C.RainbowMode,function(v) C.RainbowMode=v end)
+mT(P9,"Fun Rainbow",C.FunRainbow,function(v) C.FunRainbow=v end)
 
--- === MUSIC ===
-local PgM=Pg["Music"]
-mB(PgM,"Play Music",function()
-    if _G.playMusic then _G.playMusic(C.MusicId) end
-end)
-mB(PgM,"Stop Music",function()
-    if _G.stopMusic then _G.stopMusic() end
-end)
-mS(PgM,"Volume",0,1,C.MusicVolume,function(v) C.MusicVolume=v end)
+-- MUSIC
+local P10=Pg["Music"]
+mB(P10,"Play",function() _G.playMusic(C.MusicId) end)
+mB(P10,"Stop",function() _G.stopMusic() end)
+mS(P10,"Volume",0,1,C.MusicVolume,function(v) C.MusicVolume=v end)
 
--- === SOUND ===
-local PgS=Pg["Sound"]
-mT(PgS,"Notify Sound",C.NotifySound,function(v) C.NotifySound=v end)
-mT(PgS,"Rush Warning",C.RushWarning,function(v) C.RushWarning=v end)
+-- SOUND
+local P11=Pg["Sound"]
+mT(P11,"Notify Sound",C.NotifySound,function(v) C.NotifySound=v end)
+mT(P11,"Rush Warning",C.RushWarning,function(v) C.RushWarning=v end)
 
--- === MOVE ===
-local PgMv=Pg["Move"]
-mB(PgMv,"Save Position",function() _G.savePos() end)
-mB(PgMv,"TP to Save",function() _G.tpToSave() end)
+-- MOVE
+local P12=Pg["Move"]
+mB(P12,"Save Position",function() _G.savePos() end)
+mB(P12,"TP to Save",function() _G.tpToSave() end)
 
--- === STATS ===
-local PgSt=Pg["Stats"]
-mT(PgSt,"Show Timer",C.ShowTimer,function(v) C.ShowTimer=v end)
+-- STATS
+local P13=Pg["Stats"]
+mT(P13,"Show Timer",C.ShowTimer,function(v) C.ShowTimer=v end)
 
--- === FEATURES ===
-local PgF=Pg["Features"]
-mT(PgF,"Auto Aim",C.AutoAim,function(v) C.AutoAim=v end,true)
-mT(PgF,"Discord Rich",C.DiscordRich,function(v) C.DiscordRich=v end,true)
-mT(PgF,"Auto Rejoin",C.AutoRejoin,function(v) C.AutoRejoin=v end,true)
+-- FEATURES
+local P15=Pg["Features"]
+mT(P15,"Auto Aim",C.AutoAim,function(v) C.AutoAim=v end,true)
+mT(P15,"Discord Rich",C.DiscordRich,function(v) C.DiscordRich=v end,true)
+mT(P15,"Auto Rejoin",C.AutoRejoin,function(v) C.AutoRejoin=v end,true)
 
--- === FARM ===
-local PgFa=Pg["Farm"]
-mT(PgFa,"Auto Farm",C.AutoFarm,function(v) C.AutoFarm=v end)
-mT(PgFa,"Farm Deaths",C.AutoFarmDeaths,function(v) C.AutoFarmDeaths=v end)
-mS(PgFa,"Farm Delay",1,10,C.FarmDelay,function(v) C.FarmDelay=v end)
-mT(PgFa,"Auto Play Again",C.AutoPlayAgain,function(v) C.AutoPlayAgain=v end)
+-- FARM
+local P16=Pg["Farm"]
+mT(P16,"Auto Farm",C.AutoFarm,function(v) C.AutoFarm=v end)
+mT(P16,"Farm Deaths",C.AutoFarmDeaths,function(v) C.AutoFarmDeaths=v end)
+mS(P16,"Farm Delay",1,10,C.FarmDelay,function(v) C.FarmDelay=v end)
+mT(P16,"Auto Play Again",C.AutoPlayAgain,function(v) C.AutoPlayAgain=v end)
 
--- === FUN ===
-local PgFu=Pg["Fun"]
-mT(PgFu,"Snow",C.Snow,function(v) C.Snow=v end)
-mT(PgFu,"Leaves",C.Leaves,function(v) C.Leaves=v end)
-mT(PgFu,"Petals",C.Petals,function(v) C.Petals=v end)
-mT(PgFu,"Aura Fire",C.AuraFire,function(v) C.AuraFire=v end)
-mT(PgFu,"Aura Ice",C.AuraIce,function(v) C.AuraIce=v end)
-mT(PgFu,"Fireworks",C.FunFire,function(v) C.FunFire=v end)
-mT(PgFu,"Duck Spawn",C.DuckSpawn,function(v) C.DuckSpawn=v end)
-mB(PgFu,"Confetti!",function() _G.doConfetti() end)
-mB(PgFu,"Random TP",function() _G.randomTP() end)
-mB(PgFu,"Fake Death",function() _G.fakeDeath() end)
-mB(PgFu,"Chat Spam",function() _G.chatSpam("Burmalda on top!",5) end)
+-- FUN
+local P17=Pg["Fun"]
+mT(P17,"Snow",C.Snow,function(v) C.Snow=v end)
+mT(P17,"Leaves",C.Leaves,function(v) C.Leaves=v end)
+mT(P17,"Petals",C.Petals,function(v) C.Petals=v end)
+mT(P17,"Aura Fire",C.AuraFire,function(v) C.AuraFire=v end)
+mT(P17,"Aura Ice",C.AuraIce,function(v) C.AuraIce=v end)
+mT(P17,"Fireworks",C.FunFire,function(v) C.FunFire=v end)
+mT(P17,"Duck Spawn",C.DuckSpawn,function(v) C.DuckSpawn=v end)
+mB(P17,"Confetti!",function() _G.doConfetti() end)
+mB(P17,"Random TP",function() _G.randomTP() end)
+mB(P17,"Fake Death",function() _G.fakeDeath() end)
+mB(P17,"Chat Spam",function() _G.chatSpam("Burmalda on top!",5) end)
 
--- === SPAWN ===
-local PgSp=Pg["Spawn"]
-mB(PgSp,"Spawn Rush",function() _G.spawnRush() end)
-mB(PgSp,"Spawn Ambush",function() _G.spawnAmbush() end)
-mB(PgSp,"Spawn Seek",function() _G.spawnSeek() end)
-mB(PgSp,"Spawn Figure",function() _G.spawnFigure() end)
-mB(PgSp,"Spawn Coin",function() _G.spawnCoin() end)
-mB(PgSp,"Spawn Key",function() _G.spawnKey() end)
+-- SPAWN
+local P18=Pg["Spawn"]
+mB(P18,"Spawn Rush",function() _G.spawnRush() end)
+mB(P18,"Spawn Ambush",function() _G.spawnAmbush() end)
+mB(P18,"Spawn Seek",function() _G.spawnSeek() end)
+mB(P18,"Spawn Figure",function() _G.spawnFigure() end)
+mB(P18,"Spawn Coin",function() _G.spawnCoin() end)
+mB(P18,"Spawn Key",function() _G.spawnKey() end)
 
--- === ADMIN (Fake Panel) ===
-local PgA=Pg["Admin"]
-mB(PgA,"🎭 [FAKE] Kick All",function() _G.fakeAdminAction("Kick All") end,T().danger)
-mB(PgA,"🎭 [FAKE] Ban Player",function() _G.fakeAdminAction("Ban Player") end,T().danger)
-mB(PgA,"🎭 [FAKE] Server Shutdown",function() _G.fakeAdminAction("Server Shutdown") end,T().danger)
-mB(PgA,"🎭 [FAKE] Give Godmode",function() _G.fakeAdminAction("Give Godmode") end,T().danger)
-mB(PgA,"🎭 [FAKE] Give Flashlight",function() _G.fakeAdminGiveItem("Flashlight") end)
-mB(PgA,"🎭 [FAKE] Give Lockpick",function() _G.fakeAdminGiveItem("Lockpick") end)
-mB(PgA,"🎭 [FAKE] Give Bandage",function() _G.fakeAdminGiveItem("Bandage") end)
-mB(PgA,"🎭 [FAKE] Give Vitamins",function() _G.fakeAdminGiveItem("Vitamins") end)
-mB(PgA,"🎭 [FAKE] Give Crucifix",function() _G.fakeAdminGiveItem("Crucifix") end)
+-- ADMIN
+local P19=Pg["Admin"]
+mB(P19,"[FAKE] Kick All",function() _G.fakeAdminAction("Kick All") end,T().danger)
+mB(P19,"[FAKE] Ban Player",function() _G.fakeAdminAction("Ban Player") end,T().danger)
+mB(P19,"[FAKE] Server Shutdown",function() _G.fakeAdminAction("Server Shutdown") end,T().danger)
+mB(P19,"[FAKE] Give Godmode",function() _G.fakeAdminAction("Give Godmode") end,T().danger)
+mB(P19,"[FAKE] Give Flashlight",function() _G.fakeAdminGiveItem("Flashlight") end)
+mB(P19,"[FAKE] Give Lockpick",function() _G.fakeAdminGiveItem("Lockpick") end)
+mB(P19,"[FAKE] Give Bandage",function() _G.fakeAdminGiveItem("Bandage") end)
+mB(P19,"[FAKE] Give Vitamins",function() _G.fakeAdminGiveItem("Vitamins") end)
+mB(P19,"[FAKE] Give Crucifix",function() _G.fakeAdminGiveItem("Crucifix") end)
 
--- === MOBILE ===
-local PgMb=Pg["Mobile"]
-mT(PgMb,"Show Mobile Buttons",true,function(v) end)
+-- MOBILE
+local P20=Pg["Mobile"]
+mT(P20,"Show Mobile Buttons",true,function(v) end)
 
--- === ANTIDET ===
-local PgAD=Pg["AntiDet"]
-mT(PgAD,"Anti-Detection",C.AntiDetect,function(v) C.AntiDetect=v end,true)
-mT(PgAD,"Safe Mode",C.SafeMode,function(v) C.SafeMode=v end,true)
-mS(PgAD,"Bypass Delay",0.05,1,C.BypassDelay,function(v) C.BypassDelay=v end)
+-- ANTIDET
+local P21=Pg["AntiDet"]
+mT(P21,"Anti-Detection",C.AntiDetect,function(v) C.AntiDetect=v end,true)
+mT(P21,"Safe Mode",C.SafeMode,function(v) C.SafeMode=v end,true)
+mS(P21,"Bypass Delay",0.05,1,C.BypassDelay,function(v) C.BypassDelay=v end)
 
--- === HOTEL ===
-local PgH=Pg["Hotel"]
-mT(PgH,"Auto Breaker",C.AutoBreaker,function(v) C.AutoBreaker=v end)
+-- HOTEL
+local P25=Pg["Hotel"]
+mT(P25,"Auto Breaker",C.AutoBreaker,function(v) C.AutoBreaker=v end)
 
--- === MINES ===
-local PgMi=Pg["Mines"]
-mT(PgMi,"Mines Auto-Steer",C.AutoSeek,function(v) C.AutoSeek=v end)
+-- ARCHIVES
+local P29=Pg["Archives"]
+mT(P29,"Time Shower",C.TimeShower,function(v) C.TimeShower=v end)
+mT(P29,"Anti Ransom",C.AntiRansom,function(v) C.AntiRansom=v end)
+mT(P29,"Anti Closet Trash",C.AntiClosetTrash,function(v) C.AntiClosetTrash=v end)
+mT(P29,"Forget Me Not",C.ForgetMeNot,function(v) C.ForgetMeNot=v end)
+mT(P29,"Honcho ESP",C.HonchoESP,function(v) C.HonchoESP=v end)
 
--- === ARCHIVES ===
-local PgAr=Pg["Archives"]
-mT(PgAr,"Time Shower",C.TimeShower,function(v) C.TimeShower=v end)
-mT(PgAr,"Anti Ransom",C.AntiRansom,function(v) C.AntiRansom=v end)
-mT(PgAr,"Anti Closet Trash",C.AntiClosetTrash,function(v) C.AntiClosetTrash=v end)
-mT(PgAr,"Forget Me Not Skipper",C.ForgetMeNot,function(v) C.ForgetMeNot=v end)
-mT(PgAr,"Honcho ESP",C.HonchoESP,function(v) C.HonchoESP=v end)
+-- SETTINGS
+local P31=Pg["Settings"]
+mS(P31,"UI Scale",0.5,2,C.UI_Scale,function(v) C.UI_Scale=v end)
+mB(P31,"Save Config",function() _G.sv(); N("Saved!") end)
+mB(P31,"Load Config",function() _G.ld(); N("Loaded!") end)
 
--- === SETTINGS ===
-local PgSett=Pg["Settings"]
-mS(PgSett,"UI Scale",0.5,2,C.UI_Scale,function(v) C.UI_Scale=v end)
-mB(PgSett,"Save Config",function() _G.sv(); N("Saved!") end)
-mB(PgSett,"Load Config",function() _G.ld(); N("Loaded!") end)
-
--- === INFO ===
-local PgI=Pg["Info"]
-mB(PgI,"Burmalda v13 | KOTENOK7204",function()
-    N("Burmalda v13 FINAL — by KOTENOK7204, tester Kostya_2015KostyaKos")
+-- INFO
+local P32=Pg["Info"]
+mB(P32,"Burmalda v14 | KOTENOK7204",function()
+    N("Burmalda v14 — by KOTENOK7204, tester Kostya_2015KostyaKos")
 end)
 
--- ═══ Стартовый экран: кнопки этажей ═══
+-- ═══ КНОПКИ ЭТАЖЕЙ ═══
 local function mkFB(txt,y,fn)
     local b=Instance.new("TextButton",FM)
-b.Size=UDim2.new(0,270,0,32)
+    b.Size=UDim2.new(0,270,0,32)
     b.Position=UDim2.new(0.5,-135,0,y)
     b.BackgroundColor3=Color3.fromRGB(40,40,45)
     b.Text=txt
@@ -565,12 +535,12 @@ mkFB("Outdoors",229,"Outdoors")
 mkFB("Archives",266,"Archives")
 mkFB("Stairwell",303,"Stairwell")
 
--- ═══ Автосохранение ═══
+-- ═══ АВТОСОХРАНЕНИЕ ═══
 task.spawn(function()
     while task.wait(30) do
         if C.AutoSave and _G.sv then pcall(_G.sv) end
     end
 end)
 
-print("[Burmalda v13] Part 8/8 — GUI loaded. Script ready!")
-print("[Burmalda v13] By KOTENOK7204 | Tester: Kostya_2015KostyaKos")
+print("[Burmalda v14] Part 8/8 — GUI loaded. Script ready!")
+print("[Burmalda v14] By KOTENOK7204 | Tester: Kostya_2015KostyaKos")
