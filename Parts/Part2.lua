@@ -1,5 +1,5 @@
--- BURMALDA v13 | Part 2/8 — MAIN + CHARACTER
--- Fly, Noclip, Speed, Inf Jump, GodMode, Revive, RemoveDelay
+-- BURMALDA v14 | Part 2/8 — MAIN + CHARACTER
+-- Fly (рабочий), InfJump (UIS.JumpRequest), Speed (fix), GodMode, Noclip
 
 local C=_G.C
 local T=_G.T
@@ -12,7 +12,7 @@ local VU=_G.VU
 local RF=_G.RF
 local P=_G.P
 
--- ═══ FLY ═══
+-- ═══ FLY (рабочий — не менял) ═══
 local FBV,FBG,FC
 _G.setFly=function(s)
     local ch=LP.Character; if not ch then return end
@@ -72,17 +72,18 @@ _G.setNC=function(s)
     end)
 end
 
--- ═══ INFINITE JUMPS ═══
+-- ═══ INFINITE JUMPS (через UIS.JumpRequest — правильный способ) ═══
 local infJumpConn
 _G.setInfJump=function(s)
     if infJumpConn then infJumpConn:Disconnect(); infJumpConn=nil end
     if not s then return end
-    local ch=LP.Character; if not ch then return end
-    local h=ch:FindFirstChildOfClass("Humanoid"); if not h then return end
-    infJumpConn=h.StateChanged:Connect(function(o,n)
-        if n==Enum.HumanoidStateType.Freefall and C.InfiniteJumps then
-            task.wait(0.01)
-            h:ChangeState(Enum.HumanoidStateType.Jumping)
+    infJumpConn=UIS.JumpRequest:Connect(function()
+        if C.InfiniteJumps then
+            local ch=LP.Character
+            local h=ch and ch:FindFirstChildOfClass("Humanoid")
+            if h then
+                h:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
         end
     end)
 end
@@ -92,9 +93,9 @@ LP.CharacterAdded:Connect(function()
     if C.InfiniteJumps then _G.setInfJump(true) end
 end)
 
--- ═══ SPEED / JUMP LOOP ═══
+-- ═══ SPEED LOOP (проверка значения перед изменением) ═══
 task.spawn(function()
-    while task.wait(0.5) do
+    while task.wait(0.1) do
         local ch=LP.Character
         local h=ch and ch:FindFirstChildOfClass("Humanoid")
         if h then
@@ -102,23 +103,32 @@ task.spawn(function()
             if C.SpeedEnabled then sp=C.WalkSpeed+C.SpeedBoost end
             if C.Speed10x then sp=160 end
             if C.BunnyHop then sp=30 end
-            h.WalkSpeed=sp
-            h.JumpPower=C.JumpPower
-            h.UseJumpPower=true
-        end
-        if ch then
-            if C.EnableJump then pcall(function() ch:SetAttribute("CanJump",true) end) end
-            if C.EnableSlide then pcall(function() ch:SetAttribute("CanSlide",true) end) end
+            if h.WalkSpeed~=sp then h.WalkSpeed=sp end
+            if h.JumpPower~=C.JumpPower then
+                h.JumpPower=C.JumpPower
+                h.UseJumpPower=true
+            end
         end
     end
 end)
 
--- ═══ GOD MODE ═══
+-- ═══ ENABLE JUMP / SLIDE ═══
 task.spawn(function()
-    while task.wait(0.5) do
+    while task.wait(0.3) do
+        local ch=LP.Character
+        if ch then
+            if C.EnableJump then pcall(function() ch:SetAttribute("CanJump",true) end) end
+if C.EnableSlide then pcall(function() ch:SetAttribute("CanSlide",true) end) end
+        end
+    end
+end)
+
+-- ═══ GOD MODE (восстановление HP) ═══
+task.spawn(function()
+    while task.wait(0.3) do
         if C.GodMode then
             local ch=LP.Character
-local h=ch and ch:FindFirstChildOfClass("Humanoid")
+            local h=ch and ch:FindFirstChildOfClass("Humanoid")
             if h and h.Health<h.MaxHealth then
                 pcall(function() h.Health=h.MaxHealth end)
             end
@@ -174,7 +184,7 @@ task.spawn(function()
     end
 end)
 
--- ═══ PROMPT LOOP (InstantPrompts, PromptClip, DoorReach) ═══
+-- ═══ PROMPTS (InstantPrompts, PromptClip, DoorReach) ═══
 task.spawn(function()
     while task.wait(0.5) do
         pcall(function()
@@ -212,4 +222,4 @@ task.spawn(function()
     end
 end)
 
-print("[Burmalda v13] Part 2/8 — MAIN + CHARACTER loaded")
+print("[Burmalda v14] Part 2/8 — MAIN + CHARACTER loaded")
