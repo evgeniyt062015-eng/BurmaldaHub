@@ -1,13 +1,14 @@
--- BURMALDA v13 FINAL | KOTENOK7204 | Tester: Kostya_2015KostyaKos
--- Загрузчик 8 частей
+-- BURMALDA v14 FINAL | KOTENOK7204 | Tester: Kostya_2015KostyaKos
+-- Загрузчик 9 частей
 
-local base="https://raw.githubusercontent.com/evgeniyt062015-eng/BurmaldaHub/main/Parts/"
-for i=1,8 do
-    local ok,err=pcall(function()
-        loadstring(game:HttpGet(base.."Part"..i..".lua?t="..tick()))()
-    end)
-    if not ok then
-        warn("[Burmalda v13] Part"..i.." failed: "..tostring(err))
-    end
-end
-print("[Burmalda v13] All 8 parts loaded. Press B to open menu.")
+-- Сначала загружаем Part1 (ядро) без экрана
+pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/evgeniyt062015-eng/BurmaldaHub/main/Parts/Part1.lua?t="..tick()))()
+end)
+
+-- Потом Part9 (экран загрузки) — он сам загрузит Part2-8
+pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/evgeniyt062015-eng/BurmaldaHub/main/Parts/Part9.lua?t="..tick()))()
+end)
+
+print("[Burmalda v14] Main loader done.")
