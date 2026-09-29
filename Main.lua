@@ -845,7 +845,7 @@ local FQ=Instance.new("TextLabel",FM);FQ.Size=UDim2.new(1,0,0,22);FQ.Position=UD
 function mkFB(txt,y,fn)local b=Instance.new("TextButton",FM);b.Size=UDim2.new(0,270,0,32);b.Position=UDim2.new(0.5,-135,0,y);b.BackgroundColor3=Color3.fromRGB(40,40,45);b.Text=txt;b.TextColor3=Color3.fromRGB(240,240,245);b.Font=Enum.Font.GothamBold;b.TextSize=12;b.BorderSizePixel=0;local c=Instance.new("UICorner",b);c.CornerRadius=UDim.new(0,6);local s=Instance.new("UIStroke",b);s.Color=Color3.fromRGB(120,20,40);s.Thickness=1;b.MouseButton1Click:Connect(function()MF=fn;M.Visible=true;sw("Main");FS:Destroy();N("Floor: "..fn)end)end
 
 -- MAIN GUI
-_G.SG=Instance.new("ScreenGui");SG.Name="BurmaldaV13GUI";SG.ResetOnSpawn=false;SG.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;SG.Parent=LP:WaitForChild("PlayerGui")
+local SG=Instance.new("ScreenGui");SG.Name="BurmaldaV13GUI";SG.ResetOnSpawn=false;SG.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;SG.Parent=LP:WaitForChild("PlayerGui")
 local OB=Instance.new("TextButton",SG);OB.Size=UDim2.new(0,50,0,50);OB.Position=UDim2.new(0,10,0.5,-25);OB.BackgroundColor3=Color3.fromRGB(120,20,40);OB.Text="B";OB.TextColor3=Color3.fromRGB(255,255,255);OB.TextSize=20;OB.Font=Enum.Font.GothamBlack;OB.BorderSizePixel=0;OB.Draggable=true
 local OBC=Instance.new("UICorner",OB);OBC.CornerRadius=UDim.new(1,0)
 local OBS=Instance.new("UIStroke",OB);OBS.Color=Color3.fromRGB(240,240,245);OBS.Thickness=2
