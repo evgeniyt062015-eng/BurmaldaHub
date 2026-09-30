@@ -1,5 +1,5 @@
--- BURMALDA v15 | Part 13/14 — GUI (34 вкладки) — ЧАСТЬ 1
--- Ядро + 17 вкладок (Main-Exploits)
+-- BURMALDA v15.1 | Part 13/14 — GUI (35 вкладок) — ЧАСТЬ 1
+-- Ядро + вкладки 1-18
 
 local C=_G.C
 local T=_G.T
@@ -23,8 +23,8 @@ FB.BackgroundTransparency=0.3
 FB.BorderSizePixel=0
 
 local FM=Instance.new("Frame",FB)
-FM.Size=UDim2.new(0,300,0,370)
-FM.Position=UDim2.new(0.5,-150,0.5,-185)
+FM.Size=UDim2.new(0,300,0,400)
+FM.Position=UDim2.new(0.5,-150,0.5,-200)
 FM.BackgroundColor3=Color3.fromRGB(20,20,25)
 FM.BorderSizePixel=0
 
@@ -32,14 +32,14 @@ local FMC=Instance.new("UICorner",FM)
 FMC.CornerRadius=UDim.new(0,12)
 
 local FMS=Instance.new("UIStroke",FM)
-FMS.Color=Color3.fromRGB(120,20,40)
+FMS.Color=Color3.fromRGB(180,30,30)
 FMS.Thickness=2
 
 local FT=Instance.new("TextLabel",FM)
 FT.Size=UDim2.new(1,0,0,35)
 FT.Position=UDim2.new(0,0,0,10)
 FT.BackgroundTransparency=1
-FT.Text="BURMALDA v15"
+FT.Text="BURMALDA v15.1"
 FT.TextColor3=Color3.fromRGB(180,30,30)
 FT.Font=Enum.Font.GothamBlack
 FT.TextSize=22
@@ -53,18 +53,9 @@ FSu.TextColor3=Color3.fromRGB(200,200,210)
 FSu.Font=Enum.Font.Gotham
 FSu.TextSize=10
 
-local FSu2=Instance.new("TextLabel",FM)
-FSu2.Size=UDim2.new(1,0,0,18)
-FSu2.Position=UDim2.new(0,0,0,62)
-FSu2.BackgroundTransparency=1
-FSu2.Text="Tester: Kostya_2015KostyaKos"
-FSu2.TextColor3=Color3.fromRGB(255,200,100)
-FSu2.Font=Enum.Font.GothamBold
-FSu2.TextSize=10
-
 local FQ=Instance.new("TextLabel",FM)
 FQ.Size=UDim2.new(1,0,0,22)
-FQ.Position=UDim2.new(0,0,0,84)
+FQ.Position=UDim2.new(0,0,0,70)
 FQ.BackgroundTransparency=1
 FQ.Text="Where are you?"
 FQ.TextColor3=Color3.fromRGB(240,240,245)
@@ -130,13 +121,12 @@ local HT=Instance.new("TextLabel",H)
 HT.Size=UDim2.new(1,-120,1,0)
 HT.Position=UDim2.new(0,10,0,0)
 HT.BackgroundTransparency=1
-HT.Text="BURMALDA v15 | ".._G.gF()
+HT.Text="BURMALDA v15.1 | ".._G.gF()
 HT.TextColor3=Color3.fromRGB(255,255,255)
 HT.Font=Enum.Font.GothamBold
 HT.TextSize=11
 HT.TextXAlignment=Enum.TextXAlignment.Left
 
--- SEARCH кнопка
 local SearchBtn=Instance.new("TextButton",H)
 SearchBtn.Size=UDim2.new(0,30,0,24)
 SearchBtn.Position=UDim2.new(1,-90,0,5)
@@ -149,7 +139,6 @@ SearchBtn.BorderSizePixel=0
 local SBC=Instance.new("UICorner",SearchBtn)
 SBC.CornerRadius=UDim.new(0,4)
 
--- CLOSE
 local CB=Instance.new("TextButton",H)
 CB.Size=UDim2.new(0,24,0,24)
 CB.Position=UDim2.new(1,-28,0,5)
@@ -169,7 +158,7 @@ CB.MouseButton1Click:Connect(function()
     OB.Text="B"
 end)
 
--- ═══ ЛЕВАЯ ПАНЕЛЬ (вкладки) ═══
+-- ═══ ЛЕВАЯ ПАНЕЛЬ ═══
 local TB=Instance.new("ScrollingFrame",M)
 TB.Size=UDim2.new(0,140,1,-34)
 TB.Position=UDim2.new(0,0,0,34)
@@ -177,7 +166,7 @@ TB.BackgroundColor3=T().panel
 TB.BorderSizePixel=0
 TB.ScrollBarThickness=3
 TB.ScrollBarImageColor3=T().accent
-TB.CanvasSize=UDim2.new(0,0,3200)
+TB.CanvasSize=UDim2.new(0,0,3500)
 
 local TBC=Instance.new("UICorner",TB)
 TBC.CornerRadius=UDim.new(0,10)
@@ -186,7 +175,7 @@ local TBL=Instance.new("UIListLayout",TB)
 TBL.Padding=UDim.new(0,3)
 TBL.SortOrder=Enum.SortOrder.LayoutOrder
 
--- ═══ ПРАВАЯ ПАНЕЛЬ (контент) ═══
+-- ═══ ПРАВАЯ ПАНЕЛЬ ═══
 local CT=Instance.new("Frame",M)
 CT.Size=UDim2.new(1,-145,1,-42)
 CT.Position=UDim2.new(0,142,0,38)
@@ -205,7 +194,7 @@ local function crP(n)
     p.BorderSizePixel=0
     p.ScrollBarThickness=3
     p.ScrollBarImageColor3=T().accent
-    p.CanvasSize=UDim2.new(0,0,3200)
+    p.CanvasSize=UDim2.new(0,0,3500)
     p.Visible=false
     local L=Instance.new("UIListLayout",p)
     L.Padding=UDim.new(0,3)
@@ -214,34 +203,34 @@ local function crP(n)
     return p
 end
 
--- ═══ mT (Toggle с подписью статуса) ═══
-local function mT(p,t,i,cb,d,status)
+-- ═══ mT (Toggle с подписью) ═══
+local function mT(p,t,i,cb,status,d)
     local b=Instance.new("TextButton",p)
-    b.Size=UDim2.new(1,-6,0,38)
+    b.Size=UDim2.new(1,-6,0,36)
     b.BackgroundColor3=d and T().danger or T().panel
     b.BorderSizePixel=0
     b.Text=""
     local c=Instance.new("UICorner",b); c.CornerRadius=UDim.new(0,5)
     local l=Instance.new("TextLabel",b)
-    l.Size=UDim2.new(0.75,0,0,20); l.Position=UDim2.new(0,8,0,2)
+    l.Size=UDim2.new(0.75,0,0,18); l.Position=UDim2.new(0,8,0,2)
     l.BackgroundTransparency=1; l.Text=t; l.TextColor3=d and Color3.fromRGB(255,200,210) or T().text
     l.Font=Enum.Font.Gotham; l.TextSize=10; l.TextXAlignment=Enum.TextXAlignment.Left
     -- Подпись статуса
-    local st=Instance.new("TextLabel",b)
-    st.Size=UDim2.new(0.75,0,0,12); st.Position=UDim2.new(0,8,0,22)
-    st.BackgroundTransparency=1
-    st.TextSize=8; st.TextXAlignment=Enum.TextXAlignment.Left
-    st.Font=Enum.Font.Gotham
-    if status=="works" then
-        st.Text="✅ работает"; st.TextColor3=Color3.fromRGB(80,220,120)
-    elseif status=="maybe" then
-        st.Text="⚠️ может не работать"; st.TextColor3=Color3.fromRGB(255,200,50)
-    elseif status=="no" then
-        st.Text="❌ не работает"; st.TextColor3=Color3.fromRGB(220,80,80)
-    elseif status=="new" then
-        st.Text="🆕 новое в v15"; st.TextColor3=Color3.fromRGB(80,150,255)
-    else
-        st.Text=""; st.TextColor3=Color3.fromRGB(150,150,160)
+    if status then
+        local st=Instance.new("TextLabel",b)
+        st.Size=UDim2.new(0.75,0,0,12); st.Position=UDim2.new(0,8,0,20)
+        st.BackgroundTransparency=1
+        st.TextSize=8; st.TextXAlignment=Enum.TextXAlignment.Left
+        st.Font=Enum.Font.Gotham
+        if status=="works" then
+            st.Text="✅ работает"; st.TextColor3=Color3.fromRGB(80,220,120)
+        elseif status=="maybe" then
+            st.Text="⚠️ может не работать"; st.TextColor3=Color3.fromRGB(255,200,50)
+        elseif status=="no" then
+            st.Text="❌ не работает"; st.TextColor3=Color3.fromRGB(220,80,80)
+        elseif status=="new" then
+            st.Text="🆕 новое"; st.TextColor3=Color3.fromRGB(80,150,255)
+        end
     end
     -- Кнопка ON/OFF
     local s=Instance.new("TextLabel",b)
@@ -309,16 +298,16 @@ local function mS(p,t,mn,mx,i,cb)
     end)
 end
 
--- ═══ СПИСОК ВКЛАДОК ═══
+-- ═══ СПИСОК ВКЛАДОК (35) ═══
 local tL={
     {n="Main"},{n="Character"},{n="TP"},{n="Hide"},{n="AutoSeek"},{n="Auto"},
     {n="Bypass"},{n="Exploits",d=true},{n="ESP"},{n="Visual"},
     {n="Music"},{n="Sound"},{n="Move"},{n="Stats"},{n="Players"},
-    {n="Features",d=true},{n="Farm"},{n="Fun"},{n="Spawn"},
-    {n="Admin",d=true},{n="Mobile"},{n="AntiDet",d=true},{n="FPS Booster"},
+    {n="Features",d=true},{n="Farm"},{n="Fun"},
+    {n="Spawn"},{n="Admin",d=true},{n="Mobile"},{n="AntiDet",d=true},{n="FPS Booster"},
     {n="Shop"},{n="Achiev"},{n="Favorites"},
     {n="Hotel"},{n="Mines"},{n="Backdoor"},{n="Outdoors"},{n="Archives"},{n="Stairwell"},
-    {n="Settings"},{n="Updates"}
+    {n="Notifications"},{n="Settings"},{n="Updates"}
 }
 
 local tbts={}
@@ -348,20 +337,20 @@ sw("Main")
 if tbts[1] then tbts[1].BackgroundColor3=T().accent end
 
 -- ═══════════════════════════════════════════════════════
--- ВКЛАДКИ 1-17 (Main → Exploits)
+-- ВКЛАДКИ 1-18
 -- ═══════════════════════════════════════════════════════
 
 -- 1. MAIN
 local P1=Pg["Main"]
-mT(P1,"Speed Hack",C.SpeedEnabled,function(v) C.SpeedEnabled=v; _G.setSpeed(v) end,"works")
+mT(P1,"Speed Hack",C.SpeedEnabled,function(v) C.SpeedEnabled=v; if _G.setSpeed then _G.setSpeed(v) end end,"works")
 mS(P1,"Walk Speed",16,200,C.WalkSpeed,function(v) C.WalkSpeed=v end)
 mS(P1,"Speed Boost",0,100,C.SpeedBoost,function(v) C.SpeedBoost=v end)
-mS(P1,"Jump Power",50,500,C.JumpPower,function(v) C.JumpPower=v; _G.setJump(true) end)
-mT(P1,"Fly",C.Fly,function(v) C.Fly=v; _G.setFly(v) end,"works")
+mS(P1,"Jump Power",50,500,C.JumpPower,function(v) C.JumpPower=v; if _G.setJump then _G.setJump(true) end end)
+mT(P1,"Fly",C.Fly,function(v) C.Fly=v; if _G.setFly then _G.setFly(v) end end,"works")
 mS(P1,"Fly Speed",10,200,C.FlySpeed,function(v) C.FlySpeed=v end)
-mT(P1,"Noclip",C.Noclip,function(v) C.Noclip=v; _G.setNC(v) end,"works")
-mT(P1,"Infinite Jumps",C.InfiniteJumps,function(v) C.InfiniteJumps=v; _G.setInfJump(v) end,"new")
-mT(P1,"Enable Jump",C.EnableJump,function(v) C.EnableJump=v end,"works")
+mT(P1,"Noclip",C.Noclip,function(v) C.Noclip=v; if _G.setNC then _G.setNC(v) end end,"works")
+mT(P1,"Infinite Jumps",C.InfiniteJumps,function(v) C.InfiniteJumps=v; if _G.setInfJump then _G.setInfJump(v) end end,"new")
+mT(P1,"Enable Jump",C.EnableJump,function(v) C.EnableJump=v end,"maybe")
 mT(P1,"Enable Slide",C.EnableSlide,function(v) C.EnableSlide=v end,"maybe")
 mT(P1,"Bunny Hop",C.BunnyHop,function(v) C.BunnyHop=v end,"maybe")
 mT(P1,"Anti-AFK",C.AntiAFK,function(v) C.AntiAFK=v end,"works")
@@ -374,20 +363,21 @@ mT(P1,"Disable Idle Kick",C.DisableIdleKick,function(v) C.DisableIdleKick=v end,
 
 -- 2. CHARACTER
 local P2=Pg["Character"]
-mT(P2,"God Mode",C.GodMode,function(v) C.GodMode=v; _G.setGodMode(v) end,"new")
+mT(P2,"God Mode",C.GodMode,function(v) C.GodMode=v; if _G.setGodMode then _G.setGodMode(v) end end,"new")
 mT(P2,"Max Stats",C.MaxStats,function(v) C.MaxStats=v end,"maybe")
 mT(P2,"Invisible",C.Invisible,function(v) C.Invisible=v end,"maybe")
 mT(P2,"God Rusher",C.GodRusher,function(v) C.GodRusher=v end,"maybe")
 mT(P2,"Adaptive Speed",C.AdaptiveSpeed,function(v) C.AdaptiveSpeed=v end,"new")
 mT(P2,"Predictive Hide",C.PredictiveHide,function(v) C.PredictiveHide=v end,"new")
 mT(P2,"Smart Path",C.SmartPath,function(v) C.SmartPath=v end,"new")
+mT(P2,"Figure Invisible",C.FigureInvisible,function(v) C.FigureInvisible=v end,"new")
 
 -- 3. TP
 local P3=Pg["TP"]
-mB(P3,"TP Nearest Item",function() _G.tpNearestItem() end)
+mB(P3,"TP Nearest Item",function() if _G.tpNearestItem then _G.tpNearestItem() end end)
 mS(P3,"TP Radius",50,500,C.TPItemRadius,function(v) C.TPItemRadius=v end)
-mB(P3,"Save Position",function() _G.savePos() end)
-mB(P3,"TP to Save",function() _G.tpToSave() end)
+mB(P3,"Save Position",function() if _G.savePos then _G.savePos() end end)
+mB(P3,"TP to Save",function() if _G.tpToSave then _G.tpToSave() end end)
 
 -- 4. HIDE
 local P4=Pg["Hide"]
@@ -418,6 +408,7 @@ mT(P6,"Auto Interact — Items",C.AutoInteractItems,function(v) C.AutoInteractIt
 mT(P6,"Auto Play Again",C.AutoPlayAgain,function(v) C.AutoPlayAgain=v end,"works")
 mT(P6,"Auto Skip Cutscene",C.AutoSkipCutscene,function(v) C.AutoSkipCutscene=v end,"new")
 mT(P6,"Auto Breaker",C.AutoBreaker,function(v) C.AutoBreaker=v end,"maybe")
+mT(P6,"Auto Complete Room",C.AutoCompleteRoom,function(v) C.AutoCompleteRoom=v end,"new")
 
 -- 7. BYPASS
 local P7=Pg["Bypass"]
@@ -437,15 +428,15 @@ local bpList={
     {"Bypass Giggle","BypassGiggle","maybe"},
     {"Bypass Dupe","BypassDupe","maybe"},
     {"Bypass Vacuum","BypassVacuum","maybe"},
-    {"Bypass Gloombat Eggs","BypassGloombatEggs","maybe"},
-    {"Bypass Seek Obstructions","BypassSeekObstructions","maybe"},
+    {"Bypass GloombatEggs","BypassGloombatEggs","maybe"},
+    {"Bypass SeekObstructions","BypassSeekObstructions","maybe"},
     {"Bypass Jeff","BypassJeff","maybe"},
     {"Bypass Grumble","BypassGrumble","maybe"},
     {"Bypass Drones","BypassDrones","maybe"},
     {"Bypass Alma","BypassAlma","new"},
     {"Bypass Scribbles","BypassScribbles","new"},
-    {"Bypass Electric Water","BypassElectricWater","new"},
-    {"Bypass Giggle Arc","BypassGiggleArc","new"},
+    {"Bypass ElectricWater","BypassElectricWater","new"},
+    {"Bypass GiggleArc","BypassGiggleArc","new"},
     {"Anti Ransom","AntiRansom","new"},
     {"Anti Closet Trash","AntiClosetTrash","new"},
     {"Anti Noise","AntiNoise","new"},
@@ -465,7 +456,7 @@ end
 -- 8. EXPLOITS
 local P8=Pg["Exploits"]
 mT(P8,"God Rusher",C.GodRusher,function(v) C.GodRusher=v end,"maybe",true)
-mT(P8,"Entity Freeze",C.EntityFreeze,function(v) C.EntityFreeze=v end,"maybe",true)
+mT(P8,"Entity Freeze",C.EntityFreeze,function(v) C.EntityFreeze=v end,"new",true)
 mT(P8,"Entity Teleport",C.EntityTeleport,function(v) C.EntityTeleport=v end,"maybe",true)
 mT(P8,"Speed 10x",C.Speed10x,function(v) C.Speed10x=v end,"maybe",true)
 mT(P8,"Invisible",C.Invisible,function(v) C.Invisible=v end,"maybe",true)
@@ -476,7 +467,7 @@ mT(P8,"Infinite Items",C.InfiniteItems,function(v) C.InfiniteItems=v end,"maybe"
 
 -- 9. ESP
 local P9=Pg["ESP"]
-mT(P9,"ESP All",C.ESP_All,function(v) C.ESP_All=v end,"new")
+mT(P9,"ESP ALL",C.ESP_All,function(v) C.ESP_All=v end,"new")
 mT(P9,"ESP Rush",C.ESP_Rush,function(v) C.ESP_Rush=v end,"new")
 mT(P9,"ESP Ambush",C.ESP_Ambush,function(v) C.ESP_Ambush=v end,"new")
 mT(P9,"ESP Seek",C.ESP_Seek,function(v) C.ESP_Seek=v end,"new")
@@ -491,12 +482,14 @@ mT(P9,"ESP Keys",C.ESP_Keys,function(v) C.ESP_Keys=v end,"new")
 mT(P9,"ESP Items",C.ESP_Items,function(v) C.ESP_Items=v end,"new")
 mT(P9,"ESP Chests",C.ESP_Chests,function(v) C.ESP_Chests=v end,"new")
 mT(P9,"ESP Objectives",C.ESP_Objectives,function(v) C.ESP_Objectives=v end,"new")
+mT(P9,"ESP Breaker",C.ESP_Breaker,function(v) C.ESP_Breaker=v end,"new")
 mT(P9,"ESP Players",C.ESP_Players,function(v) C.ESP_Players=v end,"works")
 mT(P9,"Smart ESP",C.SmartESP,function(v) C.SmartESP=v end,"new")
 mS(P9,"Smart Range",50,300,C.SmartRange,function(v) C.SmartRange=v end)
 mS(P9,"Max Distance",100,1000,C.MaxDistance,function(v) C.MaxDistance=v end)
 mS(P9,"Fill Transparency",0,1,C.FillTransparency,function(v) C.FillTransparency=v end)
 mS(P9,"Text Size",8,24,C.TextSize,function(v) C.TextSize=v end)
+mS(P9,"Update Rate",0.3,3,C.ESPUpdateRate,function(v) C.ESPUpdateRate=v end)
 mT(P9,"Rainbow Mode",C.RainbowMode,function(v) C.RainbowMode=v end,"new")
 mT(P9,"Show Distance",C.ShowDistance,function(v) C.ShowDistance=v end,"works")
 mT(P9,"X-Ray",C.XRay,function(v) C.XRay=v end,"works")
@@ -508,11 +501,14 @@ mS(P10,"FOV",40,120,C.FOV,function(v) C.FOV=v end)
 mS(P10,"Custom FOV (0=off)",0,120,C.CustomFOV,function(v) C.CustomFOV=v end)
 mT(P10,"Third Person",C.ThirdPerson,function(v) C.ThirdPerson=v end,"maybe")
 mT(P10,"No Fog",C.NoFog,function(v) C.NoFog=v end,"new")
-mT(P10,"Wallhack",C.Wallhack,function(v) C.Wallhack=v; _G.setWallhack(v) end,"new")
-mT(P10,"Chams",C.Chams,function(v) C.Chams=v; _G.setChams(v) end,"new")
-mT(P10,"Crosshair",C.Crosshair,function(v) C.Crosshair=v end,"works")
+mT(P10,"Fullbright",C.Fullbright,function(v) C.Fullbright=v end,"new")
+mT(P10,"Wallhack",C.Wallhack,function(v) C.Wallhack=v; if _G.setWallhack then _G.setWallhack(v) end end,"works")
+mT(P10,"Chams",C.Chams,function(v) C.Chams=v; if _G.setChams then _G.setChams(v) end end,"new")
+mT(P10,"Crosshair",C.Crosshair,function(v) C.Crosshair=v end,"new")
 mS(P10,"Crosshair Size",5,50,C.CrosshairSize,function(v) C.CrosshairSize=v end)
-mT(P10,"Entity Tracker",C.EntityTracker,function(v) C.EntityTracker=v end,"works")
+mT(P10,"Entity Tracker",C.EntityTracker,function(v) C.EntityTracker=v end,"new")
+mT(P10,"Box ESP",C.BoxESP,function(v) C.BoxESP=v end,"new")
+mT(P10,"Tracers",C.Tracers,function(v) C.Tracers=v end,"new")
 mT(P10,"Hitmarker",C.Hitmarker,function(v) C.Hitmarker=v end,"new")
 mT(P10,"Damage Numbers",C.DamageNumbers,function(v) C.DamageNumbers=v end,"new")
 mT(P10,"Danger Meter",C.DangerMeter,function(v) C.DangerMeter=v end,"new")
@@ -524,7 +520,7 @@ mT(P10,"Remove Cutscenes",C.RemoveCutscenes,function(v) C.RemoveCutscenes=v end,
 
 -- 11. MUSIC
 local P11=Pg["Music"]
-mB(P11,"Play Music (ID в Chat)",function()
+mB(P11,"Play Music (из поля ID)",function()
     if _G.playMusic then _G.playMusic(C.MusicId) end
 end)
 mB(P11,"Stop Music",function() if _G.stopMusic then _G.stopMusic() end end)
@@ -545,9 +541,9 @@ mT(P12,"Remove Interacting Sounds",C.RemoveInteractingSounds,function(v) C.Remov
 
 -- 13. MOVE
 local P13=Pg["Move"]
-mB(P13,"Save Position",function() _G.savePos() end)
-mB(P13,"TP to Save",function() _G.tpToSave() end)
-mB(P13,"Server Hop",function() _G.serverHop() end)
+mB(P13,"Save Position",function() if _G.savePos then _G.savePos() end end)
+mB(P13,"TP to Save",function() if _G.tpToSave then _G.tpToSave() end end)
+mB(P13,"Server Hop",function() if _G.serverHop then _G.serverHop() end end)
 mT(P13,"Auto Rejoin",C.AutoRejoin,function(v) C.AutoRejoin=v end,"new")
 
 -- 14. STATS
@@ -563,37 +559,34 @@ mB(P15,"Chat Spam x5",function() if _G.chatSpam then _G.chatSpam("Burmalda v15!"
 
 -- 16. FEATURES
 local P16=Pg["Features"]
-mT(P16,"God Rusher",C.GodRusher,function(v) C.GodRusher=v end,"maybe",true)
-mT(P16,"Entity Freeze",C.EntityFreeze,function(v) C.EntityFreeze=v end,"maybe",true)
-mT(P16,"Entity Teleport",C.EntityTeleport,function(v) C.EntityTeleport=v end,"maybe",true)
-mT(P16,"Speed 10x",C.Speed10x,function(v) C.Speed10x=v end,"maybe",true)
 mT(P16,"Auto Aim",C.AutoAim,function(v) C.AutoAim=v end,"new",true)
 mT(P16,"Discord Rich",C.DiscordRich,function(v) C.DiscordRich=v end,"new",true)
+mT(P16,"Adaptive Speed",C.AdaptiveSpeed,function(v) C.AdaptiveSpeed=v end,"new",true)
+mT(P16,"Predictive Hide",C.PredictiveHide,function(v) C.PredictiveHide=v end,"new",true)
+mT(P16,"Smart Path",C.SmartPath,function(v) C.SmartPath=v end,"new",true)
+mT(P16,"Anti Kick",C.AntiKick,function(v) C.AntiKick=v end,"new",true)
 
 -- 17. FARM
 local P17=Pg["Farm"]
-mT(P17,"Farm Deaths",C.AutoFarmDeaths,function(v) C.AutoFarmDeaths=v; _G.setFarmDeaths(v) end,"new")
+mT(P17,"Farm Deaths",C.AutoFarmDeaths,function(v) C.AutoFarmDeaths=v; if _G.setFarmDeaths then _G.setFarmDeaths(v) end end,"new")
 mT(P17,"Knob Farm",C.KnobFarm,function(v) C.KnobFarm=v end,"new")
 mS(P17,"Farm Delay",1,10,C.FarmDelay,function(v) C.FarmDelay=v end)
 mT(P17,"Auto Complete Dam Seek",C.AutoCompleteDamSeek,function(v) C.AutoCompleteDamSeek=v end,"new")
 mT(P17,"Auto Complete Cringle",C.AutoCompleteCringle,function(v) C.AutoCompleteCringle=v end,"new")
-mB(P17,"Copy Death Farm Loadstring",function() if _G.copyDeathFarmLoadstring then _G.copyDeathFarmLoadstring() end end)
-
-print("[Burmalda v15] Part 13/14 — GUI CHUNK 1 loaded (17 tabs)")
--- ═══════════════════════════════════════════════════════
--- ВКЛАДКИ 18-34 (Fun → Updates)
--- ═══════════════════════════════════════════════════════
+mB(P17,"Copy Death Farm Loadstring",function()
+    if _G.copyDeathFarmLoadstring then _G.copyDeathFarmLoadstring() end
+end)
 
 -- 18. FUN
 local P18=Pg["Fun"]
 mT(P18,"Snow",C.Snow,function(v) C.Snow=v end,"maybe")
 mT(P18,"Leaves",C.Leaves,function(v) C.Leaves=v end,"maybe")
 mT(P18,"Petals",C.Petals,function(v) C.Petals=v end,"maybe")
-mT(P18,"Aura Fire",C.AuraFire,function(v) C.AuraFire=v end,"maybe")
-mT(P18,"Aura Ice",C.AuraIce,function(v) C.AuraIce=v end,"maybe")
-mT(P18,"Fireworks",C.Fireworks,function(v) C.Fireworks=v end,"maybe")
+mT(P18,"Aura Fire",C.AuraFire,function(v) C.AuraFire=v end,"new")
+mT(P18,"Aura Ice",C.AuraIce,function(v) C.AuraIce=v end,"new")
+mT(P18,"Fireworks",C.Fireworks,function(v) C.Fireworks=v end,"new")
 mB(P18,"Confetti!",function() if _G.doConfetti then _G.doConfetti() end end)
-mT(P18,"Duck Spawn",C.DuckSpawn,function(v) C.DuckSpawn=v end,"maybe")
+mT(P18,"Duck Spawn",C.DuckSpawn,function(v) C.DuckSpawn=v end,"new")
 mS(P18,"Duck Count",10,500,C.DuckCount,function(v) C.DuckCount=v end)
 mB(P18,"Spawn Ducks Now",function() if _G.spawnDucks then _G.spawnDucks(50) end end)
 mT(P18,"Disco Mode",C.FunDisco,function(v) C.FunDisco=v end,"new")
@@ -601,13 +594,16 @@ mT(P18,"Fun Rainbow Char",C.FunRainbow,function(v) C.FunRainbow=v end,"maybe")
 mB(P18,"Random TP",function() if _G.randomTP then _G.randomTP() end end)
 mB(P18,"Fake Death",function() if _G.fakeDeath then _G.fakeDeath() end end)
 mB(P18,"Fake Entity (Rush)",function() if _G.spawnFakeEntity then _G.spawnFakeEntity("Rush",Color3.fromRGB(255,0,0)) end end)
-mB(P18,"Fake Entity (Custom)",function() if _G.spawnFakeEntity then _G.spawnFakeEntity("CustomEntity",Color3.fromRGB(255,0,255)) end end)
 mB(P18,"Fake Chat",function() if _G.fakeChat then _G.fakeChat("FakePlayer","Hello from Burmalda!") end end)
 mB(P18,"Fake Screenshot",function() if _G.fakeScreenshot then _G.fakeScreenshot() end end)
 mB(P18,"Fake Kick",function() if _G.fakeKick then _G.fakeKick() end end)
 mB(P18,"Screen Shake",function() if _G.screenShake then _G.screenShake(2) end end)
-mB(P18,"Custom Notif",function() if _G.customNotif then _G.customNotif("Hello!","This is custom notification.") end end)
 mB(P18,"Chat Spam x5",function() if _G.chatSpam then _G.chatSpam("Burmalda on top!",5) end end)
+
+print("[Burmalda v15.1] Part 13/14 — GUI CHUNK 1 loaded (18 tabs)")
+-- ═══════════════════════════════════════════════════════
+-- ВКЛАДКИ 19-35
+-- ═══════════════════════════════════════════════════════
 
 -- 19. SPAWN
 local P19=Pg["Spawn"]
@@ -632,45 +628,49 @@ mB(P19,"Spawn Crucifix",function() if _G.spawnCrucifix then _G.spawnCrucifix() e
 
 -- 20. ADMIN
 local P20=Pg["Admin"]
-mB(P20,"👑 [FAKE] Kick All",function() _G.fakeKickAll() end,T().danger)
-mB(P20,"👑 [FAKE] Ban Player",function() _G.fakeBanPlayer() end,T().danger)
-mB(P20,"👑 [FAKE] Freeze All",function() _G.fakeFreezeAll() end,T().danger)
-mB(P20,"👑 [FAKE] Give Godmode All",function() _G.fakeGiveGodmodeAll() end,T().danger)
-mB(P20,"👑 [FAKE] Force Respawn",function() _G.fakeForceRespawnAll() end,T().danger)
-mB(P20,"👑 [FAKE] Server Shutdown",function() _G.fakeServerShutdown() end,T().danger)
-mB(P20,"👑 [FAKE] Restart Run",function() _G.fakeRestartRun() end,T().danger)
-mB(P20,"👑 [FAKE] Announce",function() _G.fakeAnnounce("Hello everyone!") end,T().danger)
-mB(P20,"👑 [FAKE] Clear Room",function() _G.fakeClearRoom() end,T().danger)
-mB(P20,"👑 [FAKE] Delete Entities",function() _G.fakeDeleteAllEntities() end,T().danger)
-mB(P20,"👑 Give All Items",function() _G.fakeGiveAllItems() end)
-mB(P20,"👑 Give Flashlight",function() _G.fakeGiveItem("Flashlight") end)
-mB(P20,"👑 Give Lockpick",function() _G.fakeGiveItem("Lockpick") end)
-mB(P20,"👑 Give Bandage",function() _G.fakeGiveItem("Bandage") end)
-mB(P20,"👑 Give Vitamins",function() _G.fakeGiveItem("Vitamins") end)
-mB(P20,"👑 Give Crucifix",function() _G.fakeGiveItem("Crucifix") end)
-mB(P20,"👑 Give Lighter",function() _G.fakeGiveItem("Lighter") end)
-mB(P20,"👑 Give Battery",function() _G.fakeGiveItem("Battery") end)
-mB(P20,"👑 Give Candle",function() _G.fakeGiveItem("Candle") end)
-mB(P20,"👑 Give Skeleton Key",function() _G.fakeGiveItem("Skeleton Key") end)
-mB(P20,"👑 [SPAWN] Rush",function() _G.adminSpawnRush() end)
-mB(P20,"👑 [SPAWN] Ambush",function() _G.adminSpawnAmbush() end)
-mB(P20,"👑 [SPAWN] Seek",function() _G.adminSpawnSeek() end)
-mB(P20,"👑 [SPAWN] Figure",function() _G.adminSpawnFigure() end)
-mB(P20,"👑 [SPAWN] Screech",function() _G.adminSpawnScreech() end)
-mB(P20,"👑 [SPAWN] Eyes",function() _G.adminSpawnEyes() end)
-mB(P20,"👑 [SPAWN] Halt",function() _G.adminSpawnHalt() end)
-mB(P20,"👑 [SPAWN] Coin",function() _G.adminSpawnCoin() end)
-mB(P20,"👑 [SPAWN] Key",function() _G.adminSpawnKey() end)
-mB(P20,"👑 [DANGER] Kill Self",function() _G.fakeKillSelf() end,T().danger)
-mB(P20,"👑 [DANGER] Delete Server",function() _G.fakeDeleteServer() end,T().danger)
-mB(P20,"👑 [DANGER] Ban Self",function() _G.fakeBanSelf() end,T().danger)
-mB(P20,"👑 [DANGER] Crash Game",function() _G.fakeCrashGame() end,T().danger)
-mB(P20,"👑 Gold Name",function() _G.fakeGoldName() end)
-mB(P20,"👑 Rainbow Name",function() _G.fakeRainbowName() end)
+mB(P20,"👑 [FAKE] Kick All",function() if _G.fakeKickAll then _G.fakeKickAll() end end,T().danger)
+mB(P20,"👑 [FAKE] Ban Player",function() if _G.fakeBanPlayer then _G.fakeBanPlayer() end end,T().danger)
+mB(P20,"👑 [FAKE] Ban All",function() if _G.fakeBanAll then _G.fakeBanAll() end end,T().danger)
+mB(P20,"👑 [FAKE] Freeze All",function() if _G.fakeFreezeAll then _G.fakeFreezeAll() end end,T().danger)
+mB(P20,"👑 [FAKE] Unfreeze All",function() if _G.fakeUnfreezeAll then _G.fakeUnfreezeAll() end end,T().danger)
+mB(P20,"👑 [FAKE] Give Godmode All",function() if _G.fakeGiveGodmodeAll then _G.fakeGiveGodmodeAll() end end,T().danger)
+mB(P20,"👑 [FAKE] Force Respawn All",function() if _G.fakeForceRespawnAll then _G.fakeForceRespawnAll() end end,T().danger)
+mB(P20,"👑 [FAKE] Server Shutdown",function() if _G.fakeServerShutdown then _G.fakeServerShutdown() end end,T().danger)
+mB(P20,"👑 [FAKE] Restart Run",function() if _G.fakeRestartRun then _G.fakeRestartRun() end end,T().danger)
+mB(P20,"👑 [FAKE] Announce",function() if _G.fakeAnnounce then _G.fakeAnnounce("Hello everyone!") end end,T().danger)
+mB(P20,"👑 [FAKE] Clear Room",function() if _G.fakeClearRoom then _G.fakeClearRoom() end end,T().danger)
+mB(P20,"👑 [FAKE] Delete Entities",function() if _G.fakeDeleteAllEntities then _G.fakeDeleteAllEntities() end end,T().danger)
+mB(P20,"👑 Give All Items",function() if _G.fakeGiveAllItems then _G.fakeGiveAllItems() end end)
+mB(P20,"👑 Give Flashlight",function() if _G.fakeGiveItem then _G.fakeGiveItem("Flashlight") end end)
+mB(P20,"👑 Give Lockpick",function() if _G.fakeGiveItem then _G.fakeGiveItem("Lockpick") end end)
+mB(P20,"👑 Give Bandage",function() if _G.fakeGiveItem then _G.fakeGiveItem("Bandage") end end)
+mB(P20,"👑 Give Vitamins",function() if _G.fakeGiveItem then _G.fakeGiveItem("Vitamins") end end)
+mB(P20,"👑 Give Crucifix",function() if _G.fakeGiveItem then _G.fakeGiveItem("Crucifix") end end)
+mB(P20,"👑 Give Lighter",function() if _G.fakeGiveItem then _G.fakeGiveItem("Lighter") end end)
+mB(P20,"👑 Give Battery",function() if _G.fakeGiveItem then _G.fakeGiveItem("Battery") end end)
+mB(P20,"👑 Give Candle",function() if _G.fakeGiveItem then _G.fakeGiveItem("Candle") end end)
+mB(P20,"👑 Give Skeleton Key",function() if _G.fakeGiveItem then _G.fakeGiveItem("Skeleton Key") end end)
+mB(P20,"👑 [SPAWN] Rush",function() if _G.adminSpawnRush then _G.adminSpawnRush() end end)
+mB(P20,"👑 [SPAWN] Ambush",function() if _G.adminSpawnAmbush then _G.adminSpawnAmbush() end end)
+mB(P20,"👑 [SPAWN] Seek",function() if _G.adminSpawnSeek then _G.adminSpawnSeek() end end)
+mB(P20,"👑 [SPAWN] Figure",function() if _G.adminSpawnFigure then _G.adminSpawnFigure() end end)
+mB(P20,"👑 [SPAWN] Screech",function() if _G.adminSpawnScreech then _G.adminSpawnScreech() end end)
+mB(P20,"👑 [SPAWN] Eyes",function() if _G.adminSpawnEyes then _G.adminSpawnEyes() end end)
+mB(P20,"👑 [SPAWN] Halt",function() if _G.adminSpawnHalt then _G.adminSpawnHalt() end end)
+mB(P20,"👑 [SPAWN] Coin",function() if _G.adminSpawnCoin then _G.adminSpawnCoin() end end)
+mB(P20,"👑 [SPAWN] Key",function() if _G.adminSpawnKey then _G.adminSpawnKey() end end)
+mB(P20,"👑 Gold Name",function() if _G.fakeGoldName then _G.fakeGoldName() end end)
+mB(P20,"👑 Rainbow Name",function() if _G.fakeRainbowName then _G.fakeRainbowName() end end)
+mB(P20,"👑 [FAKE] Force Fly",function() if _G.fakeFly then _G.fakeFly() end end)
+mB(P20,"👑 [FAKE] Explosion",function() if _G.fakeExplode then _G.fakeExplode() end end)
+mB(P20,"👑 [DANGER] Kill Self",function() if _G.fakeKillSelf then _G.fakeKillSelf() end end,T().danger)
+mB(P20,"👑 [DANGER] Delete Server",function() if _G.fakeDeleteServer then _G.fakeDeleteServer() end end,T().danger)
+mB(P20,"👑 [DANGER] Ban Self",function() if _G.fakeBanSelf then _G.fakeBanSelf() end end,T().danger)
+mB(P20,"👑 [DANGER] Crash Game",function() if _G.fakeCrashGame then _G.fakeCrashGame() end end,T().danger)
 
 -- 21. MOBILE
 local P21=Pg["Mobile"]
-mB(P21,"Show Mobile Buttons",function() N("Mobile buttons shown (auto)") end)
+mB(P21,"Show Mobile Buttons",function() N("Mobile","Кнопки активны","success") end)
 
 -- 22. ANTIDET
 local P22=Pg["AntiDet"]
@@ -684,9 +684,9 @@ mS(P22,"Bypass Delay",0.05,1,C.BypassDelay,function(v) C.BypassDelay=v end)
 local P23=Pg["FPS Booster"]
 mT(P23,"FPS Booster (общий)",C.FPSBooster,function(v) C.FPSBooster=v end,"new")
 mT(P23,"Low Graphics",C.LowGraphics,function(v) C.LowGraphics=v end,"new")
-mT(P23,"Remove Particles",C.RemoveParticles,function(v) C.RemoveParticles=v end,"new")
-mT(P23,"Remove Lights",C.RemoveLights,function(v) C.RemoveLights=v end,"new")
-mT(P23,"Remove Decals",C.RemoveDecals,function(v) C.RemoveDecals=v end,"new")
+mT(P23,"Remove Particles",C.RemoveParticles,function(v) C.RemoveParticles=v; if _G.setRemoveParticles then _G.setRemoveParticles(v) end end,"new")
+mT(P23,"Remove Lights",C.RemoveLights,function(v) C.RemoveLights=v; if _G.setRemoveLights then _G.setRemoveLights(v) end end,"new")
+mT(P23,"Remove Decals",C.RemoveDecals,function(v) C.RemoveDecals=v; if _G.setRemoveDecals then _G.setRemoveDecals(v) end end,"new")
 mT(P23,"Remove Shadows",C.RemoveShadows,function(v) C.RemoveShadows=v end,"new")
 mT(P23,"Remove Distant",C.RemoveDistant,function(v) C.RemoveDistant=v end,"new")
 mT(P23,"Remove Invisible",C.RemoveInvisible,function(v) C.RemoveInvisible=v end,"new")
@@ -697,20 +697,27 @@ mT(P23,"Show Ping",C.ShowPing,function(v) C.ShowPing=v end,"new")
 
 -- 24. SHOP
 local P24=Pg["Shop"]
-mB(P24,"🛒 [FAKE] Free Items",function() _G.fakeAdminAction("Free Items") end)
-mB(P24,"🛒 [FAKE] Buy All",function() _G.fakeAdminAction("Buy All") end)
+mB(P24,"🛒 [FAKE] Free Items",function() if _G.fakeAdminAction then _G.fakeAdminAction("Free Items") end end)
+mB(P24,"🛒 [FAKE] Buy All",function() if _G.fakeAdminAction then _G.fakeAdminAction("Buy All") end end)
 
 -- 25. ACHIEV
 local P25=Pg["Achiev"]
-mB(P25,"🏆 [FAKE] Unlock All",function() _G.fakeAdminAction("Unlock All Achievements") end)
-mB(P25,"🏆 [FAKE] Auto-Unlock",function() _G.fakeAdminAction("Auto Unlock") end)
+mB(P25,"🏆 [FAKE] Unlock All",function() if _G.fakeAdminAction then _G.fakeAdminAction("Unlock All Achievements") end end)
+mB(P25,"🏆 [FAKE] Auto-Unlock",function() if _G.fakeAdminAction then _G.fakeAdminAction("Auto Unlock") end end)
 
 -- 26. FAVORITES
 local P26=Pg["Favorites"]
-mB(P26,"Save Profile 1",function() _G.sv(); N("Profile 1 saved") end)
-mB(P26,"Load Profile 1",function() _G.ld(); N("Profile 1 loaded") end)
-mB(P26,"Save Profile 2",function() _G.sv(); N("Profile 2 saved") end)
-mB(P26,"Load Profile 2",function() _G.ld(); N("Profile 2 loaded") end)
+mB(P26,"Save Config",function() if _G.sv then _G.sv() end; N("Config","Сохранено","success") end)
+mB(P26,"Load Config",function() if _G.ld then _G.ld() end; N("Config","Загружено","success") end)
+mB(P26,"Reset Config",function()
+    for k,v in pairs(C) do
+        if type(v)=="boolean" then C[k]=false end
+    end
+    N("Config","Сброшено","info")
+end)
+mB(P26,"Config: default",function() C.SelectedConfig="default"; N("Config","Выбран default","info") end)
+mB(P26,"Config: pvp",function() C.SelectedConfig="pvp"; N("Config","Выбран pvp","info") end)
+mB(P26,"Config: farm",function() C.SelectedConfig="farm"; N("Config","Выбран farm","info") end)
 
 -- 27. HOTEL
 local P27=Pg["Hotel"]
@@ -746,51 +753,80 @@ mT(P31,"Ignore A-60",C.IgnoreA60,function(v) C.IgnoreA60=v end,"new")
 local P32=Pg["Stairwell"]
 mT(P32,"Auto Climb",C.AutoSeekDoor,function(v) C.AutoSeekDoor=v end,"new")
 
--- 33. SETTINGS (UI + Configs + Info)
-local P33=Pg["Settings"]
-mS(P33,"UI Scale",0.5,2,C.UI_Scale,function(v) C.UI_Scale=v end)
-mS(P33,"UI Opacity",0.3,1,C.UI_Opacity,function(v) C.UI_Opacity=v end)
-mB(P33,"Save Config",function() _G.sv(); N("✅ Saved") end)
-mB(P33,"Load Config",function() _G.ld(); N("✅ Loaded") end)
-mB(P33,"Reset Config",function()
-    if _G.LP then
-        for k,v in pairs(C) do
-            if type(v)=="boolean" then C[k]=false end
-        end
-        N("🔄 Reset (partially)")
-    end
-end)
-mB(P33,"Config: default",function() C.SelectedConfig="default"; N("Selected: default") end)
-mB(P33,"Config: pvp",function() C.SelectedConfig="pvp"; N("Selected: pvp") end)
-mB(P33,"Config: farm",function() C.SelectedConfig="farm"; N("Selected: farm") end)
-mB(P33,"Show Info",function()
-    N("Burmalda v15 by KOTENOK7204 | Tester: Kostya_2015KostyaKos")
-end)
+-- 33. NOTIFICATIONS
+local P33=Pg["Notifications"]
+mT(P33,"Notify Loading",C.NotifyLoading,function(v) C.NotifyLoading=v end,"works")
+mT(P33,"Notify Entities (спавн)",C.NotifyEntitiesSwitch,function(v) C.NotifyEntitiesSwitch=v end,"new")
+mT(P33,"Notify Items",C.NotifyItems,function(v) C.NotifyItems=v end,"new")
+mT(P33,"Notify Errors",C.NotifyErrors,function(v) C.NotifyErrors=v end,"new")
+mT(P33,"Notify Actions (тумблеры)",C.NotifyActions,function(v) C.NotifyActions=v end,"new")
+mT(P33,"Notify Only Important",C.NotifyOnlyImportant,function(v) C.NotifyOnlyImportant=v end,"new")
+mS(P33,"Duration (сек)",2,10,C.NotifyDuration,function(v) C.NotifyDuration=v end)
+mT(P33,"Notify Sound",C.NotifySound,function(v) C.NotifySound=v end,"works")
+mS(P33,"Sound Volume",0,1,C.NotifySoundVolume,function(v) C.NotifySoundVolume=v end)
+mB(P33,"Position: BottomRight",function() C.NotifyPosition="BottomRight"; N("Notif","Позиция: BottomRight","info") end)
+mB(P33,"Position: BottomLeft",function() C.NotifyPosition="BottomLeft"; N("Notif","Позиция: BottomLeft","info") end)
+mB(P33,"Position: TopRight",function() C.NotifyPosition="TopRight"; N("Notif","Позиция: TopRight","info") end)
+mB(P33,"Position: TopLeft",function() C.NotifyPosition="TopLeft"; N("Notif","Позиция: TopLeft","info") end)
+mB(P33,"Test Notification",function() N("Burmalda","Это тестовое уведомление","success") end)
+mB(P33,"Test Error",function() N("Ошибка","Что-то пошло не так","error") end)
+mB(P33,"Test Warn",function() N("Внимание","Rush появился!","warn") end)
+mB(P33,"Test Info",function() N("Инфо","Это информация","info") end)
 
--- 34. UPDATES
-local P34=Pg["Updates"]
-mB(P34,"Check for Updates",function()
+-- 34. SETTINGS
+local P34=Pg["Settings"]
+mS(P34,"UI Scale",0.5,2,C.UI_Scale,function(v) C.UI_Scale=v end)
+mS(P34,"UI Opacity",0.3,1,C.UI_Opacity,function(v) C.UI_Opacity=v end)
+mB(P34,"Save Config",function() if _G.sv then _G.sv() end; N("Config","Сохранено","success") end)
+mB(P34,"Load Config",function() if _G.ld then _G.ld() end; N("Config","Загружено","success") end)
+mB(P34,"Reset Config",function()
+    for k,v in pairs(C) do
+        if type(v)=="boolean" then C[k]=false end
+    end
+    N("Config","Сброшено","info")
+end)
+mB(P34,"Show Info",function()
+    N("Burmalda v15.1","by KOTENOK7204 | Tester: Kostya_2015KostyaKos","info")
+end)
+mB(P34,"Theme: GrayBlack",function() C.Theme="GrayBlack"; N("Theme","GrayBlack","info") end)
+mB(P34,"Theme: Blood",function() C.Theme="Blood"; N("Theme","Blood","info") end)
+mB(P34,"Theme: Toxic",function() C.Theme="Toxic"; N("Theme","Toxic","info") end)
+mB(P34,"Theme: Gold",function() C.Theme="Gold"; N("Theme","Gold","info") end)
+mB(P34,"Theme: Neon",function() C.Theme="Neon"; N("Theme","Neon","info") end)
+mB(P34,"Theme: Cyberpunk",function() C.Theme="Cyberpunk"; N("Theme","Cyberpunk","info") end)
+mB(P34,"Theme: Black",function() C.Theme="Black"; N("Theme","Black","info") end)
+
+-- 35. UPDATES
+local P35=Pg["Updates"]
+mB(P35,"Check for Updates",function()
     pcall(function()
         local url="https://raw.githubusercontent.com/evgeniyt062015-eng/BurmaldaHub/main/version.txt"
         local last=game:HttpGet(url)
-        if last and last~="15.0" then
-            N("⚠️ Update available: v"..last)
+        if last and last~="15.1" then
+            N("Обновление","Доступна v"..last,"warn")
         else
-            N("✅ You have the latest version (v15.0)")
+            N("Обновление","У тебя последняя (v15.1)","success")
         end
     end)
 end)
-mB(P34,"Current Version: v15.0",function() N("Burmalda v15.0") end)
-mB(P34,"Changelog",function()
-    N("v15: фикс Speed/InfJump/Bypass/ESP, +50 новых функций")
+mB(P35,"Current Version: v15.1",function() N("Burmalda","v15.1 FINAL","info") end)
+mB(P35,"Changelog",function()
+    N("Что нового","Фикс Speed, InfJump, Bypass, ESP, Visual +50 функций","info")
 end)
-mB(P34,"Discord (coming in v20)",function() N("Discord — в v20") end)
-mB(P34,"GitHub",function() N("github.com/evgeniyt062015-eng/BurmaldaHub") end)
+mB(P35,"GitHub",function()
+    pcall(function()
+        if setclipboard then setclipboard("https://github.com/evgeniyt062015-eng/BurmaldaHub") end
+    end)
+    N("GitHub","Ссылка скопирована","success")
+end)
+mB(P35,"Discord (в v20)",function() N("Discord","Будет в v20","info") end)
 
--- ═══ КНОПКИ ЭТАЖЕЙ ═══
+-- ═══════════════════════════════════════════════════════
+-- КНОПКИ ЭТАЖЕЙ
+-- ═══════════════════════════════════════════════════════
 local function mkFB(txt,y,fn)
     local b=Instance.new("TextButton",FM)
-    b.Size=UDim2.new(0,270,0,30)
+    b.Size=UDim2.new(0,270,0,28)
     b.Position=UDim2.new(0.5,-135,0,y)
     b.BackgroundColor3=Color3.fromRGB(40,40,45)
     b.Text=txt
@@ -805,18 +841,21 @@ local function mkFB(txt,y,fn)
         FS:Destroy()
         M.Visible=true
         OB.Text="X"
-        N("Этаж: "..fn)
+        N("Этаж",fn,"success")
     end)
 end
 
-mkFB("Hotel",118,"Hotel")
-mkFB("Mines",152,"Mines")
-mkFB("Backdoor",186,"Backdoor")
-mkFB("Outdoors",220,"Outdoors")
-mkFB("Archives",254,"Archives")
-mkFB("Stairwell",288,"Stairwell")
+mkFB("Hotel",112,"Hotel")
+mkFB("Mines",144,"Mines")
+mkFB("Backdoor",176,"Backdoor")
+mkFB("Outdoors",208,"Outdoors")
+mkFB("Archives",240,"Archives")
+mkFB("Stairwell",272,"Stairwell")
+mkFB("Skip (не выбирать)",310,"")
 
--- ═══ SEARCH функционал ═══
+-- ═══════════════════════════════════════════════════════
+-- SEARCH
+-- ═══════════════════════════════════════════════════════
 local SearchFrame=nil
 SearchBtn.MouseButton1Click:Connect(function()
     if SearchFrame and SearchFrame.Parent then
@@ -860,10 +899,10 @@ SearchBtn.MouseButton1Click:Connect(function()
         for _,c in ipairs(results:GetChildren()) do
             if c:IsA("TextButton") then c:Destroy() end
         end
-        local query=input.Text:lower()
+        local query=string.lower(input.Text)
         if query=="" then return end
         for _,obj in ipairs(M:GetDescendants()) do
-            if obj:IsA("TextLabel") and obj.Text:lower():find(query,1,true) then
+            if obj:IsA("TextLabel") and string.find(string.lower(obj.Text),query,1,true) then
                 if obj.TextSize==10 and obj.TextXAlignment==Enum.TextXAlignment.Left then
                     local btn=Instance.new("TextButton",results)
                     btn.Size=UDim2.new(1,0,0,22)
@@ -875,9 +914,7 @@ SearchBtn.MouseButton1Click:Connect(function()
                     btn.BorderSizePixel=0
                     local bc=Instance.new("UICorner",btn); bc.CornerRadius=UDim.new(0,3)
                     btn.MouseButton1Click:Connect(function()
-                        N("Найдено: "..obj.Text)
-                        SearchFrame:Destroy()
-                        SearchFrame=nil
+                        N("Найдено",obj.Text,"info")
                     end)
                 end
             end
@@ -886,7 +923,4 @@ SearchBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- ═══ АВТОСОХРАНЕНИЕ (без Auto-Save тумблера) ═══
--- Убрано (по твоей просьбе)
-
-print("[Burmalda v15] Part 13/14 — GUI loaded (34 tabs)")
+print("[Burmalda v15.1] Part 13/14 — GUI loaded (35 tabs)")
