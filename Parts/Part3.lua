@@ -1,5 +1,5 @@
--- BURMALDA v15 | Part 3/14 — TP + HIDE + AUTO
--- Всё внутри pcall, без continue, без nil-вызовов
+-- BURMALDA v15.1 | Part 3/14 — TP + HIDE + AUTO
+-- Фиксы: безопасные хелперы, больше имён, всё в pcall
 
 local C=_G.C
 local T=_G.T
@@ -11,35 +11,60 @@ local P=_G.P
 local GD=_G.GD
 
 -- ═══ БЕЗОПАСНЫЕ ХЕЛПЕРЫ ═══
-local function safeCall(fn)
-    if type(fn)=="function" then
-        pcall(fn)
-    end
+local function getR()
+    local ok,res=pcall(function()
+        local ch=LP and LP.Character
+        if not ch then return nil end
+        return ch:FindFirstChild("HumanoidRootPart")
+    end)
+    if ok then return res end
+    return nil
 end
 
-local function getR()
-    pcall(function()
+local function getH()
+    local ok,res=pcall(function()
         local ch=LP and LP.Character
-        if ch then
-            return ch:FindFirstChild("HumanoidRootPart")
-        end
+        if not ch then return nil end
+        return ch:FindFirstChildOfClass("Humanoid")
     end)
-    local ch=LP and LP.Character
-    if not ch then return nil end
-    return ch:FindFirstChild("HumanoidRootPart")
+    if ok then return res end
+    return nil
 end
 
 local function getPart(o)
     if not o then return nil end
-    pcall(function()
+    local ok,res=pcall(function()
         if o:IsA("BasePart") then return o end
+        if o.PrimaryPart then return o.PrimaryPart end
+        return o:FindFirstChildWhichIsA("BasePart",true)
     end)
-    if o:IsA("BasePart") then return o end
-    if o.PrimaryPart then return o.PrimaryPart end
-    return o:FindFirstChildWhichIsA("BasePart",true)
+    if ok then return res end
+    return nil
 end
 
-local ITEM_NAMES={"crucifix","lockpick","bandage","flashlight","lighter","battery","vitamin","candle","skeleton","lantern","shears","scanner","compass","key","coin","gold","shakelight","straplight","bulklight"}
+-- ═══ СПИСКИ ИМЁН ═══
+local ITEM_NAMES={
+    "crucifix","lockpick","bandage","flashlight","lighter","battery",
+    "vitamin","candle","skeleton","lantern","shears","scanner","compass",
+    "key","coin","gold","shakelight","straplight","bulklight",
+    "bottle","crate","pizza","donut","cheese","bread","smoothie","nanner",
+    "glowstick","lighter_up","batterypack"
+}
+
+local CLOSET_NAMES={"closet","hiding","wardrobe","locker","cabinet","hide"}
+
+local ENEMY_NAMES={
+    rush={"rushmoving","rushnew","rush"},
+    ambush={"ambushmoving","ambushnew","ambush"},
+    seek={"seek","seekmoving"},
+    figure={"figurerig","figure","figureragdoll"},
+    blitz={"backdoorrush","blitz"},
+    screech={"screech"},
+    halt={"halt","haltmoving"},
+    eyes={"eyes","eyesentity"},
+    giggle={"giggleceiling","giggle"},
+    grumble={"grumble","gumblerig"}
+}
 
 local function isItem(name)
     if not name then return false end
@@ -50,19 +75,38 @@ local function isItem(name)
     return false
 end
 
+local function isCloset(name)
+    if not name then return false end
+    local n=string.lower(tostring(name))
+    for _,k in ipairs(CLOSET_NAMES) do
+        if string.find(n,k,1,true) then return true end
+    end
+    return false
+end
+
+local function isEnemy(name, type)
+    if not name or not type then return false end
+    local list=ENEMY_NAMES[type]
+    if not list then return false end
+    local n=string.lower(tostring(name))
+    for _,k in ipairs(list) do
+        if string.find(n,k,1,true) then return true end
+    end
+    return false
+end
+
 -- ═══ TP NEAREST ITEM ═══
 _G.tpNearestItem=function()
     pcall(function()
-        local ch=LP and LP.Character
-        if not ch then N("Нет персонажа"); return end
-        local r=ch:FindFirstChild("HumanoidRootPart")
-        if not r then N("Нет HumanoidRootPart"); return end
+        local r=getR()
+        if not r then N("Burmalda","Нет персонажа","error"); return end
         local myPos=r.Position
         local closest,dist=nil,math.huge
         for _,o in ipairs(workspace:GetDescendants()) do
             if o:IsA("Model") or o:IsA("BasePart") then
                 if not P:GetPlayerFromCharacter(o) then
-                    if not ch:IsAncestorOf(o) then
+                    local ch=LP.Character
+                    if not (ch and ch:IsAncestorOf(o)) then
                         if isItem(o.Name) then
                             local p=getPart(o)
                             if p and p.Position then
@@ -77,11 +121,11 @@ _G.tpNearestItem=function()
                 end
             end
         end
-        if closest and closest.Position then
+        if closest then
             r.CFrame=CFrame.new(closest.Position+Vector3.new(0,3,0))
-            N("TP to item")
+            N("Burmalda","TP to item","success")
         else
-            N("No items nearby")
+            N("Burmalda","No items nearby","warn")
         end
     end)
 end
@@ -90,16 +134,14 @@ end
 _G.tpToPlayer=function(t)
     pcall(function()
         if not t then return end
-        local ch=LP and LP.Character
-        if not ch then return end
-        local r=ch:FindFirstChild("HumanoidRootPart")
+        local r=getR()
         if not r then return end
         local tg=t.Character
-        if not tg then N("No char"); return end
+        if not tg then N("Burmalda","No char","error"); return end
         local tr=tg:FindFirstChild("HumanoidRootPart")
         if not tr then return end
         r.CFrame=CFrame.new(tr.Position+Vector3.new(0,3,0))
-        N("TP to "..tostring(t.Name))
+        N("Burmalda","TP to "..tostring(t.Name),"success")
     end)
 end
 
@@ -107,16 +149,14 @@ end
 _G.bringPlayer=function(t)
     pcall(function()
         if not t then return end
-        local ch=LP and LP.Character
-        if not ch then return end
-        local r=ch:FindFirstChild("HumanoidRootPart")
+        local r=getR()
         if not r then return end
         local tg=t.Character
         if not tg then return end
         local tr=tg:FindFirstChild("HumanoidRootPart")
         if not tr then return end
         tr.CFrame=CFrame.new(r.Position+Vector3.new(0,3,0))
-        N("Brought "..tostring(t.Name))
+        N("Burmalda","Brought "..tostring(t.Name),"success")
     end)
 end
 
@@ -125,17 +165,20 @@ local savedPos=nil
 _G.savePos=function()
     pcall(function()
         local r=getR()
-        if r and r.CFrame then
+        if r then
             savedPos=r.CFrame
-            N("Saved")
+            N("Burmalda","Position saved","success")
         end
     end)
 end
 _G.tpToSave=function()
     pcall(function()
-        if not savedPos then N("No save"); return end
+        if not savedPos then N("Burmalda","No saved position","warn"); return end
         local r=getR()
-        if r then r.CFrame=savedPos; N("TP to save") end
+        if r then
+            r.CFrame=savedPos
+            N("Burmalda","TP to saved","success")
+        end
     end)
 end
 
@@ -153,6 +196,8 @@ _G.isInsideCloset=function()
             result=true
             return
         end
+        local hum=ch:FindFirstChildOfClass("Humanoid")
+        if hum and hum.WalkSpeed<8 then result=true; return end
     end)
     return result
 end
@@ -161,31 +206,28 @@ local function findCloset(pos, maxDist, sameRoomOnly)
     local closest,prompt,dist=nil,nil,math.huge
     pcall(function()
         local curRoom=nil
-        if sameRoomOnly then
+        if sameRoomOnly and LP then
             curRoom=LP:GetAttribute("CurrentRoom")
         end
         for _,o in ipairs(workspace:GetDescendants()) do
-            if o:IsA("Model") then
-                local n=string.lower(o.Name)
-                if string.find(n,"closet",1,true) or string.find(n,"hiding",1,true) or string.find(n,"wardrobe",1,true) or string.find(n,"locker",1,true) then
-                    local skip=false
-                    if sameRoomOnly and curRoom then
-                        local pRoom=o:GetAttribute("ParentRoom")
-                        if pRoom and tostring(pRoom)~=tostring(curRoom) then
-                            skip=true
-                        end
+            if o:IsA("Model") and isCloset(o.Name) then
+                local skip=false
+                if sameRoomOnly and curRoom then
+                    local pRoom=o:GetAttribute("ParentRoom")
+                    if pRoom and tostring(pRoom)~=tostring(curRoom) then
+                        skip=true
                     end
-                    if not skip then
-                        local p=getPart(o)
-                        if p and p.Position then
-                            local d=(p.Position-pos).Magnitude
-                            if d<dist and d<maxDist then
-                                local pr=o:FindFirstChildWhichIsA("ProximityPrompt",true)
-                                if pr and pr.Enabled then
-                                    dist=d
-                                    closest=o
-                                    prompt=pr
-                                end
+                end
+                if not skip then
+                    local p=getPart(o)
+                    if p and p.Position then
+                        local d=(p.Position-pos).Magnitude
+                        if d<dist and d<maxDist then
+                            local pr=o:FindFirstChildWhichIsA("ProximityPrompt",true)
+                            if pr and pr.Enabled then
+                                dist=d
+                                closest=o
+                                prompt=pr
                             end
                         end
                     end
@@ -254,13 +296,9 @@ _G.aH=function()
         local danger=false
         for _,o in ipairs(workspace:GetDescendants()) do
             if o:IsA("Model") then
-                local n=string.lower(o.Name)
-                local isRush=string.find(n,"rush",1,true)
-                local isAmb=string.find(n,"ambush",1,true)
-                local isSeek=string.find(n,"seek",1,true)
-                local isFig=string.find(n,"figure",1,true)
-                local isBlitz=string.find(n,"blitz",1,true)
-                if (isRush and C.AutoHideRush) or (isAmb and C.AutoHideAmbush) or (C.AutoHideAll and (isSeek or isFig or isBlitz)) then
+                if (isEnemy(o.Name,"rush") and C.AutoHideRush)
+                or (isEnemy(o.Name,"ambush") and C.AutoHideAmbush)
+                or (C.AutoHideAll and (isEnemy(o.Name,"seek") or isEnemy(o.Name,"figure") or isEnemy(o.Name,"blitz"))) then
                     local p=getPart(o)
                     if p and p.Position and (p.Position-pos).Magnitude<100 then
                         danger=true
@@ -279,7 +317,7 @@ _G.aH=function()
             if p and p.Position then
                 if dist>10 then
                     pcall(function()
-                        local h=LP.Character:FindFirstChildOfClass("Humanoid")
+                        local h=getH()
                         if h then h:MoveTo(p.Position) end
                     end)
                     task.wait(1.5)
@@ -312,7 +350,7 @@ task.spawn(function()
     end
 end)
 
--- ═══ AUTO COLLECT ═══
+-- ═══ AUTO COLLECT (радиус 50, без телепорта) ═══
 task.spawn(function()
     while task.wait(0.3) do
         if C.AutoCollect then
@@ -324,21 +362,24 @@ task.spawn(function()
                         if not P:GetPlayerFromCharacter(o) then
                             if isItem(o.Name) then
                                 local p=getPart(o)
-                                if p and p.Position and (p.Position-r.Position).Magnitude<50 then
-                                    local prompt=o:FindFirstChildWhichIsA("ProximityPrompt",true)
-                                    if prompt and prompt.Enabled then
-                                        if (p.Position-r.Position).Magnitude>10 then
+                                if p and p.Position then
+                                    local d=(p.Position-r.Position).Magnitude
+                                    if d<50 then
+                                        local prompt=o:FindFirstChildWhichIsA("ProximityPrompt",true)
+                                        if prompt and prompt.Enabled then
+                                            if d>10 then
+                                                pcall(function()
+                                                    local h=getH()
+                                                    if h then h:MoveTo(p.Position) end
+                                                end)
+                                                task.wait(0.5)
+                                            end
                                             pcall(function()
-                                                local h=LP.Character:FindFirstChildOfClass("Humanoid")
-                                                if h then h:MoveTo(p.Position) end
+                                                prompt:InputHoldBegin()
+                                                task.wait(math.max(prompt.HoldDuration or 0,0.05))
+                                                prompt:InputHoldEnd()
                                             end)
-                                            task.wait(0.5)
                                         end
-                                        pcall(function()
-                                            prompt:InputHoldBegin()
-                                            task.wait(math.max(prompt.HoldDuration or 0,0.05))
-                                            prompt:InputHoldEnd()
-                                        end)
                                     end
                                 end
                             end
@@ -350,7 +391,7 @@ task.spawn(function()
     end
 end)
 
--- ═══ AUTO COINS ═══
+-- ═══ AUTO COINS (радиус 30) ═══
 task.spawn(function()
     while task.wait(0.3) do
         if C.AutoCoins then
@@ -366,7 +407,7 @@ task.spawn(function()
                                 if prompt and prompt.Enabled then
                                     if (o.Position-r.Position).Magnitude>8 then
                                         pcall(function()
-                                            local h=LP.Character:FindFirstChildOfClass("Humanoid")
+                                            local h=getH()
                                             if h then h:MoveTo(o.Position) end
                                         end)
                                         task.wait(0.3)
@@ -470,12 +511,9 @@ task.spawn(function()
     while task.wait(0.3) do
         if C.AutoSeekDoor then
             pcall(function()
-                local ch=LP and LP.Character
-                if not ch then return end
-                local r=ch:FindFirstChild("HumanoidRootPart")
-                if not r then return end
-                local h=ch:FindFirstChildOfClass("Humanoid")
-                if not h then return end
+                local r=getR()
+                local h=getH()
+                if not r or not h then return end
                 local latestRoom=0
                 if GD and GD:FindFirstChild("LatestRoom") then
                     latestRoom=GD.LatestRoom.Value
@@ -521,12 +559,9 @@ task.spawn(function()
     while task.wait(0.3) do
         if C.SeekEscape then
             pcall(function()
-                local ch=LP and LP.Character
-                if not ch then return end
-                local r=ch:FindFirstChild("HumanoidRootPart")
-                if not r then return end
-                local h=ch:FindFirstChildOfClass("Humanoid")
-                if not h then return end
+                local r=getR()
+                local h=getH()
+                if not r or not h then return end
                 local seekObj=nil
                 for _,o in ipairs(workspace:GetDescendants()) do
                     if o:IsA("Model") and string.lower(o.Name)=="seek" then
@@ -613,4 +648,4 @@ task.spawn(function()
     end
 end)
 
-print("[Burmalda v15] Part 3/14 — TP + HIDE + AUTO loaded")
+print("[Burmalda v15.1] Part 3/14 — TP + HIDE + AUTO loaded")
