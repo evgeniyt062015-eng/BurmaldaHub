@@ -1,5 +1,5 @@
--- BURMALDA v15 | Part 8/14 — MUSIC + SOUND + AUDIO
--- Music Player, Notify Sound, Warnings, TTS, Audio Removal
+-- BURMALDA v15.1 | Part 8/14 — MUSIC + SOUND + AUDIO
+-- Фиксы: tostring для ID, проверка звуков, больше имён монстров
 
 local C=_G.C
 local T=_G.T
@@ -10,34 +10,51 @@ local SS=_G.SS
 local RF=_G.RF
 local P=_G.P
 
--- ═══ MUSIC PLAYER ═══
+-- ═══════════════════════════════════════════════
+-- MUSIC PLAYER
+-- ═══════════════════════════════════════════════
 local musicSound=nil
 
 _G.playMusic=function(id)
     if musicSound then pcall(function() musicSound:Destroy() end) end
-    if id=="" or not id then N("No Music ID"); return end
+    musicSound=nil
+    if id=="" or id==nil then
+        N("Музыка","ID пустой","warn")
+        return
+    end
+    -- FIX: tostring для ID
+    local idStr=tostring(id)
+    -- Убираем rbxassetid:// если есть
+    idStr=idStr:gsub("rbxassetid://",""):gsub("rbxassetid:",""):gsub("%D","")
+    if idStr=="" then
+        N("Музыка","Неверный ID","error")
+        return
+    end
     pcall(function()
         musicSound=Instance.new("Sound",SS)
-        musicSound.SoundId="rbxassetid://"..tostring(id)
-        musicSound.Volume=C.MusicVolume
+        musicSound.SoundId="rbxassetid://"..idStr
+        musicSound.Volume=C.MusicVolume or 0.5
         musicSound.Looped=true
         musicSound:Play()
         C.MusicId=id
         C.MusicPlaying=true
-        N("Playing music")
+        N("Музыка","Играет: "..idStr,"success")
     end)
 end
 
 _G.stopMusic=function()
     if musicSound then
-        pcall(function() musicSound:Stop(); musicSound:Destroy() end)
+        pcall(function()
+            musicSound:Stop()
+            musicSound:Destroy()
+        end)
     end
     musicSound=nil
     C.MusicPlaying=false
-    N("Music stopped")
+    N("Музыка","Остановлено","info")
 end
 
--- Автопроверка состояния
+-- Автопроверка
 task.spawn(function()
     while task.wait(1) do
         if C.MusicPlaying and musicSound then
@@ -48,7 +65,10 @@ task.spawn(function()
     end
 end)
 
--- ═══ SOUND WARNINGS (Rush / Ambush / Seek / Halt) ═══
+-- ═══════════════════════════════════════════════
+-- SOUND WARNINGS (Rush / Ambush / Seek / Halt)
+-- FIX: больше имён
+-- ═══════════════════════════════════════════════
 local warnedRush=false
 local warnedAmbush=false
 local warnedSeek=false
@@ -66,89 +86,132 @@ end
 
 task.spawn(function()
     while task.wait(1) do
-        -- Rush
-        if C.RushWarning then
-            local found=false
-            for _,o in ipairs(workspace:GetDescendants()) do
-                if o:IsA("Model") and (o.Name=="RushMoving" or o.Name=="RushNew") then
-                    found=true; break
-                end
-            end
-            if found and not warnedRush then
-                warnedRush=true
-                playWarnSound("8784885431")
-                N("⚠️ Rush spawned!")
-            elseif not found then warnedRush=false end
-        end
-        -- Ambush
-        if C.AmbushWarning then
-            local found=false
-            for _,o in ipairs(workspace:GetDescendants()) do
-                if o:IsA("Model") and (o.Name=="AmbushMoving" or o.Name=="AmbushNew") then
-                    found=true; break
-                end
-            end
-            if found and not warnedAmbush then
-                warnedAmbush=true
-                playWarnSound("8784885431")
-                N("⚠️ Ambush spawned!")
-            elseif not found then warnedAmbush=false end
-        end
-        -- Seek
-        if C.SeekWarning then
-            local found=false
-            for _,o in ipairs(workspace:GetDescendants()) do
-                if o:IsA("Model") and o.Name=="Seek" then
-                    found=true; break
-                end
-            end
-            if found and not warnedSeek then
-                warnedSeek=true
-                playWarnSound("8784885431")
-                N("⚠️ Seek spawned!")
-            elseif not found then warnedSeek=false end
-        end
-        -- Halt
-        if C.HaltWarning then
-            local found=false
-            for _,o in ipairs(workspace:GetDescendants()) do
-                if o:IsA("Model") and (o.Name=="Halt" or o.Name=="HaltMoving") then
-                    found=true; break
-                end
-            end
-            if found and not warnedHalt then
-                warnedHalt=true
-                playWarnSound("8784885431")
-                N("⚠️ Halt spawned!")
-            elseif not found then warnedHalt=false end
-        end
-    end
-end)
-
--- ═══ NOTIFY ITEMS (уведомление при появлении редких предметов) ═══
-local notifiedItems={}
-task.spawn(function()
-    while task.wait(2) do
-        if C.NotifyItems then
-            for _,o in ipairs(workspace:GetDescendants()) do
-                if o:IsA("Model") or o:IsA("BasePart") then
-                    local n=o.Name:lower()
-                    if n:find("crucifix") or n:find("skeleton") or n:find("candle") or n:find("lantern") then
-                        if not notifiedItems[o] then
-                            notifiedItems[o]=true
-                            N("Item found: "..o.Name)
-                            o.Destroying:Connect(function()
-                                notifiedItems[o]=nil
-                            end)
+        pcall(function()
+            -- RUSH
+            if C.RushWarning then
+                local found=false
+                for _,o in ipairs(workspace:GetDescendants()) do
+                    if o:IsA("Model") then
+                        local n=string.lower(o.Name)
+                        if n=="rushmoving" or n=="rushnew" or n=="rush" then
+                            found=true
+                            break
                         end
                     end
                 end
+                if found and not warnedRush then
+                    warnedRush=true
+                    playWarnSound("8784885431")
+                    N("⚠️ Rush!","Найди шкаф!","error")
+                elseif not found then
+                    warnedRush=false
+                end
             end
+            
+            -- AMBUSH
+            if C.AmbushWarning then
+                local found=false
+                for _,o in ipairs(workspace:GetDescendants()) do
+                    if o:IsA("Model") then
+                        local n=string.lower(o.Name)
+                        if n=="ambushmoving" or n=="ambushnew" or n=="ambush" then
+                            found=true
+                            break
+                        end
+                    end
+                end
+                if found and not warnedAmbush then
+                    warnedAmbush=true
+                    playWarnSound("8784885431")
+                    N("⚠️ Ambush!","Он вернётся!","error")
+                elseif not found then
+                    warnedAmbush=false
+                end
+            end
+            
+            -- SEEK
+            if C.SeekWarning then
+                local found=false
+                for _,o in ipairs(workspace:GetDescendants()) do
+                    if o:IsA("Model") then
+                        local n=string.lower(o.Name)
+                        if n=="seek" or n=="seekmoving" then
+                            found=true
+                            break
+                        end
+                    end
+                end
+                if found and not warnedSeek then
+                    warnedSeek=true
+                    playWarnSound("8784885431")
+                    N("⚠️ Seek!","Беги!","error")
+                elseif not found then
+                    warnedSeek=false
+                end
+            end
+            
+            -- HALT
+            if C.HaltWarning then
+                local found=false
+                for _,o in ipairs(workspace:GetDescendants()) do
+                    if o:IsA("Model") then
+                        local n=string.lower(o.Name)
+                        if n=="halt" or n=="haltmoving" then
+                            found=true
+                            break
+                        end
+                    end
+                end
+                if found and not warnedHalt then
+                    warnedHalt=true
+                    playWarnSound("8784885431")
+                    N("⚠️ Halt!","Отвернись!","error")
+                elseif not found then
+                    warnedHalt=false
+                end
+            end
+        end)
+    end
+end)
+
+-- ═══════════════════════════════════════════════
+-- NOTIFY ITEMS (редкие предметы)
+-- ═══════════════════════════════════════════════
+local RARE_ITEMS={"crucifix","skeleton","candle","lantern","scanner","compass"}
+local notifiedItems={}
+
+task.spawn(function()
+    while task.wait(2) do
+        if C.NotifyItems then
+            pcall(function()
+                for _,o in ipairs(workspace:GetDescendants()) do
+                    if o:IsA("Model") or o:IsA("BasePart") then
+                        local n=string.lower(tostring(o.Name))
+                        for _,rare in ipairs(RARE_ITEMS) do
+                            if string.find(n,rare,1,true) then
+                                if not notifiedItems[o] then
+                                    notifiedItems[o]=true
+                                    N("💎 Найден предмет",o.Name,"success")
+                                end
+                                break
+                            end
+                        end
+                    end
+                end
+                -- Очистка мёртвых
+                for obj,_ in pairs(notifiedItems) do
+                    if not obj or not obj.Parent then
+                        notifiedItems[obj]=nil
+                    end
+                end
+            end)
         end
     end
 end)
 
--- ═══ NOTIFY LIBRARY CODE ═══
+-- ═══════════════════════════════════════════════
+-- NOTIFY LIBRARY CODE
+-- ═══════════════════════════════════════════════
 task.spawn(function()
     while task.wait(3) do
         if C.NotifyLibraryCode then
@@ -156,8 +219,9 @@ task.spawn(function()
                 local ch=LP.Character
                 if ch then
                     for _,item in ipairs(ch:GetChildren()) do
-                        if item.Name:find("LibraryHintPaper") then
-                            N("Library code found!")
+                        local n=string.lower(tostring(item.Name))
+                        if string.find(n,"libraryhint",1,true) or string.find(n,"libraryhintpaper",1,true) then
+                            N("📚 Library Code","Бумага найдена!","info")
                             break
                         end
                     end
@@ -167,7 +231,11 @@ task.spawn(function()
     end
 end)
 
--- ═══ NOTIFY OXYGEN LEVEL ═══
+-- ═══════════════════════════════════════════════
+-- NOTIFY OXYGEN LEVEL
+-- ═══════════════════════════════════════════════
+local lastOxygen=100
+
 task.spawn(function()
     while task.wait(2) do
         if C.NotifyOxygenLevel then
@@ -175,8 +243,15 @@ task.spawn(function()
                 local ch=LP.Character
                 if ch then
                     for _,o in ipairs(ch:GetDescendants()) do
-                        if o:IsA("NumberValue") and o.Name:lower():find("oxygen") then
-                            N("Oxygen: "..math.floor(o.Value).."%")
+                        if o:IsA("NumberValue") then
+                            local n=string.lower(o.Name)
+                            if string.find(n,"oxygen",1,true) then
+                                local val=math.floor(o.Value)
+                                if math.abs(val-lastOxygen)>=10 then
+                                    lastOxygen=val
+                                    N("💨 Oxygen",val.."%","info")
+                                end
+                            end
                         end
                     end
                 end
@@ -185,7 +260,9 @@ task.spawn(function()
     end
 end)
 
--- ═══ NOTIFY HASTE TIME ═══
+-- ═══════════════════════════════════════════════
+-- NOTIFY HASTE TIME
+-- ═══════════════════════════════════════════════
 task.spawn(function()
     while task.wait(5) do
         if C.NotifyHasteTime then
@@ -194,7 +271,7 @@ task.spawn(function()
                 if gd then
                     local hr=gd:FindFirstChild("HasteTime") or gd:FindFirstChild("DigitalTimer")
                     if hr then
-                        N("Haste: "..tostring(hr.Value))
+                        N("⏱️ Haste",tostring(hr.Value),"info")
                     end
                 end
             end)
@@ -202,40 +279,93 @@ task.spawn(function()
     end
 end)
 
--- ═══ AUDIO REMOVAL ═══
-local audioBlacklist={}
-
-task.spawn(function()
-    while task.wait(2) do
+-- ═══════════════════════════════════════════════
+-- AUDIO REMOVAL (удаление звуков)
+-- ═══════════════════════════════════════════════
+local audioConn
+_G.setAudioRemoval=function(on)
+    if audioConn then audioConn:Disconnect(); audioConn=nil end
+    if not on then
+        -- Восстанавливаем громкость
         pcall(function()
             for _,o in ipairs(game:GetDescendants()) do
                 if o:IsA("Sound") then
-                    local n=o.Name:lower()
-                    
-                    if C.RemoveFootstepSounds and (n:find("footstep") or n:find("step")) then
-                        pcall(function() o.Volume=0 end)
-                    end
-                    if C.RemoveJamminMusic and (n:find("jammin") or n:find("music")) then
-                        pcall(function() o.Volume=0 end)
-                    end
-                    if C.RemoveInteractingSounds and (n:find("interact") or n:find("prompt")) then
-                        pcall(function() o.Volume=0 end)
+                    if o:GetAttribute("BurmaldaMuted") then
+                        o.Volume=o:GetAttribute("BurmaldaOldVol") or 1
+                        o:SetAttribute("BurmaldaMuted",nil)
                     end
                 end
+            end
+        end)
+        return
+    end
+    audioConn=Run.Heartbeat:Connect(function()
+        pcall(function()
+            for _,o in ipairs(game:GetDescendants()) do
+                if o:IsA("Sound") then
+                    local n=string.lower(o.Name)
+                    local shouldMute=false
+                    if C.RemoveFootstepSounds and (string.find(n,"footstep",1,true) or string.find(n,"step",1,true)) then shouldMute=true end
+                    if C.RemoveJamminMusic and (string.find(n,"jammin",1,true) or string.find(n,"music",1,true)) then shouldMute=true end
+                    if C.RemoveInteractingSounds and (string.find(n,"interact",1,true) or string.find(n,"prompt",1,true)) then shouldMute=true end
+                    if shouldMute then
+                        if not o:GetAttribute("BurmaldaMuted") then
+                            o:SetAttribute("BurmaldaOldVol",o.Volume)
+                            o:SetAttribute("BurmaldaMuted",true)
+                        end
+                        o.Volume=0
+                    end
+                end
+            end
+        end)
+    end)
+end
+
+-- Автоподключение
+task.spawn(function()
+    while task.wait(1) do
+        if C.RemoveFootstepSounds or C.RemoveJamminMusic or C.RemoveInteractingSounds then
+            if not audioConn then _G.setAudioRemoval(true) end
+        elseif audioConn then
+            _G.setAudioRemoval(false)
+        end
+    end
+end)
+
+-- ═══════════════════════════════════════════════
+-- DISABLE SOUND (для FPS Booster)
+-- ═══════════════════════════════════════════════
+local origVolume=SS.Volume
+task.spawn(function()
+    while task.wait(2) do
+        pcall(function()
+            if C.DisableSound then
+                SS.Volume=0
+            else
+                if SS.Volume~=origVolume then SS.Volume=origVolume end
             end
         end)
     end
 end)
 
--- ═══ DISABLE SOUND (для FPS Booster) ═══
-task.spawn(function()
-    while task.wait(2) do
-        if C.DisableSound then
-            pcall(function() SS.Volume=0 end)
-        else
-            pcall(function() SS.Volume=1 end)
-        end
-    end
-end)
+-- ═══════════════════════════════════════════════
+-- PRESETS (5 музыкальных пресетов)
+-- ═══════════════════════════════════════════════
+_G.MUSIC_PRESETS={
+    ["Phonk"]="1835246723",
+    ["Ambient"]="1838404504",
+    ["Epic"]="1837872354",
+    ["Doors Theme"]="1836901758",
+    ["Horror"]="1836035534"
+}
 
-print("[Burmalda v15] Part 8/14 — MUSIC + SOUND + AUDIO loaded")
+_G.playPreset=function(name)
+    local id=_G.MUSIC_PRESETS[name]
+    if id then
+        _G.playMusic(id)
+    else
+        N("Музыка","Пресет не найден","warn")
+    end
+end
+
+print("[Burmalda v15.1] Part 8/14 — MUSIC + SOUND + AUDIO loaded")
