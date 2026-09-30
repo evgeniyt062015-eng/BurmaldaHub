@@ -1,29 +1,39 @@
+-- ═══════════════════════════════════════════════
+-- BURMALDA v15.1 — ОПРОС ВСЕХ ФУНКЦИЙ
+-- ═══════════════════════════════════════════════
+
 local questions = {
-    -- MAIN (12)
+    -- MAIN (19)
     "FLY работает?",
     "NOCLIP работает?",
-    "SPEED работает без багов?",
+    "SPEED работает без багов (не скользит, не застревает)?",
     "INF JUMP работает?",
     "ENABLE JUMP работает?",
     "ENABLE SLIDE работает?",
     "BUNNY HOP работает?",
     "ANTI-AFK работает?",
+    "REMOVE CLOSET DELAY работает?",
+    "REMOVE ACCEL работает?",
+    "DOOR REACH работает?",
+    "INSTANT PROMPTS работает?",
+    "PROMPT CLIP работает?",
+    "DISABLE IDLE KICK работает?",
     "WALK SPEED слайдер работает?",
     "JUMP POWER слайдер работает?",
     "SPEED BOOST слайдер работает?",
     "FLY SPEED слайдер работает?",
-    -- CHARACTER (6)
-    "GOD MODE работает?",
-    "INFINITE REVIVE работает?",
+    "CHARACTER — GOD MODE работает?",
+    -- CHARACTER (5)
     "MAX STATS работает?",
     "INVISIBLE работает?",
-    "REMOVE CLOSET DELAY работает?",
-    "REMOVE ACCEL работает?",
+    "GOD RUSHER работает?",
+    "ADAPTIVE SPEED работает?",
+    "PREDICTIVE HIDE работает?",
     -- TP (4)
     "TP NEAREST ITEM работает?",
-    "TP ITEM RADIUS слайдер работает?",
-    "AUTO COLLECT работает?",
-    "AUTO COINS работает?",
+    "TP RADIUS слайдер работает?",
+    "SAVE POSITION работает?",
+    "TP TO SAVE работает?",
     -- HIDE (6)
     "INFINITE HIDE работает?",
     "HIDE LOCK работает?",
@@ -32,11 +42,24 @@ local questions = {
     "AUTO HIDE AMBUSH работает?",
     "AUTO HIDE ALL работает?",
     -- AUTOSEEK (4)
-    "AUTO SEEK работает?",
+    "AUTO SEEK DOOR работает?",
+    "SEEK ESCAPE работает?",
     "AUTO PLATFORM работает?",
-    "SEEK ROUTE ARROW работает?",
-    "MINES AUTO-STEER работает?",
-    -- BYPASS (18)
+    "PLATFORM SIZE слайдер работает?",
+    -- AUTO (12)
+    "AUTO COLLECT работает?",
+    "AUTO COINS работает?",
+    "AUTO DOOR работает?",
+    "AUTO INTERACT работает?",
+    "AUTO INTERACT — DOORS работает?",
+    "AUTO INTERACT — CLOSETS работает?",
+    "AUTO INTERACT — ANCHORS работает?",
+    "AUTO INTERACT — ITEMS работает?",
+    "AUTO PLAY AGAIN работает?",
+    "AUTO SKIP CUTSCENE работает?",
+    "AUTO BREAKER работает?",
+    "AUTO COMPLETE ROOM работает?",
+    -- BYPASS (35)
     "BYPASS RUSH работает?",
     "BYPASS AMBUSH работает?",
     "BYPASS SEEK работает?",
@@ -47,23 +70,42 @@ local questions = {
     "BYPASS LOOKMAN работает?",
     "BYPASS SNARE работает?",
     "BYPASS KILLBRICKS работает?",
+    "BYPASS SEEKING WALL работает?",
+    "BYPASS BANANA работает?",
     "BYPASS GIGGLE работает?",
     "BYPASS DUPE работает?",
     "BYPASS VACUUM работает?",
+    "BYPASS GLOOMBAT EGGS работает?",
+    "BYPASS SEEK OBSTRUCTIONS работает?",
     "BYPASS JEFF работает?",
-    "BYPASS DRONES работает?",
     "BYPASS GRUMBLE работает?",
+    "BYPASS DRONES работает?",
+    "BYPASS ALMA работает?",
+    "BYPASS SCRIBBLES работает?",
+    "BYPASS ELECTRIC WATER работает?",
+    "BYPASS GIGGLE ARC работает?",
     "ANTI RANSOM работает?",
     "ANTI CLOSET TRASH работает?",
-    -- EXPLOITS (7)
-    "GOD RUSHER работает?",
+    "ANTI NOISE работает?",
+    "NOISE TV BREAKER работает?",
+    "REMOVE SCREECH работает?",
+    "REMOVE HALT работает?",
+    "REMOVE A-90 работает?",
+    "REMOVE DREAD работает?",
+    "REMOVE SURGE работает?",
+    "REMOVE PAINTINGS DOOR работает?",
+    "REMOVE SKELETON DOOR работает?",
+    -- EXPLOITS (9)
+    "GOD RUSHER (exploit) работает?",
     "ENTITY FREEZE работает?",
     "ENTITY TELEPORT работает?",
     "SPEED 10X работает?",
     "TIME STOP работает?",
     "SLOW MOTION работает?",
     "AUTO DODGE работает?",
-    -- ESP (17)
+    "INFINITE ITEMS работает?",
+    "INVISIBLE (exploit) работает?",
+    -- ESP (26)
     "ESP ALL работает?",
     "ESP RUSH работает?",
     "ESP AMBUSH работает?",
@@ -72,145 +114,290 @@ local questions = {
     "ESP SCREECH работает?",
     "ESP EYES работает?",
     "ESP HALT работает?",
-    "ESP DOORS (двери) работает?",
-    "ESP CLOSETS (шкафы) работает?",
-    "ESP MONEY (монеты) работает?",
-    "ESP KEYS (ключи) работает?",
-    "ESP ITEMS (предметы) работает?",
+    "ESP DOORS работает?",
+    "ESP CLOSETS работает?",
+    "ESP MONEY работает?",
+    "ESP KEYS работает?",
+    "ESP ITEMS работает?",
+    "ESP CHESTS работает?",
+    "ESP OBJECTIVES работает?",
+    "ESP BREAKER работает?",
     "ESP PLAYERS работает?",
     "SMART ESP работает?",
-    "ESP COLOR работает?",
+    "RAINBOW MODE работает?",
+    "SHOW DISTANCE работает?",
+    "X-RAY работает?",
+    "NOTIFY ENTITIES работает?",
     "MAX DISTANCE слайдер работает?",
-    -- VISUAL (9)
+    "FILL TRANSPARENCY слайдер работает?",
+    "TEXT SIZE слайдер работает?",
+    "UPDATE RATE слайдер работает?",
+    -- VISUAL (20)
     "FOV работает?",
+    "CUSTOM FOV работает?",
     "THIRD PERSON работает?",
     "NO FOG работает?",
+    "FULLBRIGHT работает?",
     "WALLHACK работает?",
     "CHAMS работает?",
     "CROSSHAIR работает?",
-    "ENTITY TRACKER (радар) работает?",
-    "RAINBOW MODE работает?",
+    "CROSSHAIR SIZE слайдер работает?",
+    "ENTITY TRACKER работает?",
+    "BOX ESP работает?",
+    "TRACERS работает?",
+    "HITMARKER работает?",
+    "DAMAGE NUMBERS работает?",
+    "DANGER METER работает?",
+    "SHOW SEEK PATH работает?",
     "FUN RAINBOW работает?",
+    "REMOVE CAMERA SHAKE работает?",
+    "REMOVE CAMERA BOBBING работает?",
+    "REMOVE CUTSCENES работает?",
     -- MUSIC (3)
     "PLAY MUSIC работает?",
     "STOP MUSIC работает?",
-    "MUSIC VOLUME работает?",
-    -- SOUND (2)
+    "MUSIC VOLUME слайдер работает?",
+    -- SOUND (10)
     "NOTIFY SOUND работает?",
+    "SOUND VOLUME слайдер работает?",
     "RUSH WARNING работает?",
+    "AMBUSH WARNING работает?",
+    "SEEK WARNING работает?",
+    "HALT WARNING работает?",
+    "NOTIFY ITEMS работает?",
+    "REMOVE FOOTSTEP SOUNDS работает?",
+    "REMOVE JAMMIN MUSIC работает?",
+    "REMOVE INTERACTING SOUNDS работает?",
     -- MOVE (4)
     "SAVE POSITION работает?",
     "TP TO SAVE работает?",
-    "SPECTATE PLAYER работает?",
-    "FOLLOW PLAYER работает?",
-    -- STATS (1)
+    "SERVER HOP работает?",
+    "AUTO REJOIN работает?",
+    -- STATS (4)
     "SHOW TIMER работает?",
-    -- FEATURES (3)
+    "SHOW FPS работает?",
+    "SHOW PING работает?",
+    "RESET STATS работает?",
+    -- PLAYERS (1)
+    "CHAT SPAM x5 работает?",
+    -- FEATURES (6)
     "AUTO AIM работает?",
     "DISCORD RICH работает?",
-    "AUTO REJOIN работает?",
-    -- FARM (4)
-    "AUTO FARM работает?",
+    "ADAPTIVE SPEED работает?",
+    "PREDICTIVE HIDE работает?",
+    "SMART PATH работает?",
+    "ANTI KICK работает?",
+    -- FARM (6)
     "FARM DEATHS работает?",
-    "FARM DELAY работает?",
-    "AUTO PLAY AGAIN работает?",
-    -- FUN (16)
-    "FUN SNOW работает?",
-    "FUN LEAVES работает?",
-    "FUN PETALS работает?",
+    "KNOB FARM работает?",
+    "FARM DELAY слайдер работает?",
+    "AUTO COMPLETE DAM SEEK работает?",
+    "AUTO COMPLETE CRINGLE работает?",
+    "COPY DEATH FARM LOADSTRING работает?",
+    -- FUN (20)
+    "SNOW работает?",
+    "LEAVES работает?",
+    "PETALS работает?",
     "AURA FIRE работает?",
     "AURA ICE работает?",
     "FIREWORKS работает?",
-    "DUCK SPAWN работает?",
     "CONFETTI работает?",
+    "DUCK SPAWN работает?",
+    "DUCK COUNT слайдер работает?",
+    "SPAWN DUCKS NOW работает?",
+    "DISCO MODE работает?",
+    "FUN RAINBOW CHAR работает?",
     "RANDOM TP работает?",
     "FAKE DEATH работает?",
-    "CHAT SPAM работает?",
-    "FUN DISCO есть?",
-    "FAKE ENTITY есть?",
-    "FAKE CHAT есть?",
-    "FAKE SCREENSHOT есть?",
-    "CUSTOM NOTIFICATION есть?",
-    -- SPAWN (6)
+    "FAKE ENTITY работает?",
+    "FAKE CHAT работает?",
+    "FAKE SCREENSHOT работает?",
+    "FAKE KICK работает?",
+    "SCREEN SHAKE работает?",
+    "CHAT SPAM (fun) работает?",
+    -- SPAWN (18)
     "SPAWN RUSH работает?",
     "SPAWN AMBUSH работает?",
     "SPAWN SEEK работает?",
     "SPAWN FIGURE работает?",
+    "SPAWN SCREECH работает?",
+    "SPAWN EYES работает?",
+    "SPAWN HALT работает?",
+    "SPAWN GRUMBLE работает?",
+    "SPAWN GIGGLE работает?",
+    "SPAWN BLITZ работает?",
+    "SPAWN LOOKMAN работает?",
+    "SPAWN A-60 работает?",
+    "SPAWN A-120 работает?",
     "SPAWN COIN работает?",
     "SPAWN KEY работает?",
-    -- ADMIN (5)
-    "ADMIN PANEL открывается?",
-"FAKE KICK ALL работает?",
-    "FAKE GIVE ITEM работает?",
-    "FAKE SERVER SHUTDOWN работает?",
-    "FAKE GIVE GODMODE работает?",
+    "SPAWN FLASHLIGHT работает?",
+    "SPAWN BANDAGE работает?",
+    "SPAWN CRUCIFIX работает?",
+    -- ADMIN (40)
+    "ADMIN [FAKE] KICK ALL работает?",
+    "ADMIN [FAKE] BAN PLAYER работает?",
+    "ADMIN [FAKE] BAN ALL работает?",
+    "ADMIN [FAKE] FREEZE ALL работает?",
+    "ADMIN [FAKE] UNFREEZE ALL работает?",
+    "ADMIN [FAKE] GIVE GODMODE ALL работает?",
+    "ADMIN [FAKE] FORCE RESPAWN ALL работает?",
+    "ADMIN [FAKE] SERVER SHUTDOWN работает?",
+    "ADMIN [FAKE] RESTART RUN работает?",
+    "ADMIN [FAKE] ANNOUNCE работает?",
+    "ADMIN [FAKE] CLEAR ROOM работает?",
+    "ADMIN [FAKE] DELETE ENTITIES работает?",
+    "ADMIN GIVE ALL ITEMS работает?",
+    "ADMIN GIVE FLASHLIGHT работает?",
+    "ADMIN GIVE LOCKPICK работает?",
+    "ADMIN GIVE BANDAGE работает?",
+    "ADMIN GIVE VITAMINS работает?",
+    "ADMIN GIVE CRUCIFIX работает?",
+    "ADMIN GIVE LIGHTER работает?",
+    "ADMIN GIVE BATTERY работает?",
+    "ADMIN GIVE CANDLE работает?",
+    "ADMIN GIVE SKELETON KEY работает?",
+    "ADMIN SPAWN RUSH работает?",
+    "ADMIN SPAWN AMBUSH работает?",
+    "ADMIN SPAWN SEEK работает?",
+    "ADMIN SPAWN FIGURE работает?",
+    "ADMIN SPAWN SCREECH работает?",
+    "ADMIN SPAWN EYES работает?",
+    "ADMIN SPAWN HALT работает?",
+    "ADMIN SPAWN COIN работает?",
+    "ADMIN SPAWN KEY работает?",
+    "ADMIN GOLD NAME работает?",
+    "ADMIN RAINBOW NAME работает?",
+    "ADMIN [FAKE] FORCE FLY работает?",
+    "ADMIN [FAKE] EXPLOSION работает?",
+    "ADMIN [DANGER] KILL SELF работает?",
+    "ADMIN [DANGER] DELETE SERVER работает?",
+    "ADMIN [DANGER] BAN SELF работает?",
+    "ADMIN [DANGER] CRASH GAME работает?",
     -- MOBILE (1)
-    "MOBILE BUTTONS работают?",
-    -- ANTIDET (3)
+    "MOBILE — SHOW MOBILE BUTTONS работает?",
+    -- ANTIDET (5)
     "ANTI-DETECTION работает?",
     "SAFE MODE работает?",
-    "BYPASS DELAY работает?",
-    -- FLOORS (5)
-    "AUTO BREAKER (Hotel) работает?",
-    "MINES AUTO-STEER работает?",
-    "TIME SHOWER (Archives) работает?",
-    "HONCHO ESP (Archives) работает?",
-    "FORGET ME NOT (Archives) работает?",
-    -- SETTINGS (3)
-    "UI SCALE работает?",
-    "SAVE CONFIG работает?",
-    "LOAD CONFIG работает?",
-    -- GUI (6)
-    "Кнопка B открывает меню?",
-    "Стартовое окно работает?",
-    "Кнопки этажей работают?",
-    "Переключение вкладок работает?",
-    "Тумблеры переключаются?",
-    "Слайдеры двигаются?",
+    "ANTICHEAT BYPASS работает?",
+    "VELOCITY MANIPULATION работает?",
+    "BYPASS DELAY слайдер работает?",
+    -- FPS BOOSTER (12)
+    "FPS BOOSTER (общий) работает?",
+    "LOW GRAPHICS работает?",
+    "REMOVE PARTICLES работает?",
+    "REMOVE LIGHTS работает?",
+    "REMOVE DECALS работает?",
+    "REMOVE SHADOWS работает?",
+    "REMOVE DISTANT работает?",
+    "REMOVE INVISIBLE работает?",
+    "REMOVE ANIMATIONS работает?",
+    "DISABLE SOUND работает?",
+    "SHOW FPS (fps booster) работает?",
+    "SHOW PING (fps booster) работает?",
+    -- SHOP (2)
+    "SHOP [FAKE] FREE ITEMS работает?",
+    "SHOP [FAKE] BUY ALL работает?",
+    -- ACHIEV (2)
+    "ACHIEV [FAKE] UNLOCK ALL работает?",
+    "ACHIEV [FAKE] AUTO-UNLOCK работает?",
+    -- FAVORITES (6)
+    "FAVORITES SAVE CONFIG работает?",
+    "FAVORITES LOAD CONFIG работает?",
+    "FAVORITES RESET CONFIG работает?",
+    "FAVORITES CONFIG DEFAULT работает?",
+    "FAVORITES CONFIG PVP работает?",
+    "FAVORITES CONFIG FARM работает?",
+    -- HOTEL (4)
+    "HOTEL AUTO BREAKER работает?",
+    "HOTEL AUTO HEARTBEAT работает?",
+    "HOTEL AUTO UNLOCK PADLOCK работает?",
+    "HOTEL GUESS LIBRARY CODE работает?",
+    -- MINES (2)
+    "MINES AUTO SOLVE ANCHORS работает?",
+    "MINES AUTO PLATFORM работает?",
+    -- BACKDOOR (1)
+    "BACKDOOR ANTI RANSOM работает?",
+    -- OUTDOORS (1)
+    "OUTDOORS AUTO COLLECT работает?",
+    -- ARCHIVES (7)
+    "ARCHIVES ANTI RANSOM работает?",
+    "ARCHIVES ANTI CLOSET TRASH работает?",
+    "ARCHIVES ANTI NOISE работает?",
+    "ARCHIVES FORGET ME NOT работает?",
+    "ARCHIVES TIME SHOWER работает?",
+    "ARCHIVES HONCHO ESP работает?",
+    "ARCHIVES IGNORE A-60 работает?",
+    -- STAIRWELL (1)
+    "STAIRWELL AUTO CLIMB работает?",
+    -- NOTIFICATIONS (13)
+    "NOTIF NOTIFY LOADING работает?",
+    "NOTIF NOTIFY ENTITIES работает?",
+    "NOTIF NOTIFY ITEMS работает?",
+    "NOTIF NOTIFY ERRORS работает?",
+    "NOTIF NOTIFY ACTIONS работает?",
+    "NOTIF NOTIFY ONLY IMPORTANT работает?",
+    "NOTIF DURATION слайдер работает?",
+    "NOTIF SOUND работает?",
+    "NOTIF SOUND VOLUME слайдер работает?",
+    "NOTIF POSITION работает?",
+    "NOTIF TEST работает?",
+    -- SETTINGS (10)
+    "SETTINGS UI SCALE слайдер работает?",
+    "SETTINGS UI OPACITY слайдер работает?",
+    "SETTINGS SAVE CONFIG работает?",
+    "SETTINGS LOAD CONFIG работает?",
+    "SETTINGS RESET CONFIG работает?",
+    "SETTINGS THEME работает?",
+    -- UPDATES (5)
+    "UPDATES CHECK работает?",
+    "UPDATES CURRENT VERSION работает?",
+    "UPDATES CHANGELOG работает?",
+    "UPDATES GITHUB работает?",
+    "UPDATES DISCORD работает?",
 }
 
 -- ═══ GUI ═══
 local SG = Instance.new("ScreenGui")
 SG.Name="BurmaldaTest"
 SG.ResetOnSpawn=false
+SG.DisplayOrder=1000
 SG.Parent=game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local Frame = Instance.new("Frame",SG)
-Frame.Size=UDim2.new(0,440,0,600)
-Frame.Position=UDim2.new(0.5,-220,0.5,-300)
-Frame.BackgroundColor3=Color3.fromRGB(20,20,25)
+Frame.Size=UDim2.new(1,0,1,0)
+Frame.BackgroundColor3=Color3.fromRGB(15,15,20)
 Frame.BorderSizePixel=0
 
-local Corner=Instance.new("UICorner",Frame)
-Corner.CornerRadius=UDim.new(0,10)
+local Header = Instance.new("Frame",Frame)
+Header.Size=UDim2.new(1,0,0,50)
+Header.BackgroundColor3=Color3.fromRGB(120,20,40)
+Header.BorderSizePixel=0
 
-local Stroke=Instance.new("UIStroke",Frame)
-Stroke.Color=Color3.fromRGB(120,20,40)
-Stroke.Thickness=2
-
-local Title=Instance.new("TextLabel",Frame)
-Title.Size=UDim2.new(1,0,0,40)
-Title.BackgroundColor3=Color3.fromRGB(120,20,40)
-Title.Text="ТЕСТ BURMALDA v13"
+local Title = Instance.new("TextLabel",Header)
+Title.Size=UDim2.new(1,0,1,0)
+Title.BackgroundTransparency=1
+Title.Text="ОПРОС BURMALDA v15.1 — "..#questions.." ФУНКЦИЙ"
 Title.TextColor3=Color3.fromRGB(255,255,255)
-Title.Font=Enum.Font.GothamBold
-Title.TextSize=14
+Title.Font=Enum.Font.GothamBlack
+Title.TextSize=16
 
-local Progress=Instance.new("TextLabel",Frame)
-Progress.Size=UDim2.new(1,0,0,20)
-Progress.Position=UDim2.new(0,0,0,40)
-Progress.BackgroundTransparency=1
+local Progress = Instance.new("TextLabel",Frame)
+Progress.Size=UDim2.new(1,0,0,24)
+Progress.Position=UDim2.new(0,0,0,50)
+Progress.BackgroundColor3=Color3.fromRGB(20,20,25)
 Progress.Text="0 / "..#questions
-Progress.TextColor3=Color3.fromRGB(255,255,255)
-Progress.Font=Enum.Font.Gotham
-Progress.TextSize=10
+Progress.TextColor3=Color3.fromRGB(80,220,120)
+Progress.Font=Enum.Font.GothamBold
+Progress.TextSize=12
 
 local Scroll=Instance.new("ScrollingFrame",Frame)
 Scroll.Size=UDim2.new(1,0,1,-130)
-Scroll.Position=UDim2.new(0,0,0,64)
+Scroll.Position=UDim2.new(0,0,0,74)
 Scroll.BackgroundTransparency=1
 Scroll.BorderSizePixel=0
-Scroll.ScrollBarThickness=3
+Scroll.ScrollBarThickness=4
+Scroll.ScrollBarImageColor3=Color3.fromRGB(180,30,30)
 Scroll.CanvasSize=UDim2.new(0,0,#questions*42+20)
 
 local List=Instance.new("UIListLayout",Scroll)
@@ -222,18 +409,22 @@ local answered = 0
 
 local function updateProgress()
     Progress.Text=answered.." / "..#questions
+    if answered==#questions then
+        Progress.TextColor3=Color3.fromRGB(80,220,120)
+        Progress.Text="✅ ВСЁ ОТВЕЧЕНО! Нажми РЕЗУЛЬТАТ"
+    end
 end
 
 for i,q in ipairs(questions) do
     local row=Instance.new("Frame",Scroll)
     row.Size=UDim2.new(1,-10,0,38)
-    row.BackgroundColor3=Color3.fromRGB(40,40,45)
+    row.BackgroundColor3=Color3.fromRGB(30,30,35)
     row.BorderSizePixel=0
     local rc=Instance.new("UICorner",row)
     rc.CornerRadius=UDim.new(0,5)
 
     local lbl=Instance.new("TextLabel",row)
-    lbl.Size=UDim2.new(0.55,0,1,0)
+    lbl.Size=UDim2.new(0.5,0,1,0)
     lbl.Position=UDim2.new(0,6,0,0)
     lbl.BackgroundTransparency=1
     lbl.Text=q
@@ -244,38 +435,54 @@ for i,q in ipairs(questions) do
     lbl.TextWrapped=true
 
     local btnW=0.11
-    local btnH=0.7
+    local btnH=0.75
 
+    -- ДА
     local yes=Instance.new("TextButton",row)
     yes.Size=UDim2.new(btnW,0,btnH,0)
-    yes.Position=UDim2.new(0.56,0,0.15,0)
+    yes.Position=UDim2.new(0.52,0,0.12,0)
     yes.BackgroundColor3=Color3.fromRGB(40,120,60)
-    yes.Text="ДА"; yes.TextColor3=Color3.fromRGB(255,255,255)
-    yes.Font=Enum.Font.GothamBold; yes.TextSize=9; yes.BorderSizePixel=0
+    yes.Text="ДА"
+    yes.TextColor3=Color3.fromRGB(255,255,255)
+    yes.Font=Enum.Font.GothamBold
+    yes.TextSize=9
+    yes.BorderSizePixel=0
     local yc=Instance.new("UICorner",yes); yc.CornerRadius=UDim.new(0,3)
 
+    -- НЕТ
     local no=Instance.new("TextButton",row)
     no.Size=UDim2.new(btnW,0,btnH,0)
-    no.Position=UDim2.new(0.67,0,0.15,0)
+    no.Position=UDim2.new(0.63,0,0.12,0)
     no.BackgroundColor3=Color3.fromRGB(120,40,40)
-    no.Text="НЕТ"; no.TextColor3=Color3.fromRGB(255,255,255)
-    no.Font=Enum.Font.GothamBold; no.TextSize=9; no.BorderSizePixel=0
+    no.Text="НЕТ"
+    no.TextColor3=Color3.fromRGB(255,255,255)
+    no.Font=Enum.Font.GothamBold
+    no.TextSize=9
+    no.BorderSizePixel=0
     local nc=Instance.new("UICorner",no); nc.CornerRadius=UDim.new(0,3)
 
+    -- БАГ
     local bug=Instance.new("TextButton",row)
     bug.Size=UDim2.new(btnW,0,btnH,0)
-    bug.Position=UDim2.new(0.78,0,0.15,0)
+    bug.Position=UDim2.new(0.74,0,0.12,0)
     bug.BackgroundColor3=Color3.fromRGB(200,120,20)
-bug.Text="БАГ"; bug.TextColor3=Color3.fromRGB(255,255,255)
-    bug.Font=Enum.Font.GothamBold; bug.TextSize=9; bug.BorderSizePixel=0
+    bug.Text="БАГ"
+    bug.TextColor3=Color3.fromRGB(255,255,255)
+    bug.Font=Enum.Font.GothamBold
+    bug.TextSize=9
+    bug.BorderSizePixel=0
     local bc=Instance.new("UICorner",bug); bc.CornerRadius=UDim.new(0,3)
 
+    -- ?
     local skip=Instance.new("TextButton",row)
     skip.Size=UDim2.new(btnW,0,btnH,0)
-    skip.Position=UDim2.new(0.89,0,0.15,0)
+    skip.Position=UDim2.new(0.85,0,0.12,0)
     skip.BackgroundColor3=Color3.fromRGB(60,60,80)
-    skip.Text="?"; skip.TextColor3=Color3.fromRGB(255,255,255)
-    skip.Font=Enum.Font.GothamBold; skip.TextSize=9; skip.BorderSizePixel=0
+    skip.Text="?"
+    skip.TextColor3=Color3.fromRGB(255,255,255)
+    skip.Font=Enum.Font.GothamBold
+    skip.TextSize=9
+    skip.BorderSizePixel=0
     local sc=Instance.new("UICorner",skip); sc.CornerRadius=UDim.new(0,3)
 
     local function reset()
@@ -303,34 +510,19 @@ bug.Text="БАГ"; bug.TextColor3=Color3.fromRGB(255,255,255)
     end)
 end
 
--- ═══ Кнопки внизу ═══
+-- ═══ КНОПКИ ВНИЗУ ═══
 local showBtn=Instance.new("TextButton",Frame)
-showBtn.Size=UDim2.new(0.45,0,0,30)
-showBtn.Position=UDim2.new(0,10,1,-40)
+showBtn.Size=UDim2.new(1,-20,0,40)
+showBtn.Position=UDim2.new(0,10,1,-50)
 showBtn.BackgroundColor3=Color3.fromRGB(40,120,60)
-showBtn.Text="РЕЗУЛЬТАТ"
+showBtn.Text="📊 РЕЗУЛЬТАТ"
 showBtn.TextColor3=Color3.fromRGB(255,255,255)
-showBtn.Font=Enum.Font.GothamBold
-showBtn.TextSize=11
+showBtn.Font=Enum.Font.GothamBlack
+showBtn.TextSize=14
 showBtn.BorderSizePixel=0
-local sbc=Instance.new("UICorner",showBtn); sbc.CornerRadius=UDim.new(0,5)
+local sbc=Instance.new("UICorner",showBtn); sbc.CornerRadius=UDim.new(0,6)
 
-local closeBtn=Instance.new("TextButton",Frame)
-closeBtn.Size=UDim2.new(0.45,0,0,30)
-closeBtn.Position=UDim2.new(0.5,0,1,-40)
-closeBtn.BackgroundColor3=Color3.fromRGB(120,40,40)
-closeBtn.Text="ЗАКРЫТЬ"
-closeBtn.TextColor3=Color3.fromRGB(255,255,255)
-closeBtn.Font=Enum.Font.GothamBold
-closeBtn.TextSize=11
-closeBtn.BorderSizePixel=0
-local cbc2=Instance.new("UICorner",closeBtn); cbc2.CornerRadius=UDim.new(0,5)
-
-closeBtn.MouseButton1Click:Connect(function()
-    SG:Destroy()
-end)
-
--- ═══ ЭКРАН РЕЗУЛЬТАТА (одной картинкой) ═══
+-- ═══ РЕЗУЛЬТАТ ═══
 showBtn.MouseButton1Click:Connect(function()
     local yesList, noList, bugList, skipList = {}, {}, {}, {}
     for q,r in pairs(results) do
@@ -340,161 +532,122 @@ showBtn.MouseButton1Click:Connect(function()
         elseif r=="?" then table.insert(skipList,q) end
     end
 
-    -- Создаём экран результата
-    local RG = Instance.new("ScreenGui")
-    RG.Name="BurmaldaResult"
-    RG.ResetOnSpawn=false
-    RG.DisplayOrder=100
-    RG.Parent=game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    local txt = "═══ BURMALDA v15.1 ОПРОС ═══\n"
+    txt = txt .. "Всего: "..#questions.."\n"
+    txt = txt .. "✅ Работает: "..#yesList.."\n"
+    txt = txt .. "❌ Не работает: "..#noList.."\n"
+    txt = txt .. "⚠️ Баг: "..#bugList.."\n"
+    txt = txt .. "❓ Не проверено: "..#skipList.."\n"
+    txt = txt .. "\n═══ ✅ РАБОТАЕТ ═══\n"
+    for _,q in ipairs(yesList) do txt=txt.."✅ "..q.."\n" end
+    txt = txt .. "\n═══ ❌ НЕ РАБОТАЕТ ═══\n"
+    for _,q in ipairs(noList) do txt=txt.."❌ "..q.."\n" end
+    txt = txt .. "\n═══ ⚠️ БАГ ═══\n"
+    for _,q in ipairs(bugList) do txt=txt.."⚠️ "..q.."\n" end
+    txt = txt .. "\n═══ ❓ НЕ ПРОВЕРЕНО ═══\n"
+    for _,q in ipairs(skipList) do txt=txt.."❓ "..q.."\n" end
 
-    local bg = Instance.new("Frame",RG)
-    bg.Size=UDim2.new(1,0,1,0)
-    bg.BackgroundColor3=Color3.fromRGB(15,15,18)
-    bg.BorderSizePixel=0
-
-    local header = Instance.new("TextLabel",bg)
-    header.Size=UDim2.new(1,0,0,50)
-    header.BackgroundColor3=Color3.fromRGB(120,20,40)
-    header.Text="РЕЗУЛЬТАТ ТЕСТА BURMALDA"
-    header.TextColor3=Color3.fromRGB(255,255,255)
-    header.Font=Enum.Font.GothamBlack
-    header.TextSize=16
-
-    local summary = Instance.new("TextLabel",bg)
-    summary.Size=UDim2.new(1,0,0,30)
-    summary.Position=UDim2.new(0,0,0,50)
-    summary.BackgroundTransparency=1
-    summary.Text="РАБОТАЕТ: "..#yesList.." | НЕ РАБОТАЕТ: "..#noList.." | БАГ: "..#bugList.." | НЕ ПРОВЕРЕНО: "..#skipList
-    summary.TextColor3=Color3.fromRGB(255,255,255)
-    summary.Font=Enum.Font.GothamBold
-    summary.TextSize=12
-
-    -- Скролл с колонками
-local scroll = Instance.new("ScrollingFrame",bg)
-    scroll.Size=UDim2.new(1,-20,1,-140)
-    scroll.Position=UDim2.new(0,10,0,85)
-    scroll.BackgroundTransparency=1
-    scroll.BorderSizePixel=0
-    scroll.ScrollBarThickness=3
-    scroll.CanvasSize=UDim2.new(0,0,math.max(#questions*20,500))
-
-    local layout = Instance.new("UIListLayout",scroll)
-    layout.Padding=UDim.new(0,2)
-    layout.SortOrder=Enum.SortOrder.LayoutOrder
-
-    -- Заголовки
-    local hRow = Instance.new("Frame",scroll)
-    hRow.Size=UDim2.new(1,0,0,22)
-    hRow.BackgroundColor3=Color3.fromRGB(60,60,70)
-    hRow.BorderSizePixel=0
-    hRow.LayoutOrder=0
-    local hc = Instance.new("UICorner",hRow); hc.CornerRadius=UDim.new(0,3)
-
-    local hName = Instance.new("TextLabel",hRow)
-    hName.Size=UDim2.new(0.65,0,1,0)
-    hName.Position=UDim2.new(0,5,0,0)
-    hName.BackgroundTransparency=1
-    hName.Text="ФУНКЦИЯ"
-    hName.TextColor3=Color3.fromRGB(255,255,255)
-    hName.Font=Enum.Font.GothamBold
-    hName.TextSize=11
-    hName.TextXAlignment=Enum.TextXAlignment.Left
-
-    local hStatus = Instance.new("TextLabel",hRow)
-    hStatus.Size=UDim2.new(0.35,0,1,0)
-    hStatus.Position=UDim2.new(0.65,0,0,0)
-    hStatus.BackgroundTransparency=1
-    hStatus.Text="СТАТУС"
-    hStatus.TextColor3=Color3.fromRGB(255,255,255)
-    hStatus.Font=Enum.Font.GothamBold
-    hStatus.TextSize=11
-    hStatus.TextXAlignment=Enum.TextXAlignment.Left
-
-    -- Строки
-    for i,q in ipairs(questions) do
-        local r = results[q] or "?"
-        local row = Instance.new("Frame",scroll)
-        row.Size=UDim2.new(1,0,0,20)
-        row.BackgroundColor3=Color3.fromRGB(30,30,35)
-        row.BorderSizePixel=0
-        row.LayoutOrder=i
-        local rc = Instance.new("UICorner",row); rc.CornerRadius=UDim.new(0,3)
-
-        local nameLbl = Instance.new("TextLabel",row)
-        nameLbl.Size=UDim2.new(0.65,0,1,0)
-        nameLbl.Position=UDim2.new(0,5,0,0)
-        nameLbl.BackgroundTransparency=1
-        nameLbl.Text=q
-        nameLbl.TextColor3=Color3.fromRGB(220,220,230)
-        nameLbl.Font=Enum.Font.Gotham
-        nameLbl.TextSize=10
-        nameLbl.TextXAlignment=Enum.TextXAlignment.Left
-
-        local statusLbl = Instance.new("TextLabel",row)
-        statusLbl.Size=UDim2.new(0.35,0,1,0)
-        statusLbl.Position=UDim2.new(0.65,0,0,0)
-        statusLbl.BackgroundTransparency=1
-        statusLbl.Font=Enum.Font.GothamBold
-        statusLbl.TextSize=10
-        statusLbl.TextXAlignment=Enum.TextXAlignment.Left
-
-        if r=="yes" then
-            statusLbl.Text="РАБОТАЕТ"
-            statusLbl.TextColor3=Color3.fromRGB(0,255,100)
-        elseif r=="no" then
-            statusLbl.Text="НЕ РАБОТАЕТ"
-            statusLbl.TextColor3=Color3.fromRGB(255,80,80)
-        elseif r=="bug" then
-            statusLbl.Text="БАГ"
-            statusLbl.TextColor3=Color3.fromRGB(255,200,0)
-        else
-            statusLbl.Text="НЕ ПРОВЕРЕНО"
-            statusLbl.TextColor3=Color3.fromRGB(180,180,180)
-        end
-    end
-
-    -- Кнопки результата
-    local btnBack = Instance.new("TextButton",bg)
-    btnBack.Size=UDim2.new(0.45,0,0,35)
-    btnBack.Position=UDim2.new(0,10,1,-45)
-    btnBack.BackgroundColor3=Color3.fromRGB(120,40,40)
-    btnBack.Text="ЗАКРЫТЬ РЕЗУЛЬТАТ"
-    btnBack.TextColor3=Color3.fromRGB(255,255,255)
-    btnBack.Font=Enum.Font.GothamBold
-    btnBack.TextSize=12
-    btnBack.BorderSizePixel=0
-    local bc1=Instance.new("UICorner",btnBack); bc1.CornerRadius=UDim.new(0,5)
-    btnBack.MouseButton1Click:Connect(function()
-        RG:Destroy()
+    print(txt)
+    pcall(function()
+        if setclipboard then setclipboard(txt) end
     end)
 
-    local btnCopy = Instance.new("TextButton",bg)
-    btnCopy.Size=UDim2.new(0.45,0,0,35)
-    btnCopy.Position=UDim2.new(0.5,0,1,-45)
-    btnCopy.BackgroundColor3=Color3.fromRGB(60,80,140)
-    btnCopy.Text="КОПИРОВАТЬ ТЕКСТ"
-    btnCopy.TextColor3=Color3.fromRGB(255,255,255)
-    btnCopy.Font=Enum.Font.GothamBold
-    btnCopy.TextSize=12
-    btnCopy.BorderSizePixel=0
-    local bc2=Instance.new("UICorner",btnCopy); bc2.CornerRadius=UDim.new(0,5)
-btnCopy.MouseButton1Click:Connect(function()
-        local txt="=== BURMALDA TEST ===\n\n"
-        txt=txt.."РАБОТАЕТ ("..#yesList.."):\n"
-        for _,q in ipairs(yesList) do txt=txt.."  + "..q.."\n" end
-        txt=txt.."\nНЕ РАБОТАЕТ ("..#noList.."):\n"
-        for _,q in ipairs(noList) do txt=txt.."  - "..q.."\n" end
-        txt=txt.."\nБАГ ("..#bugList.."):\n"
-        for _,q in ipairs(bugList) do txt=txt.."  ! "..q.."\n" end
-        txt=txt.."\nНЕ ПРОВЕРЕНО ("..#skipList.."):\n"
-        for _,q in ipairs(skipList) do txt=txt.."  ? "..q.."\n" end
-        pcall(function()
-            if setclipboard then setclipboard(txt) end
-        end)
-        game:GetService("StarterGui"):SetCore("SendNotification",{
-            Title="СКОПИРОВАНО",
-            Text="Отчёт в буфере обмена",
-            Duration=10
-        })
+    -- Экран результата
+    local RG=Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+    RG.Name="BurmaldaTestResult"
+    RG.DisplayOrder=2000
+
+    local bg=Instance.new("Frame",RG)
+    bg.Size=UDim2.new(1,0,1,0)
+    bg.BackgroundColor3=Color3.fromRGB(15,15,20)
+    bg.BorderSizePixel=0
+
+    local header=Instance.new("Frame",bg)
+    header.Size=UDim2.new(1,0,0,60)
+    header.BackgroundColor3=Color3.fromRGB(120,20,40)
+    header.BorderSizePixel=0
+
+    local hTitle=Instance.new("TextLabel",header)
+    hTitle.Size=UDim2.new(1,0,0,30)
+    hTitle.Position=UDim2.new(0,0,0,5)
+    hTitle.BackgroundTransparency=1
+    hTitle.Text="📊 РЕЗУЛЬТАТ ОПРОСА"
+    hTitle.TextColor3=Color3.fromRGB(255,255,255)
+    hTitle.Font=Enum.Font.GothamBlack
+    hTitle.TextSize=18
+
+    local stats=Instance.new("TextLabel",header)
+    stats.Size=UDim2.new(1,0,0,22)
+    stats.Position=UDim2.new(0,0,0,33)
+    stats.BackgroundTransparency=1
+    stats.Text="✅ "..#yesList.."  |  ❌ "..#noList.."  |  ⚠️ "..#bugList.."  |  ❓ "..#skipList
+    stats.TextColor3=Color3.fromRGB(255,255,255)
+    stats.Font=Enum.Font.GothamBold
+    stats.TextSize=13
+
+    local scroll=Instance.new("ScrollingFrame",bg)
+    scroll.Size=UDim2.new(1,-20,1,-140)
+    scroll.Position=UDim2.new(0,10,0,70)
+    scroll.BackgroundTransparency=1
+    scroll.BorderSizePixel=0
+    scroll.ScrollBarThickness=4
+    scroll.ScrollBarImageColor3=Color3.fromRGB(180,30,30)
+    scroll.CanvasSize=UDim2.new(0,0,#questions*20+100)
+
+    local list=Instance.new("UIListLayout",scroll)
+    list.Padding=UDim.new(0,2)
+    list.SortOrder=Enum.SortOrder.LayoutOrder
+
+    local function addLine(text, color)
+        local lbl=Instance.new("TextLabel",scroll)
+        lbl.Size=UDim2.new(1,0,0,18)
+        lbl.BackgroundTransparency=1
+        lbl.Text=text
+        lbl.TextColor3=color
+        lbl.Font=Enum.Font.Code
+        lbl.TextSize=11
+        lbl.TextXAlignment=Enum.TextXAlignment.Left
+    end
+
+    addLine("═══ ✅ РАБОТАЕТ ("..#yesList..") ═══",Color3.fromRGB(80,220,120))
+    for _,q in ipairs(yesList) do addLine("✅ "..q,Color3.fromRGB(120,255,160)) end
+    addLine("",Color3.fromRGB(200,200,200))
+    addLine("═══ ❌ НЕ РАБОТАЕТ ("..#noList..") ═══",Color3.fromRGB(255,80,80))
+    for _,q in ipairs(noList) do addLine("❌ "..q,Color3.fromRGB(255,120,120)) end
+    addLine("",Color3.fromRGB(200,200,200))
+    addLine("═══ ⚠️ БАГ ("..#bugList..") ═══",Color3.fromRGB(255,200,50))
+    for _,q in ipairs(bugList) do addLine("⚠️ "..q,Color3.fromRGB(255,220,100)) end
+    addLine("",Color3.fromRGB(200,200,200))
+    addLine("═══ ❓ НЕ ПРОВЕРЕНО ("..#skipList..") ═══",Color3.fromRGB(150,150,200))
+    for _,q in ipairs(skipList) do addLine("❓ "..q,Color3.fromRGB(180,180,220)) end
+
+    local copyBtn=Instance.new("TextButton",bg)
+    copyBtn.Size=UDim2.new(0.45,0,0,40)
+    copyBtn.Position=UDim2.new(0,10,1,-50)
+    copyBtn.BackgroundColor3=Color3.fromRGB(60,120,180)
+    copyBtn.Text="📋 СКОПИРОВАТЬ"
+    copyBtn.TextColor3=Color3.fromRGB(255,255,255)
+    copyBtn.Font=Enum.Font.GothamBold
+    copyBtn.TextSize=13
+    copyBtn.BorderSizePixel=0
+    local cbc=Instance.new("UICorner",copyBtn); cbc.CornerRadius=UDim.new(0,6)
+    copyBtn.MouseButton1Click:Connect(function()
+        pcall(function() if setclipboard then setclipboard(txt) end end)
+        copyBtn.Text="✅ СКОПИРОВАНО!"
+        copyBtn.BackgroundColor3=Color3.fromRGB(40,120,60)
+    end)
+
+    local closeBtn=Instance.new("TextButton",bg)
+    closeBtn.Size=UDim2.new(0.45,0,0,40)
+    closeBtn.Position=UDim2.new(0.5,0,1,-50)
+    closeBtn.BackgroundColor3=Color3.fromRGB(120,40,40)
+    closeBtn.Text="ЗАКРЫТЬ"
+    closeBtn.TextColor3=Color3.fromRGB(255,255,255)
+    closeBtn.Font=Enum.Font.GothamBold
+    closeBtn.TextSize=13
+    closeBtn.BorderSizePixel=0
+    local cbc2=Instance.new("UICorner",closeBtn); cbc2.CornerRadius=UDim.new(0,6)
+    closeBtn.MouseButton1Click:Connect(function()
+        RG:Destroy()
     end)
 end)
