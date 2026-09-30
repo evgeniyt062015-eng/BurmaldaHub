@@ -1,5 +1,5 @@
--- BURMALDA v15 | Part 2/14 — MAIN + CHARACTER
--- Fly, Noclip, Speed (FIX), InfJump (FIX), GodMode (FIX), BunnyHop
+-- BURMALDA v15.1 | Part 2/14 — MAIN + CHARACTER
+-- Fly, Noclip, Speed (anti-slide + anti-wall-stick), InfJump, GodMode
 
 local C=_G.C
 local T=_G.T
@@ -72,7 +72,7 @@ _G.setNC=function(s)
     end)
 end
 
--- ═══ INFINITE JUMPS (ФИКС через UIS.JumpRequest) ═══
+-- ═══ INFINITE JUMPS (через UIS.JumpRequest) ═══
 local InfJumpConn
 _G.setInfJump=function(s)
     if InfJumpConn then InfJumpConn:Disconnect(); InfJumpConn=nil end
@@ -92,16 +92,48 @@ LP.CharacterAdded:Connect(function()
     if C.InfiniteJumps then _G.setInfJump(true) end
 end)
 
--- ═══ SPEED (ФИКС через GetPropertyChangedSignal) ═══
+-- ═══ SPEED (FIX: anti-slide + anti-wall-stick) ═══
 local SpeedConn
+local WallConn
+
+-- Функция: применить трение (anti-slide)
+local function applyFriction()
+    local ch=LP.Character
+    if not ch then return end
+    for _,p in ipairs(ch:GetDescendants()) do
+        if p:IsA("BasePart") then
+            pcall(function()
+                p.CustomPhysicalProperties=PhysicalProperties.new(1.2, 0.3, 0.5, 100, 1)
+            end)
+        end
+    end
+end
+
+-- Функция: вернуть трение (при OFF)
+local function resetFriction()
+    local ch=LP.Character
+    if not ch then return end
+    for _,p in ipairs(ch:GetDescendants()) do
+        if p:IsA("BasePart") then
+            pcall(function()
+                p.CustomPhysicalProperties=nil
+            end)
+        end
+    end
+end
+
 _G.setSpeed=function(s)
     if SpeedConn then SpeedConn:Disconnect(); SpeedConn=nil end
+    if WallConn then WallConn:Disconnect(); WallConn=nil end
+    
     if not s then
         local ch=LP.Character
         local h=ch and ch:FindFirstChildOfClass("Humanoid")
         if h then h.WalkSpeed=16 end
+        resetFriction()
         return
     end
+    
     local function applySpeed()
         local ch=LP.Character
         local h=ch and ch:FindFirstChildOfClass("Humanoid")
@@ -112,56 +144,102 @@ _G.setSpeed=function(s)
         if C.BunnyHop then sp=30 end
         if h.WalkSpeed~=sp then h.WalkSpeed=sp end
     end
+    
     applySpeed()
+    applyFriction()
+    
+    -- Anti-slide: каждые 0.5 сек применять трение
     SpeedConn=Run.Heartbeat:Connect(function()
         if not C.SpeedEnabled and not C.Speed10x and not C.BunnyHop then return end
         applySpeed()
     end)
+    
+    -- Anti-wall-stick: если врезался — толчок в сторону
+    WallConn=Run.Heartbeat:Connect(function()
+        if not C.SpeedEnabled then return end
+        local ch=LP.Character
+        if not ch then return end
+        local r=ch:FindFirstChild("HumanoidRootPart")
+        local h=ch:FindFirstChildOfClass("Humanoid")
+        if not r or not h then return end
+        if h.MoveDirection.Magnitude<0.1 then return end
+        -- Ray вперёд
+        local ray=Ray.new(r.Position, r.CFrame.LookVector*2.5)
+        local hit=workspace:FindPartOnRay(ray, ch)
+        if hit and hit.CanCollide then
+            -- Отталкиваем чуть назад
+            r.Velocity=r.Velocity + r.CFrame.LookVector*-2
+        end
+    end)
+    
+    -- Применяем трение каждый раз при респавне
+    LP.CharacterAdded:Connect(function()
+        task.wait(1)
+        if C.SpeedEnabled then applyFriction() end
+    end)
 end
 
--- ═══ JUMP POWER ═══
+-- ═══ JUMP POWER (FIX: UseJumpPower) ═══
 _G.setJump=function(s)
     if not s then return end
     local ch=LP.Character
     local h=ch and ch:FindFirstChildOfClass("Humanoid")
     if h then
-        h.JumpPower=C.JumpPower
         h.UseJumpPower=true
+        h.JumpPower=C.JumpPower
     end
 end
 
--- ═══ ENABLE JUMP / SLIDE ═══
 task.spawn(function()
-    while task.wait(0.3) do
+    while task.wait(0.5) do
         local ch=LP.Character
-        if ch then
-            if C.EnableJump then pcall(function() ch:SetAttribute("CanJump",true) end) end
-            if C.EnableSlide then pcall(function() ch:SetAttribute("CanSlide",true) end) end
+        local h=ch and ch:FindFirstChildOfClass("Humanoid")
+        if h then
+            if h.UseJumpPower==false then h.UseJumpPower=true end
+            if h.JumpPower~=C.JumpPower then h.JumpPower=C.JumpPower end
         end
     end
 end)
 
--- ═══ GOD MODE (ФИКС через HealthChanged) ═══
+-- ═══ ENABLE JUMP / SLIDE (FIX: через ChangeState) ═══
+task.spawn(function()
+    while task.wait(0.3) do
+        local ch=LP.Character
+        if ch then
+            pcall(function()
+                if C.EnableJump then
+                    ch:SetAttribute("CanJump",true)
+                end
+                if C.EnableSlide then
+                    ch:SetAttribute("CanSlide",true)
+                end
+            end)
+        end
+    end
+end)
+
+-- ═══ GOD MODE (FIX: через HealthChanged) ═══
 local GodConn
+local function hookGodMode()
+    local ch=LP.Character
+    local h=ch and ch:FindFirstChildOfClass("Humanoid")
+    if not h then return end
+    if GodConn then GodConn:Disconnect() end
+    GodConn=h.HealthChanged:Connect(function(newHp)
+        if not C.GodMode then return end
+        if newHp<h.MaxHealth then
+            h.Health=h.MaxHealth
+        end
+    end)
+end
+
 _G.setGodMode=function(s)
     if GodConn then GodConn:Disconnect(); GodConn=nil end
     if not s then return end
-    local function hookGod()
-        local ch=LP.Character
-        local h=ch and ch:FindFirstChildOfClass("Humanoid")
-        if not h then return end
-        if GodConn then GodConn:Disconnect() end
-        GodConn=h.HealthChanged:Connect(function(newHp)
-            if not C.GodMode then return end
-            if newHp<h.MaxHealth then
-                h.Health=h.MaxHealth
-            end
-        end)
-    end
-    hookGod()
+    hookGodMode()
     LP.CharacterAdded:Connect(function()
         task.wait(1)
-        if C.GodMode then hookGod() end
+        if C.GodMode then hookGodMode() end
     end)
 end
 
@@ -188,8 +266,11 @@ task.spawn(function()
                 local ch=LP.Character
                 if ch then
                     for _,o in ipairs(ch:GetDescendants()) do
-                        if o:IsA("NumberValue") and o.Name:lower():find("delay") then
-                            o.Value=0
+                        if o:IsA("NumberValue") then
+                            local n=string.lower(o.Name)
+                            if string.find(n,"delay",1,true) or string.find(n,"wait",1,true) then
+                                o.Value=0
+                            end
                         end
                     end
                 end
@@ -254,4 +335,4 @@ task.spawn(function()
     end
 end)
 
-print("[Burmalda v15] Part 2/14 — MAIN + CHARACTER loaded")
+print("[Burmalda v15.1] Part 2/14 — MAIN + CHARACTER loaded")
