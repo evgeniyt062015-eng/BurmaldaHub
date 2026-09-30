@@ -1,5 +1,5 @@
--- BURMALDA v15 | Part 14/14 — LOADING + AUTO-LOADER
--- Экран загрузки с подсказками, проверка лобби/игры, автозапуск
+-- BURMALDA v15.1 | Part 14/14 — LOADING + AUTO-LOADER
+-- Экран загрузки, определение лобби/игры, автозапуск, MM2 уведомления
 
 local C=_G.C
 local T=_G.T
@@ -9,12 +9,14 @@ local Run=_G.Run
 local P=_G.P
 local HS=_G.HS
 
--- ═══ ЭКРАН ЗАГРУЗКИ ═══
+-- ═══════════════════════════════════════════════
+-- ЭКРАН ЗАГРУЗКИ
+-- ═══════════════════════════════════════════════
 local LoadGui=Instance.new("ScreenGui")
 LoadGui.Name="BurmaldaLoading"
 LoadGui.ResetOnSpawn=false
 LoadGui.IgnoreGuiInset=true
-LoadGui.DisplayOrder=999
+LoadGui.DisplayOrder=1000
 LoadGui.Parent=LP:WaitForChild("PlayerGui")
 
 local BG=Instance.new("Frame",LoadGui)
@@ -40,7 +42,7 @@ local Title=Instance.new("TextLabel",BG)
 Title.Size=UDim2.new(1,0,0,50)
 Title.Position=UDim2.new(0,0,0.4,-30)
 Title.BackgroundTransparency=1
-Title.Text="BURMALDA v15"
+Title.Text="BURMALDA v15.1"
 Title.TextColor3=Color3.fromRGB(240,240,245)
 Title.Font=Enum.Font.GothamBlack
 Title.TextSize=42
@@ -49,7 +51,7 @@ local Ver=Instance.new("TextLabel",BG)
 Ver.Size=UDim2.new(1,0,0,20)
 Ver.Position=UDim2.new(0,0,0.4,25)
 Ver.BackgroundTransparency=1
-Ver.Text="v15.0 FINAL | By KOTENOK7204"
+Ver.Text="v15.1 FINAL | By KOTENOK7204"
 Ver.TextColor3=Color3.fromRGB(180,30,30)
 Ver.Font=Enum.Font.GothamBold
 Ver.TextSize=14
@@ -115,9 +117,9 @@ Credit.TextColor3=Color3.fromRGB(120,120,130)
 Credit.Font=Enum.Font.Gotham
 Credit.TextSize=10
 
--- ═══ ПОДСКАЗКИ ПО ЧАСТЯМ ═══
+-- ═══ ПОДСКАЗКИ ═══
 local HINTS={
-    [2]="Part 2 — MAIN: Fly, Noclip, Speed (фикс)",
+    [2]="Part 2 — MAIN: Fly, Noclip, Speed (anti-slide)",
     [3]="Part 3 — TP + HIDE + AUTO: Auto Collect",
     [4]="Part 4 — BYPASS: Rush, Ambush, Seek, Figure",
     [5]="Part 5 — VISUAL: FOV, Chams, Wallhack",
@@ -128,7 +130,7 @@ local HINTS={
     [10]="Part 10 — FUN: Snow, Aura, Ducks",
     [11]="Part 11 — ADMIN: Fake Panel",
     [12]="Part 12 — FPS BOOSTER",
-    [13]="Part 13 — GUI: 34 вкладки, кнопка B",
+    [13]="Part 13 — GUI: 35 вкладок, кнопка B",
 }
 
 local HINTS_STATIC={
@@ -139,10 +141,9 @@ local HINTS_STATIC={
     "💡 Совет: FPS Booster — убирает лаги",
     "💡 Совет: Fly — F для вкл/выкл",
     "💡 Совет: Search в хедере — поиск",
-    "💡 Совет: Spawn Rush — реальный шар",
     "💡 Совет: Config в Settings",
-    "💡 Совет: Updates — проверка версии",
-    "💡 Совет: Notify Entities — уведомления",
+    "💡 Совет: Notifications — настройки",
+    "💡 Совет: Notify Entities — о спавне",
 }
 
 local function setProgress(p, text, hint)
@@ -157,7 +158,7 @@ end
 local function detectLocation()
     local inGame=false
     
-    -- Проверка 1: есть ли комнаты в CurrentRooms
+    -- Проверка 1: комнаты
     if _G.CR then
         for _,child in ipairs(_G.CR:GetChildren()) do
             if child:IsA("Model") then
@@ -167,7 +168,7 @@ local function detectLocation()
         end
     end
     
-    -- Проверка 2: есть ли прогресс в LatestRoom
+    -- Проверка 2: LatestRoom > 0
     if not inGame then
         local gd=_G.GD
         if gd and gd:FindFirstChild("LatestRoom") then
@@ -178,15 +179,16 @@ local function detectLocation()
         end
     end
     
-    -- Проверка 3: есть ли персонаж в комнате с дверьми
+    -- Проверка 3: рядом есть Door
     if not inGame then
         local ch=LP and LP.Character
         if ch then
             local r=ch:FindFirstChild("HumanoidRootPart")
             if r then
                 for _,o in ipairs(workspace:GetDescendants()) do
-                    if o:IsA("Model") and o.Name:lower()=="door" then
-                        if (o:GetPivot().Position - r.Position).Magnitude < 50 then
+                    if o:IsA("Model") and string.lower(o.Name)=="door" then
+                        local p=o:GetPivot().Position
+                        if p and (p-r.Position).Magnitude<50 then
                             inGame=true
                             break
                         end
@@ -222,9 +224,12 @@ local function loadParts(startFrom)
             loadstring(game:HttpGet(base.."Part"..i..".lua?t="..tick()))()
         end)
         if ok then
-            print("[Burmalda v15] Part "..i.." loaded")
+            print("[Burmalda v15.1] Part "..i.." loaded")
         else
-            warn("[Burmalda v15] Part "..i.." failed: "..tostring(err))
+            warn("[Burmalda v15.1] Part "..i.." failed: "..tostring(err))
+            if _G.N then
+                _G.N("Ошибка","Part"..i.." не загружен","error")
+            end
         end
         task.wait(0.15)
         
@@ -246,17 +251,18 @@ task.spawn(function()
     
     -- Сообщение лобби/игра
     if loc=="lobby" then
-        setProgress(0.20, "ЛОББИ — зайдите в лифт и начните игру", "💡 Нажмите HOST GAME → выберите этаж")
+        setProgress(0.20, "ЛОББИ — зайдите в лифт и начните игру", "💡 HOST GAME → выберите этаж")
         Hint.TextColor3=Color3.fromRGB(255,200,50)
-        task.wait(2)
-        N("🎮 ВЫ В ЛОББИ — зайдите в лифт и начните игру")
-        N("💡 HOST GAME → выберите этаж")
+        task.wait(1.5)
+        N("🎮 ВЫ В ЛОББИ","Зайдите в лифт и начните игру","warn")
+        task.wait(1)
+        N("💡 Подсказка","HOST GAME → выберите этаж","info")
         task.wait(1.5)
     else
         setProgress(0.20, "ВЫ В ИГРЕ | Этаж: "..floor, "💡 Загружаем функции для "..floor)
         Hint.TextColor3=Color3.fromRGB(80,220,120)
         task.wait(1)
-        N("✅ ВЫ В ИГРЕ | Этаж: "..floor)
+        N("✅ ВЫ В ИГРЕ","Этаж: "..floor,"success")
         task.wait(0.5)
     end
     
@@ -265,7 +271,7 @@ task.spawn(function()
     
     loadParts(2)
     
-    setProgress(1, "BURMALDA v15 запущена!", "✅ Готово! Нажми B для открытия меню")
+    setProgress(1, "BURMALDA v15.1 запущена!", "✅ Готово! Нажми B для открытия меню")
     task.wait(1.5)
     
     -- Плавное исчезновение
@@ -273,6 +279,7 @@ task.spawn(function()
     for i=1,steps do
         local p=i/steps
         BG.BackgroundTransparency=p
+        grad.BackgroundTransparency=0.85+p*0.15
         Logo.ImageTransparency=p
         Title.TextTransparency=p
         Ver.TextTransparency=p
@@ -288,12 +295,12 @@ task.spawn(function()
     LoadGui:Destroy()
     
     task.wait(0.3)
-    N("✅ Burmalda v15 загружена!")
+    N("🔥 Burmalda v15.1","Загружено успешно!","success")
     task.wait(0.5)
-    N("👑 Нажми B — открыть меню")
+    N("👑 Меню","Нажми B — открыть меню","info")
 end)
 
--- ═══ АВТО-ПЕРЕЗАПУСК ═══
+-- ═══ АВТО-ПЕРЕЗАПУСК ПРИ ТЕЛЕПОРТЕ ═══
 local AUTO_RELOAD=true
 local lastFloor=_G.gF()
 local lastChar=LP.Character
@@ -306,7 +313,7 @@ LP.CharacterAdded:Connect(function(newChar)
     local newFloor=_G.gF()
     if newFloor~=lastFloor then
         lastFloor=newFloor
-        N("📍 Новый этаж: "..newFloor)
+        N("📍 Этаж","Новый: "..newFloor,"info")
     end
 end)
 
@@ -316,7 +323,7 @@ task.spawn(function()
             local cur=_G.GD.Floor.Value
             if cur~=lastFloor then
                 lastFloor=cur
-                N("📍 Этаж изменился: "..cur)
+                N("📍 Этаж","Изменился: "..cur,"info")
             end
         end
     end
@@ -331,4 +338,4 @@ pcall(function()
     end
 end)
 
-print("[Burmalda v15] Part 14/14 — LOADING + AUTO-LOADER loaded")
+print("[Burmalda v15.1] Part 14/14 — LOADING + AUTO-LOADER loaded")
